@@ -1,1 +1,1 @@
-# EE416L-Android-Application
+# EE416L-Pastiche
