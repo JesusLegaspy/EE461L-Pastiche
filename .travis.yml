@@ -1,10 +1,14 @@
 language: android
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
-    - tools
+    - build-tools-24.0.2
+    - android-24
+
+script:
+   - ./gradlew build connectedCheck
 
     # The BuildTools version used by your project
     # - build-tools-19.1.0
@@ -21,7 +25,7 @@ android:
     # # Specify at least one system image,
     # # if you need to run emulator(s) during your tests
     # - sys-img-armeabi-v7a-android-22
-    # - sys-img-x86-android-17
+    # - sys-img-x86-android-exited with 117
 
 
 #1) Install "apt addons"
