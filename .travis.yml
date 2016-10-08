@@ -8,7 +8,6 @@ android:
     - android-24
 
 script:
-   - gradle build connectedCheck
 
 
     # The BuildTools version used by your project
