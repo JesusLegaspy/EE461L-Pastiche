@@ -5,18 +5,13 @@
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.pastiche.pastiche.MainActivity">
+        tools:context="com.pastiche.pastiche.MainActivity"
+        android:fitsSystemWindows="false"
+>
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"></include>
-
-    <TextView android:layout_below="@id/toolbar"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/content"
-    />
-
 
 
 </RelativeLayout>

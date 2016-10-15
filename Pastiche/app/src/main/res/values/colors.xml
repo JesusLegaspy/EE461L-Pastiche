@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FA0141</color>
+    <!-- Alternative Dark Primary: #CC0232-->
     <color name="colorPrimaryDark">#FA0141</color>
     <color name="colorAccent">#00E676</color>
     <color name="toolbarItemColor">#CFD8DC</color>

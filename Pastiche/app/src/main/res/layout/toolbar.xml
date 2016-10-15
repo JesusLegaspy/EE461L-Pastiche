@@ -3,7 +3,7 @@
                                    android:layout_width="match_parent"
                                    android:layout_height="wrap_content"
                                    android:background="@color/colorPrimary"
-                                   android:elevation="10dp"
+                                   android:elevation="4dp"
 >
     <TextView android:text="@string/app_name"
               android:textColor="@color/toolbarItemColor"
@@ -11,6 +11,7 @@
               android:id="@+id/toolbar_app_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textAlignment="center" android:fontFamily="sans-serif-condensed"/>
+              android:textAlignment="center"
+              android:fontFamily="sans-serif-condensed"/>
 
 </android.support.v7.widget.Toolbar>
