@@ -1,15 +1,19 @@
 package com.pastiche.pastiche;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar main_toolbar;
+    protected Typeface title_font = Typeface.createFromAsset(getAssets(), "");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +21,13 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
+        TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
+        app_name.setTypeface(title_font);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
