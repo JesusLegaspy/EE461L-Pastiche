@@ -12,7 +12,6 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar main_toolbar;
-    protected Typeface title_font = Typeface.createFromAsset(getAssets(), "");
 
 
     @Override
@@ -25,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
         TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
+        Typeface title_font = Typeface.createFromAsset(getAssets(), "fonts/Fashion Fetish Light.ttf");
+
         app_name.setTypeface(title_font);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);

@@ -16,6 +16,7 @@
               android:layout_height="wrap_content"
               android:textAlignment="center"
               android:typeface="sans"
+
     />
 
 </android.support.v7.widget.Toolbar>
