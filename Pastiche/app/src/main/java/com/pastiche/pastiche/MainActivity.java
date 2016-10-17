@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
         app_name.setTypeface(title_font);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
