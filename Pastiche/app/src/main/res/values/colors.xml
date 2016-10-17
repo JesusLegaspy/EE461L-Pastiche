@@ -5,6 +5,13 @@
     <color name="colorPrimaryDark">#FA0141</color>
     <color name="colorAccent">#00E676</color>
     <color name="toolbarItemColor">#CFD8DC</color>
-    <color name="windowBackground">#303030</color>
+    <color name="windowBackground">#424242</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_grey">#424242</color>
+    <color name="medium_grey">#9E9E9E</color>
+    <color name="button_grey">#757575</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+    <color name="grey_bg">#303030</color>
 
 </resources>
