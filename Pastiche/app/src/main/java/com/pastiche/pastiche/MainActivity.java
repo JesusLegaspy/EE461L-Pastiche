@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
         TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
-        Typeface title_font = Typeface.createFromAsset(getAssets(), "fonts/Fashion Fetish Light.ttf");
+        Typeface title_font = Typeface.createFromAsset(getAssets(), "fonts/GreatVibes-Regular.ttf");
 
         app_name.setTypeface(title_font);
 
