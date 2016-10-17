@@ -1,4 +1,13 @@
 <resources>
-    <string name="app_name">Party!!!</string>
-    <string name="title_1">Party!!!</string>
+    <string name="app_name">Pastiche</string>
+    <string name="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </string>
+    <string name="my_menu_item">my menu Item!</string>
+    <string name="action_search">search</string>
+    <string name="action_settings">settings</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="Login">Login</string>
+    <string name="Create_account_msg">No account yet? Create one</string>
+
 </resources>
