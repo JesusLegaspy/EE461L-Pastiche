@@ -50,18 +50,37 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                Intent signUpIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivityForResult(signUpIntent, REQUEST_SIGNUP);
             }
         });
-
     }
 
     /**
      * Attempts to login using credentials provided by user
      */
-    public void login() {
-       //TODO add login algorithm
+    protected void login() {
+        //TODO implement login algorithm
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     *
+     * @return
+     */
+    protected boolean validateUserInfoFormat(){
+        //TODO implement password, username, email validatation
+        return true;
     }
 
 }
