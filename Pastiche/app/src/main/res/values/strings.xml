@@ -9,5 +9,6 @@
     <string name="Password">Password</string>
     <string name="Login">Login</string>
     <string name="Create_account_msg">No account yet? Create one</string>
-
+    <string name="picture_capture">Capture</string>
+    <string name="camera">"This is the camera activity"</string>
 </resources>
