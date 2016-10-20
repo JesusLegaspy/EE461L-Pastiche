@@ -13,12 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+
 /**
  * Login screen allows users to login with their username and password
  *
  * Created by Aria Pahlavan on 10/16/16.
  */
-
 public class LoginActivity extends AppCompatActivity{
     private static final String  ACTIVITY_TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if(validateUserInfoFormat()){
+                if(validateUserInfoFormat(false)){
                     loginButton.setEnabled(true);
                 }
                 else {
@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -70,13 +69,13 @@ public class LoginActivity extends AppCompatActivity{
         emailText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //do nothing
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if(validateUserInfoFormat()){
+                if(validateUserInfoFormat(false)){
                     loginButton.setEnabled(true);
                 }
                 else {
@@ -90,6 +89,24 @@ public class LoginActivity extends AppCompatActivity{
 
             }
         });
+
+        //if invalid email and password -> display error
+        emailText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //if invalid email and password -> display error
+                validateUserInfoFormat(true);
+            }
+        });
+
+        passwordText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //if invalid email and password -> display error
+                validateUserInfoFormat(true);
+            }
+        });
+
 
         //User tapped on login button -> process login
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +135,7 @@ public class LoginActivity extends AppCompatActivity{
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
 
-        //invalid info
-        if( !validateUserInfoFormat()){
 
-        }
 
     }
 
@@ -140,7 +154,7 @@ public class LoginActivity extends AppCompatActivity{
      *
      * @return
      */
-    protected boolean validateUserInfoFormat(){
+    protected boolean validateUserInfoFormat(boolean displayError){
         String password = passwordText.getText().toString();
         String email = emailText.getText().toString();
         boolean isValidPass = true;
@@ -149,7 +163,8 @@ public class LoginActivity extends AppCompatActivity{
         //TODO add an error drawable icon
         //invalid pass length
         if(password.length() < 8 && !password.isEmpty()){
-            passwordText.setError("Oops! Password must be at least 8 characters");
+            if ( displayError )
+                passwordText.setError("Oops! Password must be at least 8 characters");
             isValidPass = false;
         }
         else if ( password.isEmpty() ){
@@ -162,9 +177,9 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         //invalid email
-        if ( !Patterns.EMAIL_ADDRESS.matcher(email).matches() ){
-
-            emailText.setError("Please enter an email address.");
+        if ( !Patterns.EMAIL_ADDRESS.matcher(email).matches() && !email.isEmpty()){
+            if ( displayError )
+                emailText.setError("Please enter an email address.");
             isValidEmail = false;
         }
         else if ( email.isEmpty() ){
@@ -176,7 +191,6 @@ public class LoginActivity extends AppCompatActivity{
             emailText.setError(null);
             isValidEmail = true;
         }
-
 
         return isValidEmail & isValidPass;
     }
