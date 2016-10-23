@@ -23,8 +23,7 @@ import android.widget.Toast;
 public class LoginActivity extends AppCompatActivity{
     private static final String  ACTIVITY_TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    private static final float DISASBLE_ALPHA = (float) 0.4;
-    private static final float ENABLE_ALPHA = 1;
+
 
 
     private EditText emailText;
@@ -43,7 +42,7 @@ public class LoginActivity extends AppCompatActivity{
         loginButton = (Button) findViewById(R.id.btn_login);
         signupLink = (TextView) findViewById(R.id.link_signup);
 
-        disableButton(loginButton);
+        MainActivity.disableButton(loginButton);
 
         //check if valid password to enable login button
         passwordText.addTextChangedListener(new TextWatcher() {
@@ -56,11 +55,11 @@ public class LoginActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
                 if( validateLoginFormat(false)){
-                    enableButton(loginButton);
+                    MainActivity.enableButton(loginButton);
                 }
                 else {
                     Log.d(ACTIVITY_TAG, "invalid login info");
-                    disableButton(loginButton);
+                    MainActivity.disableButton(loginButton);
                 }
             }
 
@@ -80,11 +79,11 @@ public class LoginActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
                 if( validateLoginFormat(false)){
-                    enableButton(loginButton);
+                    MainActivity.enableButton(loginButton);
                 }
                 else {
                     Log.d(ACTIVITY_TAG, "invalid login info");
-                    disableButton(loginButton);
+                    MainActivity.disableButton(loginButton);
                 }
             }
 
@@ -133,23 +132,7 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    /**
-     * Disables the button and sets the disable transparency
-     * @param button
-     */
-    private static void disableButton(Button button){
-        button.setEnabled(false);
-        button.setAlpha(DISASBLE_ALPHA);
-    }
 
-    /**
-     * Enables the button and sets the enable transparency
-     * @param button
-     */
-    private static void enableButton(Button button){
-        button.setEnabled(true);
-        button.setAlpha(ENABLE_ALPHA);
-    }
 
 
     /**
@@ -157,7 +140,7 @@ public class LoginActivity extends AppCompatActivity{
      */
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
-        disableButton(loginButton);
+        MainActivity.disableButton(loginButton);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
@@ -223,6 +206,7 @@ public class LoginActivity extends AppCompatActivity{
             }
         }
     }
+
 
 
     /**

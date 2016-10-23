@@ -3,10 +3,15 @@ package com.pastiche.pastiche;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Sign up screen allows guests to sing up with a username, email, and password
@@ -24,18 +29,173 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
+        //Credentials provided by user
+        usernameText = (EditText) findViewById(R.id.input_username);
+        emailText = (EditText) findViewById(R.id.input_email);
+        passwordText = (EditText) findViewById(R.id.input_password);
+        signupButton = (Button) findViewById(R.id.btn_login);
+        loginLink = (TextView) findViewById(R.id.link_signup);
+
+        MainActivity.disableButton(signupButton);
+
+        //check if valid password to enable signup button
+        passwordText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //if valid email, password and username -> enable signup button
+                if( validateSignupFormat(false)){
+                    MainActivity.enableButton(signupButton);
+                }
+                else {
+                    Log.d(ACTIVITY_TAG, "invalid signup info");
+                    MainActivity.disableButton(signupButton);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+        //check if valid username to enable signup button
+        usernameText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //if valid email, password and username-> enable signup button
+                if( validateSignupFormat(false)){
+                    MainActivity.enableButton(signupButton);
+                }
+                else {
+                    Log.d(ACTIVITY_TAG, "invalid signup info");
+                    MainActivity.disableButton(signupButton);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        //check if valid email to enable signup button
+        emailText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //if valid email, password and username -> enable signup button
+                if( validateSignupFormat(false)){
+                    MainActivity.enableButton(signupButton);
+                }
+                else {
+                    Log.d(ACTIVITY_TAG, "invalid signup info");
+                    MainActivity.disableButton(signupButton);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //if invalid email, password and username -> display error
+        emailText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //if invalid email, password and username -> display error
+                validateSignupFormat(true);
+            }
+        });
+
+        passwordText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //if invalid email and password -> display error
+                validateSignupFormat(true);
+            }
+        });
+
+        usernameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                //if invalid email and password -> display error
+                validateSignupFormat(true);
+            }
+        });
+
+
+        //User tapped on signup button -> process signup
+        signupButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                signup();
+            }
+        });
+
+        //User tapped on "create new account" link -> switch to Signup Activity
+        loginLink.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // finish the Signup activity and return to login screen
+                finish();
+            }
+        });
+    }
+
+
+    private void signup() {
+        //TODO implement signup algorithm
+    }
+
+
+    /**
+     * After a successful signup session, finish activities
+     */
+    public void onSignupSuccess() {
+        signupButton.setEnabled(true);
+        setResult(RESULT_OK, null);
+        finish();
+    }
+
+
+    /**
+     * If signup not successful, display a toast message and allow user to retry
+     */
+    public void onSignupFailed() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+
+        signupButton.setEnabled(true);
     }
 
     /**
-     * verifies whether email and password have valid format
+     * verifies whether username, email and password have valid format
      * @param displayError if true an error will be displayed specifying
      *                     why the input is invalid
-     * @return returns true if both password and email are valid, else returns false
+     * @return returns true if both username, password and email are valid, else returns false
      */
     protected boolean validateSignupFormat(boolean displayError){
         String password = passwordText.getText().toString();
         String email = emailText.getText().toString();
+        String username = usernameText.getText().toString();
         boolean isValidPass = true;
         boolean isValidEmail = true;
 
@@ -68,6 +228,18 @@ public class SignupActivity extends AppCompatActivity {
         else{
             //remove errors
             emailText.setError(null);
+            isValidEmail = true;
+        }
+
+
+        //invalid username
+        if ( username.isEmpty() ){
+            usernameText.setError(null);
+            isValidEmail = false;
+        }
+        else{
+            //remove errors
+            usernameText.setError(null);
             isValidEmail = true;
         }
 

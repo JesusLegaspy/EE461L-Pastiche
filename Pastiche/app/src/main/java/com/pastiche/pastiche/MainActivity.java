@@ -1,5 +1,6 @@
 package com.pastiche.pastiche;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
+    private static final float DISASBLE_ALPHA = (float) 0.4;
+    private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
-//    private final int STR_SPLASH_TIME = 1000;
 
 
     @Override
@@ -31,27 +35,35 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-//        startSplashTimer();
+        startAuthentications();
 
     }
 
-//    //TODO need to add SplashActivity and move this method to it
-//    private void startSplashTimer() {
-//        try {
-//            Timer timer = new Timer();
-//            timer.schedule(new TimerTask() {
-//
-//                @Override
-//                public void run() {
-//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//            }, STR_SPLASH_TIME);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * Disables the button and sets the disable transparency
+     * @param button
+     */
+    protected static void disableButton(Button button){
+        button.setEnabled(false);
+        button.setAlpha(DISASBLE_ALPHA);
+    }
+
+    /**
+     * Enables the button and sets the enable transparency
+     * @param button
+     */
+    protected static void enableButton(Button button){
+        button.setEnabled(true);
+        button.setAlpha(ENABLE_ALPHA);
+    }
+
+    //    //TODO need to add SplashActivity and move this method to it
+    private void startAuthentications() {
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        Toast.makeText(getBaseContext(), "Login done", Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
