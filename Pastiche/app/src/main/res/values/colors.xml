@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FA0141</color>
-    <!-- Alternative Dark Primary: #CC0232-->
-    <color name="colorPrimaryDark">#FA0141</color>
+    <color name="colorPrimary">#34AF8F</color>
+    <!--Alternative Dark Primary: #CC0232-->
+    <color name="colorPrimaryDark">#34AF8F</color>
     <color name="colorPrimaryDarker">#CC0232</color>
-    <color name="colorAccent">#00E676</color>
+    <color name="colorAccent">#FA0141</color>
     <color name="toolbarItemColor">#CFD8DC</color>
     <color name="windowBackground">#424242</color>
+    <color name="buttonPrimary">#34AF8F</color>
+    <color name="buttonPrimaryPressed">#3ed283</color>
+    <color name="buttonPrimaryFocused">#34AF8F</color>
+    <color name="buttonPrimaryDisabled">#9E9E9E</color>
     <color name="dark_grey">#424242</color>
     <color name="medium_grey">#9E9E9E</color>
     <color name="button_grey">#757575</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
     <color name="grey_bg">#303030</color>
+    <color name="loginStatusBar">#333333</color>
+
 
     <color name="black">#000000</color>
     <color name="jet">#222222</color>
@@ -24,3 +30,4 @@
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
 </resources>
+

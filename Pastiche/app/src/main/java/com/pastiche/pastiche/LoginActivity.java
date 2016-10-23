@@ -1,5 +1,6 @@
 package com.pastiche.pastiche;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 /**
@@ -22,6 +23,9 @@ import android.widget.TextView;
 public class LoginActivity extends AppCompatActivity{
     private static final String  ACTIVITY_TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private static final float DISASBLE_ALPHA = (float) 0.4;
+    private static final float ENABLE_ALPHA = 1;
+
 
     private EditText emailText;
     private EditText passwordText;
@@ -39,7 +43,7 @@ public class LoginActivity extends AppCompatActivity{
         loginButton = (Button) findViewById(R.id.btn_login);
         signupLink = (TextView) findViewById(R.id.link_signup);
 
-        loginButton.setEnabled(false);
+        disableButton(loginButton);
 
         //check if valid password to enable login button
         passwordText.addTextChangedListener(new TextWatcher() {
@@ -51,12 +55,12 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if(validateUserInfoFormat(false)){
-                    loginButton.setEnabled(true);
+                if( validateLoginFormat(false)){
+                    enableButton(loginButton);
                 }
                 else {
                     Log.d(ACTIVITY_TAG, "invalid login info");
-                    loginButton.setEnabled(false);
+                    disableButton(loginButton);
                 }
             }
 
@@ -75,12 +79,12 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if(validateUserInfoFormat(false)){
-                    loginButton.setEnabled(true);
+                if( validateLoginFormat(false)){
+                    enableButton(loginButton);
                 }
                 else {
                     Log.d(ACTIVITY_TAG, "invalid login info");
-                    loginButton.setEnabled(false);
+                    disableButton(loginButton);
                 }
             }
 
@@ -95,7 +99,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 //if invalid email and password -> display error
-                validateUserInfoFormat(true);
+                validateLoginFormat(true);
             }
         });
 
@@ -103,7 +107,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 //if invalid email and password -> display error
-                validateUserInfoFormat(true);
+                validateLoginFormat(true);
             }
         });
 
@@ -130,31 +134,104 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
+     * Disables the button and sets the disable transparency
+     * @param button
+     */
+    private static void disableButton(Button button){
+        button.setEnabled(false);
+        button.setAlpha(DISASBLE_ALPHA);
+    }
+
+    /**
+     * Enables the button and sets the enable transparency
+     * @param button
+     */
+    private static void enableButton(Button button){
+        button.setEnabled(true);
+        button.setAlpha(ENABLE_ALPHA);
+    }
+
+
+    /**
      * Attempts to login using credentials provided by user
      */
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
+        disableButton(loginButton);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("hang tight (ᵔᴥᵔ)");
+        progressDialog.show();
+
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
+        //TODO call Jesus's function,Frank
+
+        //
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onLoginSuccess or onLoginFailed
+                        onLoginSuccess();
+                        // onLoginFailed();
+                        progressDialog.dismiss();
+                    }
+
+                }, 3000);
 
 
+    }
 
+    /**
+     * After a successful login session, finish activities
+     */
+    private void onLoginSuccess() {
+        loginButton.setEnabled(true);
+
+        Toast.makeText(getBaseContext(), "Login was successful", Toast.LENGTH_LONG).show();
+
+
+        this.finish();
+    }
+
+
+    /**
+     * If login not successful, display a toast message and allow user to retry
+     */
+    private void onLoginFail() {
+        loginButton.setEnabled(true);
+        Toast.makeText(getBaseContext(), "Oops! Login failed", Toast.LENGTH_LONG).show();
     }
 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //user won't be able to go back to slash activity
+        moveTaskToBack(true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: put successful signup logic here
+                //TODO remove finish
+                this.finish();
+            }
+        }
     }
 
+
     /**
-     *
-     * @return
+     * verifies whether email and password have valid format
+     * @param displayError if true an error will be displayed specifying
+     *                     why the input is invalid
+     * @return returns true if both password and email are valid, else returns false
      */
-    protected boolean validateUserInfoFormat(boolean displayError){
+    protected boolean validateLoginFormat(boolean displayError){
         String password = passwordText.getText().toString();
         String email = emailText.getText().toString();
         boolean isValidPass = true;
@@ -183,7 +260,7 @@ public class LoginActivity extends AppCompatActivity{
             isValidEmail = false;
         }
         else if ( email.isEmpty() ){
-
+            emailText.setError(null);
             isValidEmail = false;
         }
         else{

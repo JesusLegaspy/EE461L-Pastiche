@@ -13,9 +13,10 @@
     </style>
 
     <style name="AppTheme_Dark_Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="android:textColorPrimary">#CCCCCC</item>
-        <item name="android:background">#E43F3F</item>
+        <item name="colorAccent">@color/oil</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:progressBackgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
