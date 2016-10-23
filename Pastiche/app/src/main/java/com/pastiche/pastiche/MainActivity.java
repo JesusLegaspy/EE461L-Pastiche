@@ -1,6 +1,5 @@
 package com.pastiche.pastiche;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +9,10 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
     private Toolbar main_toolbar;
-    private final int STR_SPLASH_TIME = 1000;
+//    private final int STR_SPLASH_TIME = 1000;
 
 
     @Override
@@ -35,27 +31,27 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        startSplashTimer();
+//        startSplashTimer();
 
     }
 
-    //TODO need to add SplashActivity and move this method to it
-    private void startSplashTimer() {
-        try {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-
-                @Override
-                public void run() {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, STR_SPLASH_TIME);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    //TODO need to add SplashActivity and move this method to it
+//    private void startSplashTimer() {
+//        try {
+//            Timer timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//
+//                @Override
+//                public void run() {
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            }, STR_SPLASH_TIME);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

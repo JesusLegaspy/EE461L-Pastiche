@@ -16,7 +16,6 @@
         <item name="colorAccent">@color/oil</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:background">@color/colorPrimary</item>
-        <item name="android:progressBackgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -33,5 +32,9 @@
 
         <item name="colorButtonNormal">@color/colorPrimaryDark</item>
         <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/colorPrimaryDarker</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 </resources>
