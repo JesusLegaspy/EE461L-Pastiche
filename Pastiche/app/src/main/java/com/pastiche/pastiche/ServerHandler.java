@@ -18,11 +18,12 @@ public class ServerHandler {
     }
     //boolean for now-- request successful?
     public boolean getRequest() {
-
+    //// TODO: 10/23/2016
+        return false;
     }
 
 }
 
 class login{
-    private String
+    private String todo;
 }
