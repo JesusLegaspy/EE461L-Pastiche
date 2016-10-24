@@ -15,10 +15,14 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             // fetch data
             ServerRequestHandler test = ServerRequestHandler.getInstance(this.getApplicationContext());
             test.addToRequestQueue(getDummyObjectArrayWithPost(createMyReqSuccessListener(), createMyReqErrorListener()));
-
+            loginTest();
         } else {
             // display error
             Context context = getApplicationContext();
@@ -161,5 +165,30 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+    TextView mTxtDisplay;
+    private void loginTest (){
 
+        mTxtDisplay = (TextView) findViewById(R.id.responseText);
+        String url = "http://api.pastiche.staging.jacobingalls.rocks/users/login";
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url,null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mTxtDisplay.setText("Response: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        mTxtDisplay.setText("Response: " + error.toString());
+                    }
+                });
+
+// Access the RequestQueue through your singleton class.
+        ServerRequestHandler test = ServerRequestHandler.getInstance(this.getApplicationContext());
+        test.addToRequestQueue(jsObjRequest);
+    }
 }
