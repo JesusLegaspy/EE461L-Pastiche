@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
-        Toast.makeText(getBaseContext(), "Login done", Toast.LENGTH_LONG).show();
     }
 
     @Override

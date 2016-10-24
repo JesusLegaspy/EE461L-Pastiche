@@ -1,5 +1,6 @@
 package com.pastiche.pastiche;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -30,14 +31,14 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
 
         //Credentials provided by user
-        usernameText = (EditText) findViewById(R.id.input_username);
-        emailText = (EditText) findViewById(R.id.input_email);
-        passwordText = (EditText) findViewById(R.id.input_password);
-        signupButton = (Button) findViewById(R.id.btn_login);
-        loginLink = (TextView) findViewById(R.id.link_signup);
+        usernameText = (EditText) findViewById(R.id.input_signup_username);
+        emailText = (EditText) findViewById(R.id.input_signup_email);
+        passwordText = (EditText) findViewById(R.id.input_signup_password);
+        signupButton = (Button) findViewById(R.id.btn_signup);
+        loginLink = (TextView) findViewById(R.id.link_login);
 
         MainActivity.disableButton(signupButton);
 
@@ -163,8 +164,30 @@ public class SignupActivity extends AppCompatActivity {
 
 
     private void signup() {
-        //TODO implement signup algorithm
-    }
+        Log.d(ACTIVITY_TAG, "Signup");
+        signupButton.setEnabled(false);
+        String name = usernameText.getText().toString();
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("hang tight (ᵔᴥᵔ)");
+        progressDialog.show();
+
+
+
+        // TODO call Jesus' function,Frank
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        //TODO based on result either call onSignupSuccess or onSignupFailed
+                        onSignupSuccess();
+                        // onSignupFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 3000);    }
 
 
     /**
@@ -196,8 +219,9 @@ public class SignupActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
         String email = emailText.getText().toString();
         String username = usernameText.getText().toString();
-        boolean isValidPass = true;
-        boolean isValidEmail = true;
+        boolean isValidPass;
+        boolean isValidEmail;
+        boolean isValidUsername;
 
         //TODO add an error drawable icon
         //invalid pass length
@@ -235,15 +259,15 @@ public class SignupActivity extends AppCompatActivity {
         //invalid username
         if ( username.isEmpty() ){
             usernameText.setError(null);
-            isValidEmail = false;
+            isValidUsername = false;
         }
         else{
             //remove errors
             usernameText.setError(null);
-            isValidEmail = true;
+            isValidUsername = true;
         }
 
-        return isValidEmail & isValidPass;
+        return isValidEmail & isValidPass & isValidUsername;
     }
 }
 

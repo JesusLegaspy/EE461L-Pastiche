@@ -37,8 +37,8 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         //Credentials provided by user
-        emailText = (EditText) findViewById(R.id.input_email);
-        passwordText = (EditText) findViewById(R.id.input_password);
+        emailText = (EditText) findViewById(R.id.input_login_email);
+        passwordText = (EditText) findViewById(R.id.input_login_password);
         loginButton = (Button) findViewById(R.id.btn_login);
         signupLink = (TextView) findViewById(R.id.link_signup);
 
@@ -141,22 +141,21 @@ public class LoginActivity extends AppCompatActivity{
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
         MainActivity.disableButton(loginButton);
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("hang tight (ᵔᴥᵔ)");
         progressDialog.show();
 
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
 
-        //TODO call Jesus's function,Frank
 
-        //
+        //TODO call Jesus' function,Frank
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
+                        //TODO based on result either call onLoginSuccess or onLoginFailed
                         onLoginSuccess();
                         // onLoginFailed();
                         progressDialog.dismiss();

@@ -5,9 +5,13 @@
     <string name="my_menu_item">my menu Item!</string>
     <string name="action_search">search</string>
     <string name="action_settings">settings</string>
-    <string name="Email">EMAIL OR USERNAME</string>
+    <string name="Login_Email">EMAIL OR USERNAME</string>
     <string name="Password">PASSWORD</string>
     <string name="Login">Log In</string>
     <string name="Create_account_msg">No account yet? Create one</string>
+    <string name="username">USERNAME</string>
+    <string name="signup">Sign Up</string>
+    <string name="signup_email">EMAIL</string>
+    <string name="signup_password">PASSWORD</string>
 
 </resources>
