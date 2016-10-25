@@ -2,6 +2,7 @@ package com.pastiche.pastiche;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,17 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) ); //TODO: remove??
 
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
@@ -76,15 +82,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 //-------------------[TESTING]------------------------
-    public void testLogin(View view){
+    public void testLogin(View view) throws JSONException {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            // fetch data
-            ServerRequestHandler test = ServerRequestHandler.getInstance(this.getApplicationContext());
-            test.addToRequestQueue(getDummyObjectArrayWithPost(createMyReqSuccessListener(), createMyReqErrorListener()));
             loginTest();
+            imageTest();
         } else {
             // display error
             Context context = getApplicationContext();
@@ -96,99 +100,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * An example call (not used in this example app) to demonstrate how to do a Volley POST call
-     * and parse the response with Gson.
-     *
-     * @param listener is the listener for the success response
-     * @param errorListener is the listener for the error response
-     *
-     */
-    public static GsonPostRequest getDummyObjectArrayWithPost
-    (
-            Response.Listener<PUser> listener,
-            Response.ErrorListener errorListener
-    )
-    {
-        final String url = "http://api.pastiche.staging.jacobingalls.rocks/users/login";
-
-        /*final Gson gson = new GsonBuilder()
-                .registerTypeAdapter(PUser.class, new DummyObjectDeserializer())
-                .create();*/
-        final Gson gson = new Gson();
-
-        final Gson test = new Gson();
-        PUser yes = new PUser(1,"myname","myemail@no.co","mypassword");
-        String jsonObject;
-        jsonObject = gson.toJson(yes);
-
-       return new GsonPostRequest<>
-                (
-                        url,
-                        jsonObject,
-                        new TypeToken<PUser>()
-                        {
-                        }.getType(),
-                        gson,
-                        listener,
-                        errorListener
-                );
-    }
-
-    private Response.Listener<PUser> createMyReqSuccessListener() {
-        return new Response.Listener<PUser>() {
-            @Override
-            public void onResponse(PUser response) {
-                // Do whatever you want to do with response;
-                // Like response.tags.getListing_count(); etc. etc.
-                Context context = getApplicationContext();
-                CharSequence text = "Logged in!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-        };
-    }
-
-    private Response.ErrorListener createMyReqErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Do whatever you want to do with error.getMessage();
-                Context context = getApplicationContext();
-                CharSequence text = "Response Error";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-        };
-    }
     TextView mTxtDisplay;
-    private void loginTest (){
-
+    private void loginTest () throws JSONException {
         mTxtDisplay = (TextView) findViewById(R.id.responseText);
-        String url = "http://api.pastiche.staging.jacobingalls.rocks/users/login";
 
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, url,null, new Response.Listener<JSONObject>() {
+        JSONObject body = new JSONObject();
+        body.put("username","myname");
+        body.put("password","mypassword");
+        body.put("email","myemail@no.co");
+
+        Response.Listener<JSONObject> successful = new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         mTxtDisplay.setText("Response: " + response.toString());
+
                     }
-                }, new Response.ErrorListener() {
+
+                };
+
+        Response.ErrorListener errored = new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         mTxtDisplay.setText("Response: " + error.toString());
                     }
-                });
+                };
 
+        ServerRequestHandler.createAccountRequest(this.getApplicationContext(), body, successful, errored);
+    }
+    ImageView mImageView;
+    private void imageTest(){
+        String url = "http://api.pastiche.staging.jacobingalls.rocks/photos/14";
+        mImageView = (ImageView) findViewById(R.id.imageView);
+
+// Retrieves an image specified by the URL, displays it in the UI.
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        mImageView.setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        mImageView.setImageResource(R.drawable.magnify);
+                    }
+                });
 // Access the RequestQueue through your singleton class.
-        ServerRequestHandler test = ServerRequestHandler.getInstance(this.getApplicationContext());
-        test.addToRequestQueue(jsObjRequest);
+        // Access the RequestQueue through your singleton class.
+        ServerRequestQueue test = ServerRequestQueue.getInstance(this.getApplicationContext());
+        test.addToRequestQueue(request);
     }
 }
