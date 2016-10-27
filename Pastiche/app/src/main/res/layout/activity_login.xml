@@ -5,7 +5,7 @@
             android:layout_height="fill_parent"
             android:background="#333333"
 
->S
+>
 
     <LinearLayout android:paddingTop="@dimen/login_padding_top"
                   android:paddingLeft="@dimen/login_padding_left_right"
