@@ -9,7 +9,7 @@
 >
 
     <TextView android:text="@string/app_name"
-              android:textColor="@color/toolbarItemColor"
+              android:textColor="@color/white"
               android:textSize="35sp"
               android:id="@+id/toolbar_app_name"
               android:layout_width="150dp"

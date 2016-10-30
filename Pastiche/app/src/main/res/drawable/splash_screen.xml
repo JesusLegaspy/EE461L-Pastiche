@@ -7,10 +7,10 @@
 
 
     <item android:id="@+id/status_bar_background"
-          android:drawable="@color/oil"/>
+          android:drawable="@color/windowBackground"/>
 
     <item android:id="@+id/content_window_background"
-          android:drawable="@color/oil"
+          android:drawable="@color/windowBackground"
           android:top="25dp"/>
 
     <item>

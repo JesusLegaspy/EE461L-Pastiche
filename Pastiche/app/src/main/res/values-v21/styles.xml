@@ -16,7 +16,7 @@
                 <item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
         </style>
         <style name="AppTheme_Dark_Dialog" parent="Theme.AppCompat.Dialog">
-                <item name="colorAccent">@color/oil</item>
+                <item name="colorAccent">@color/windowBackground</item>
                 <item name="android:textColorPrimary">@color/white</item>
                 <item name="android:background">@color/colorPrimary</item>
                 <item name="android:progressBackgroundTint">@color/colorPrimary</item>

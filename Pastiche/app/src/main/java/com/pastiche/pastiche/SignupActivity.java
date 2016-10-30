@@ -1,6 +1,7 @@
 package com.pastiche.pastiche;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +34,12 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        if ( Build.VERSION.SDK_INT >= 21) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
+        }
 
         //Credentials provided by user
         usernameText = (EditText) findViewById(R.id.input_signup_username);

@@ -2,12 +2,14 @@ package com.pastiche.pastiche;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        if ( Build.VERSION.SDK_INT >= 21) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
+        }
 
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
@@ -38,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
+    /**        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
      * Disables the button and sets the disable transparency
      * @param button
      */
