@@ -1,4 +1,4 @@
-package com.pastiche.pastiche;
+package com.pastiche.pastiche.register;
 
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.pastiche.pastiche.MainActivity;
+import com.pastiche.pastiche.R;
 
 /**
  * Sign up screen allows guests to sing up with a username, email, and password
@@ -35,6 +37,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        //make Navigation bar transparent with bg color
+        //set status bar color
         if ( Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
@@ -171,6 +175,9 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Process signup using server req handler
+     */
     private void signup() {
         Log.d(ACTIVITY_TAG, "Signup");
         signupButton.setEnabled(false);

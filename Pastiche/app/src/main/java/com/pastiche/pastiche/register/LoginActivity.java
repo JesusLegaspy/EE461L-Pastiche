@@ -1,7 +1,9 @@
-package com.pastiche.pastiche;
+package com.pastiche.pastiche.register;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.pastiche.pastiche.MainActivity;
+import com.pastiche.pastiche.R;
 
 
 /**
@@ -38,6 +42,8 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //make Navigation bar transparent with bg color
+        //set status bar color
         if ( Build.VERSION.SDK_INT >= 21) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
@@ -144,13 +150,21 @@ public class LoginActivity extends AppCompatActivity{
 
 
     /**
-     * Attempts to login using credentials provided by user
+     * Attempts to login using credentials provided by user through server req handler
      */
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
         MainActivity.disableButton(loginButton);
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
+
+        SharedPreferences preferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("id", email);
+        editor.putBoolean("logged_in", true);
+        editor.commit();
+
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
@@ -198,7 +212,7 @@ public class LoginActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        //user won't be able to go back to slash activity
+        //user won't be able to nav back to main, exit app instead
         moveTaskToBack(true);
     }
 
