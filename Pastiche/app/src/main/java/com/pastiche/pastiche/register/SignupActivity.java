@@ -1,6 +1,8 @@
 package com.pastiche.pastiche.register;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,9 @@ public class SignupActivity extends AppCompatActivity {
     private EditText passwordText;
     private Button signupButton;
     private TextView loginLink;
+    private String username;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +72,6 @@ public class SignupActivity extends AppCompatActivity {
                     MainActivity.enableButton(signupButton);
                 }
                 else {
-                    Log.d(ACTIVITY_TAG, "invalid signup info");
                     MainActivity.disableButton(signupButton);
                 }
             }
@@ -93,7 +96,6 @@ public class SignupActivity extends AppCompatActivity {
                     MainActivity.enableButton(signupButton);
                 }
                 else {
-                    Log.d(ACTIVITY_TAG, "invalid signup info");
                     MainActivity.disableButton(signupButton);
                 }
             }
@@ -117,7 +119,6 @@ public class SignupActivity extends AppCompatActivity {
                     MainActivity.enableButton(signupButton);
                 }
                 else {
-                    Log.d(ACTIVITY_TAG, "invalid signup info");
                     MainActivity.disableButton(signupButton);
                 }
             }
@@ -129,49 +130,18 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         //if invalid email, password and username -> display error
-        emailText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //if invalid email, password and username -> display error
-                validateSignupFormat(true);
-            }
-        });
+        emailText.setOnFocusChangeListener((v, hasFocus) -> validateSignupFormat(true));
 
-        passwordText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //if invalid email and password -> display error
-                validateSignupFormat(true);
-            }
-        });
+        passwordText.setOnFocusChangeListener((v, hasFocus) -> validateSignupFormat(true));
 
-        usernameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //if invalid email and password -> display error
-                validateSignupFormat(true);
-            }
-        });
+        usernameText.setOnFocusChangeListener((v, hasFocus) -> validateSignupFormat(true));
 
 
         //User tapped on signup button -> process signup
-        signupButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                signup();
-            }
-        });
+        signupButton.setOnClickListener(v -> signup());
 
         //User tapped on "create new account" link -> switch to Signup Activity
-        loginLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // finish the Signup activity and return to login screen
-                finish();
-            }
-        });
+        loginLink.setOnClickListener(v -> finish());
     }
 
 
@@ -181,9 +151,7 @@ public class SignupActivity extends AppCompatActivity {
     private void signup() {
         Log.d(ACTIVITY_TAG, "Signup");
         signupButton.setEnabled(false);
-        String name = usernameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
+        updateAttr();
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -210,10 +178,37 @@ public class SignupActivity extends AppCompatActivity {
      */
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
+
+        int numTries = 3;
+        //ensure user info is stored on device
+        while (!storeSigninUserInfo()){
+            if ( numTries == 0 ){
+                Log.d(ACTIVITY_TAG, "CANNOT STORE USER INFO");
+                break;
+            }
+            numTries--;
+        }
+
+        Toast.makeText(getBaseContext(), "Signup was successful", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, null);
         finish();
     }
 
+    private boolean storeSigninUserInfo() {
+        SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("id", username);
+        editor.putString("email", email);
+        editor.putBoolean("logged_in", true);
+        return editor.commit();
+    }
+
+    private void updateAttr(){
+        this.username = usernameText.getText().toString();
+        this.email = emailText.getText().toString();
+        this.password = passwordText.getText().toString();
+    }
 
     /**
      * If signup not successful, display a toast message and allow user to retry
@@ -231,9 +226,8 @@ public class SignupActivity extends AppCompatActivity {
      * @return returns true if both username, password and email are valid, else returns false
      */
     protected boolean validateSignupFormat(boolean displayError){
-        String password = passwordText.getText().toString();
-        String email = emailText.getText().toString();
-        String username = usernameText.getText().toString();
+        updateAttr();
+
         boolean isValidPass;
         boolean isValidEmail;
         boolean isValidUsername;

@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +34,8 @@ public class LoginActivity extends AppCompatActivity{
     private EditText passwordText;
     private Button loginButton;
     private TextView signupLink;
+    private String password;
+    private String email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity{
                     MainActivity.enableButton(loginButton);
                 }
                 else {
-                    Log.d(ACTIVITY_TAG, "invalid login info");
                     MainActivity.disableButton(loginButton);
                 }
             }
@@ -96,7 +95,6 @@ public class LoginActivity extends AppCompatActivity{
                     MainActivity.enableButton(loginButton);
                 }
                 else {
-                    Log.d(ACTIVITY_TAG, "invalid login info");
                     MainActivity.disableButton(loginButton);
                 }
             }
@@ -108,41 +106,22 @@ public class LoginActivity extends AppCompatActivity{
         });
 
         //if invalid email and password -> display error
-        emailText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //if invalid email and password -> display error
-                validateLoginFormat(true);
-            }
-        });
+        emailText.setOnFocusChangeListener((v, hasFocus) -> validateLoginFormat(true));
 
-        passwordText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //if invalid email and password -> display error
-                validateLoginFormat(true);
-            }
-        });
+        emailText.setOnFocusChangeListener((v, hasFocus) -> validateLoginFormat(true));
+
+        passwordText.setOnFocusChangeListener((v, hasFocus)->validateLoginFormat(true));
+
 
 
         //User tapped on login button -> process login
-        loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        loginButton.setOnClickListener(v -> login());
 
         //User tapped on "create new account" link -> switch to SignupActivity
-        signupLink.setOnClickListener(new View.OnClickListener() {
+        signupLink.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent signUpIntent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(signUpIntent, REQUEST_SIGNUP);
-            }
+            Intent signUpIntent = new Intent(getApplicationContext(), SignupActivity.class);
+            startActivityForResult(signUpIntent, REQUEST_SIGNUP);
         });
     }
 
@@ -155,15 +134,7 @@ public class LoginActivity extends AppCompatActivity{
     protected void login() {
         Log.d(ACTIVITY_TAG, "Login in progress!");
         MainActivity.disableButton(loginButton);
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        SharedPreferences preferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putString("id", email);
-        editor.putBoolean("logged_in", true);
-        editor.commit();
+        updateAttr();
 
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
@@ -174,18 +145,12 @@ public class LoginActivity extends AppCompatActivity{
 
 
         //TODO call Jesus' function,Frank
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        //TODO based on result either call onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-
+        new android.os.Handler().postDelayed(() -> {
+                    //TODO based on result either call onLoginSuccess or onLoginFailed
+                    onLoginSuccess();
+                    // onLoginFailed();
+                    progressDialog.dismiss();
                 }, 3000);
-
-
     }
 
     /**
@@ -194,10 +159,29 @@ public class LoginActivity extends AppCompatActivity{
     private void onLoginSuccess() {
         loginButton.setEnabled(true);
 
-        Toast.makeText(getBaseContext(), "Login was successful", Toast.LENGTH_LONG).show();
+        int numTries = 3;
+        //ensure user info is stored on device
+        while (!storeLoginUserInfo()){
+            if ( numTries == 0 ){
+                Log.d(ACTIVITY_TAG, "CANNOT STORE USER INFO");
+                break;
+            }
+            numTries--;
+        }
+
+        Toast.makeText(getBaseContext(), "Login was successful", Toast.LENGTH_SHORT).show();
 
 
         this.finish();
+    }
+
+    private boolean storeLoginUserInfo() {
+        SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("id", email);
+        editor.putBoolean("logged_in", true);
+        return editor.commit();
     }
 
 
@@ -237,8 +221,7 @@ public class LoginActivity extends AppCompatActivity{
      * @return returns true if both password and email are valid, else returns false
      */
     protected boolean validateLoginFormat(boolean displayError){
-        String password = passwordText.getText().toString();
-        String email = emailText.getText().toString();
+        updateAttr();
         boolean isValidPass = true;
         boolean isValidEmail = true;
 
@@ -259,12 +242,15 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         //invalid email
-        if ( !Patterns.EMAIL_ADDRESS.matcher(email).matches() && !email.isEmpty()){
-            if ( displayError )
-                emailText.setError("Please enter an email address.");
-            isValidEmail = false;
-        }
-        else if ( email.isEmpty() ){
+//        if ( !Patterns.EMAIL_ADDRESS.matcher(email).matches() && !email.isEmpty()){
+//            if ( displayError )
+//                emailText.setError("Please enter an email address.");
+//            isValidEmail = false;
+//        }
+//        else
+
+        //invalid email or username
+        if ( email.isEmpty() ){
             emailText.setError(null);
             isValidEmail = false;
         }
@@ -275,6 +261,14 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         return isValidEmail & isValidPass;
+    }
+
+    /**
+     * updates login attributes
+     */
+    private void updateAttr(){
+        this.password = passwordText.getText().toString();
+        this.email = emailText.getText().toString();
     }
 
 }

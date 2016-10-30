@@ -20,10 +20,14 @@ import com.pastiche.pastiche.register.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
+    private static final String SHARED_PREF_NAME = "PUSER_INFO";
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
 
+    public static String getSharedPreferenceName() {
+        return SHARED_PREF_NAME;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         if(!registered(id)) {
             startAuthentications();
         } else {
-            Log.d(ACTIVITY_TAG, "Not logged_in");
+            Log.d(ACTIVITY_TAG, "logged_in");
         }
 
     }
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
      * @return true if user already logged in, false otherwise
      */
     private boolean registered(String _id) {
-        SharedPreferences pref = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(this.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         String id = pref.getString("id", "");
         boolean logged_in = pref.getBoolean("logged_in", false);
@@ -124,6 +128,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if ( id == R.id.action_logout ){
+            logout();
+            return true;
+        }
+
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        SharedPreferences pref = getSharedPreferences(this.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.clear();
+        boolean is_loggedout = editor.commit();
+        Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
+        startAuthentications();
     }
 }

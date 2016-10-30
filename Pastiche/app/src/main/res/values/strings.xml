@@ -13,5 +13,6 @@
     <string name="signup">Sign Up</string>
     <string name="signup_email">EMAIL</string>
     <string name="signup_password">PASSWORD</string>
+    <string name="action_logout">logout</string>
 
 </resources>
