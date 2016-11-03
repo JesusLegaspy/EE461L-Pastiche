@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 /**
  * Created by Khalid on 10/22/2016.
  */
-
+/*
 public class ServerHandler {
     public PUser createAccountRequest(){
         //check if username is in use
@@ -50,3 +50,4 @@ class login{
         this.password = passw;
     }
 }
+*/
