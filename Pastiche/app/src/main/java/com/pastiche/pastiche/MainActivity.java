@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
-        ServerRequestHandler.createAccountRequest(this.getApplicationContext(), body, successful, errored);
+        //ServerRequestHandler.createAccountRequest(this.getApplicationContext(), body, successful, errored);
     }
     ImageView mImageView;
     private void imageTest(){
