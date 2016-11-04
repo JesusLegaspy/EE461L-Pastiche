@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/buttonPrimaryPressed" android:state_pressed="true"/>
-    <item android:drawable="@color/buttonPrimaryFocused" android:state_focused="true"/>
-    <item android:drawable="@color/buttonPrimary"/>
+
+
+    <item android:state_pressed="true" >
+        <shape>
+            <gradient
+                    android:startColor="@color/buttonPrimaryPressed"
+                    android:endColor="@color/buttonPrimaryPressed"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/medium_grey" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true" >
+        <shape>
+            <gradient
+                    android:endColor="@color/buttonPrimaryFocused"
+                    android:startColor="@color/buttonPrimaryFocused"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/medium_grey" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <gradient
+                    android:endColor="@color/buttonPrimary"
+                    android:startColor="@color/buttonPrimary"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/medium_grey" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_enabled="false">
+        <shape>
+            <gradient
+                    android:endColor="@color/buttonPrimaryDisabled"
+                    android:startColor="@color/buttonPrimaryDisabled"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/medium_grey" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
 </selector>
