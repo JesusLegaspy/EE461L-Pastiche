@@ -33,24 +33,4 @@
         android:layout_marginStart="39dp"
         android:id="@+id/button2"
         android:onClick="testLogin"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:layout_above="@+id/button2"
-        android:layout_alignStart="@+id/responseText"
-        android:layout_marginBottom="18dp"
-        android:id="@+id/imageView"
-        android:layout_alignEnd="@+id/button"
-        android:layout_below="@+id/responseText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="62dp"
-        android:id="@+id/responseText"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignEnd="@+id/button" />
-
 </RelativeLayout>
