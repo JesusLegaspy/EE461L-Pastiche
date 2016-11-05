@@ -1,22 +1,28 @@
 package com.pastiche.pastiche;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
+        import android.annotation.SuppressLint;
+        import android.content.Context;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.util.Log;
+        import android.widget.ImageView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+        import com.android.volley.NetworkResponse;
+        import com.android.volley.Request;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.toolbox.ImageRequest;
+        import com.android.volley.toolbox.JsonObjectRequest;
+        import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.util.function.Consumer;
+        import java.io.ByteArrayOutputStream;
+        import java.util.HashMap;
+        import java.util.Map;
+        import java.util.function.Consumer;
 
 /**
  * Created by jesus on 10/25/2016.
@@ -42,7 +48,7 @@ class ServerRequestHandler {
             }
         }
         return mInstance;
-}
+    }
 
     public void jsonPost(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -72,6 +78,63 @@ class ServerRequestHandler {
         pQueue.addToRequestQueue(strRequest);
     }
 
-// getPicture
-// postPicture
+    public void imageGet(String url, ImageView.ScaleType scaleType, Consumer<Bitmap> data, Consumer<VolleyError> errorData){
+        ImageRequest imgRequest = new ImageRequest
+                (baseURL + url, data::accept, 0,0, scaleType,null, errorData::accept);
+        ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
+        pQueue.addToRequestQueue(imgRequest);
+    }
+
+    public void bitmapPost(String url, Bitmap bitmapPhoto, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, baseURL + url, data::accept, errorData::accept) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("content-type", "multipart/form-data; boundary=---011000010111000001101001");
+                params.put("cache-control", "no-cache");
+                params.put("jesuslegaspy-token", "a1bda35a-48c7-dde3-17e0-c092d78db16a");
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                params.put("photo", new DataPart(".jpg", getBytesFromBitmap(bitmapPhoto), "image/jpeg"));
+                return params;
+            }
+        };
+    }
+
+    public void imagePost(String url, String imagePath, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, baseURL + url, data::accept, errorData::accept) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("content-type", "multipart/form-data; boundary=---011000010111000001101001");
+                params.put("cache-control", "no-cache");
+                params.put("jesuslegaspy-token", "a1bda35a-48c7-dde3-17e0-c092d78db16a");
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                params.put("photo", new DataPart(".jpg", getBytesFromBitmap(BitmapFactory.decodeFile(imagePath)), "image/jpeg"));
+
+                return params;
+            }
+        };
+    }
+
+    // convert from bitmap to byte array
+    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+        if(bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+            return stream.toByteArray();
+        }
+        Log.d("ServerRequestHandler", "Bitmap null");
+        return null;
+    }
+
 }
