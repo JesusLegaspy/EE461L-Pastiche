@@ -34,16 +34,6 @@
         android:id="@+id/button2"
         android:onClick="testLogin"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignStart="@+id/button2"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="59dp"
-        android:id="@+id/responseText"
-        android:layout_alignEnd="@+id/button" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,5 +44,13 @@
         android:id="@+id/imageView"
         android:layout_alignEnd="@+id/button"
         android:layout_below="@+id/responseText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:id="@+id/responseText"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignEnd="@+id/button" />
 
 </RelativeLayout>

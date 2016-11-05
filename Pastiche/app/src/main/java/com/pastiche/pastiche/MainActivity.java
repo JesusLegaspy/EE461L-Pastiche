@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -87,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            loginTest();
-            imageTest();
+            //loginTest();
+            //imageTest();
+            layeredPost();
         } else {
             // display error
             Context context = getApplicationContext();
@@ -152,5 +155,61 @@ public class MainActivity extends AppCompatActivity {
         // Access the RequestQueue through your singleton class.
         ServerRequestQueue test = ServerRequestQueue.getInstance(this.getApplicationContext());
         test.addToRequestQueue(request);
+    }
+
+    public void layeredPost() throws JSONException {
+        mTxtDisplay = (TextView) findViewById(R.id.responseText);
+        ServerRequestHandler testing = ServerRequestHandler.getInstance(this.getApplicationContext());
+        JSONObject body = new JSONObject();
+        body.put("username","myname");
+        body.put("password","mypassword");
+        body.put("email","myemail@no.co");
+
+        testing.jsonPost("/users", body, x -> {
+                    Log.d("main",x.toString());
+            mTxtDisplay.setText("Response: " + x.toString());},
+                y -> {
+            if(y != null) {
+                onErrorResponse(y);
+            }
+        });
+        //mTxtDisplay.setText("Response: " + y.toString())
+    }
+
+    //Credit from "Submersed" on https://stackoverflow.com/questions/21867929/android-how-handle-message-error-from-the-server-using-volley
+
+    public void onErrorResponse(VolleyError error) {
+        String json = null;
+
+        NetworkResponse response = error.networkResponse;
+        if(response != null && response.data != null){
+            switch(response.statusCode){
+                case 400:
+                    json = new String(response.data);
+                    json = trimMessage(json, "error");
+                    if(json != null) displayMessage(json);
+                    break;
+            }
+            //Additional cases
+        }
+    }
+    public String trimMessage(String json, String key){
+        String trimmedString = null;
+
+        try{
+            JSONObject obj = new JSONObject(json);
+            trimmedString = obj.getString(key);
+        } catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return trimmedString;
+    }
+
+    //Somewhere that has access to a context
+    public void displayMessage(String toastString){
+        //Toast.makeText(context, toastString, Toast.LENGTH_LONG).show();
+        Log.d("main", toastString);
     }
 }
