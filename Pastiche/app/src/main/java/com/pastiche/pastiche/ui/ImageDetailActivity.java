@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.pastiche.pastiche.MainActivity;
 import com.pastiche.pastiche.R;
 
 public class ImageDetailActivity extends AppCompatActivity {
@@ -30,7 +29,7 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     private void launchUserPage() {
         //TODO fires up the activity to show user's page
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent();
         startActivity(intent);
         finish();
     }

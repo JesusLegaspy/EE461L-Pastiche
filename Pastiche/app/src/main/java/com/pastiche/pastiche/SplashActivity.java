@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         //call main activity
-        Intent intent = new Intent(SplashActivity.this, ImageDetailActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
 
