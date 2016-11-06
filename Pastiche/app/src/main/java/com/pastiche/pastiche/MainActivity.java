@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             //do work
+            ServerHandler handle = ServerHandler.getInstance(getApplicationContext());
+            handle.login("myname", "mypassword", x -> Log.d("Main_JesusTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_JesusTesting",x));
         } else {
             //log
         }
