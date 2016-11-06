@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.register.LoginActivity;
 
+
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
     private static final String SHARED_PREF_NAME = "PUSER_INFO";
@@ -30,14 +31,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(
+            Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         //make Navigation bar transparent with bg color
         //set status bar color
-        if ( Build.VERSION.SDK_INT >= 21) {
+        if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         //authentication
         String id = new String();
-        if(!registered(id)) {
+        if ( !registered(id) ) {
             startAuthentications();
         } else {
             Log.d(ACTIVITY_TAG, "logged_in");
@@ -66,10 +68,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Check private storage for user info
      * if nothing found, user is not registered
+     *
      * @return true if user already logged in, false otherwise
      */
     private boolean registered(String _id) {
-        SharedPreferences pref = getSharedPreferences(this.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         String id = pref.getString("id", "");
         boolean logged_in = pref.getBoolean("logged_in", false);
@@ -81,21 +84,24 @@ public class MainActivity extends AppCompatActivity {
         return logged_in;
     }
 
-    /**        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+    /**
+     * testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+     * <p>
      * Disables the button and sets the disable transparency
+     *
      * @param button
      */
-    public static void disableButton(Button button){
+    public static void disableButton(Button button) {
         button.setEnabled(false);
         button.setAlpha(DISASBLE_ALPHA);
     }
 
     /**
      * Enables the button and sets the enable transparency
+     *
      * @param button
      */
-    public static void enableButton(Button button){
+    public static void enableButton(Button button) {
         button.setEnabled(true);
         button.setAlpha(ENABLE_ALPHA);
     }
@@ -122,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noInspection SimplifiableIfStatement
-        if ( id == R.id.action_settings ){
+        if ( id == R.id.action_settings ) {
             String _id = new String();
             registered(_id);
             return true;
         }
 
-        if ( id == R.id.action_logout ){
+        if ( id == R.id.action_logout ) {
             logout();
             return true;
         }
@@ -138,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        SharedPreferences pref = getSharedPreferences(this.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = pref.edit();
 

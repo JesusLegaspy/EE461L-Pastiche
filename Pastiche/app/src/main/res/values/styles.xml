@@ -2,39 +2,56 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
         <item name="android:windowBackground">@color/windowBackground</item>
-
-        <!-- Customize your theme here. -->
-
     </style>
 
+    <!-- APP_THEME DARK  DIALOG-->
     <style name="AppTheme_Dark_Dialog" parent="Theme.AppCompat.Dialog">
         <item name="colorAccent">@color/windowBackground</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/windowBackground</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
     </style>
 
+    <!-- APP_THEME DARK -->
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
 
-        <item name="android:windowBackground">@color/colorPrimary</item>
-
+        <item name="android:windowBackground">@color/windowBackground</item>
         <item name="colorControlNormal">@color/iron</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
-
-        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
-        <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/colorPrimaryDarker</item>
-
+        <item name="android:textColorHint">@color/aluminum</item>
     </style>
 
+
+    <!-- APP_THEME DARK -->
+    <style name="AppTheme.Light.Login" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorAccentPink</item>
+        <item name="colorPrimaryDark">@color/colorAccentPink</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textColorHint">@color/aluminum</item>
+    </style>
+
+
+
+    <!-- APP_THEME DARK -->
+    <style name="AppTheme.Light.Signup" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorAccentYellow</item>
+        <item name="colorPrimaryDark">@color/colorAccentYellow</item>
+        <item name="colorAccent">@color/colorAccentYellow</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textColorHint">@color/aluminum</item>
+    </style>
+
+    <!-- SPLASH THEME -->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">false</item>

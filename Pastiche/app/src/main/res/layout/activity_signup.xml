@@ -4,7 +4,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fitsSystemWindows="true"
-        android:background="@color/windowBackground"
 >
 
     <LinearLayout
@@ -13,7 +12,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="56dp"
             android:paddingLeft="24dp"
-            android:paddingRight="24dp">
+            android:paddingRight="24dp"
+    >
 
         <!-- Logo -->
         <TextView  android:layout_width="wrap_content"
@@ -21,9 +21,9 @@
                    android:layout_marginBottom="@dimen/login_padding_left_right"
                    android:layout_gravity="center_horizontal"
                    android:text="@string/signup"
+                   android:textColor="@color/black"
                    android:textSize="36sp"
-                   android:textColor="@color/white"
-                   android:textStyle="normal|bold" android:fontFamily="sans-serif-condensed"
+                   android:textStyle="normal|bold" android:fontFamily="sans-serif"
                    android:paddingBottom="@dimen/login_padding_left_right"
         />
 
@@ -40,9 +40,11 @@
                       android:inputType="textCapWords"
                       android:hint="@string/username"
                       android:maxLength="300"
-                      android:backgroundTint="@color/colorPrimary"
+                      android:textColorHint="@color/base"
+                      android:textColor="@color/black"
+                      android:backgroundTint="@color/base"
                       android:backgroundTintMode="src_atop"
-            />
+                      android:fontFamily="sans-serif"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Email title -->
@@ -58,7 +60,9 @@
                       android:inputType="textEmailAddress"
                       android:hint="@string/signup_email"
                       android:maxLength="60"
-                      android:backgroundTint="@color/colorPrimary"
+                      android:textColorHint="@color/base"
+                      android:textColor="@color/black"
+                      android:backgroundTint="@color/base"
                       android:backgroundTintMode="src_atop"
             />
         </android.support.design.widget.TextInputLayout>
@@ -76,7 +80,9 @@
                       android:inputType="textPassword"
                       android:hint="@string/signup_password"
                       android:maxLength="150"
-                      android:backgroundTint="@color/colorPrimary"
+                      android:textColorHint="@color/base"
+                      android:textColor="@color/black"
+                      android:backgroundTint="@color/base"
                       android:backgroundTintMode="src_atop"
                       android:fontFamily="sans-serif"/>
         </android.support.design.widget.TextInputLayout>
@@ -90,7 +96,8 @@
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
                 android:text="Create Account"
-                android:background="@drawable/ripple_button_background"
+                android:textColor="@color/yellowBtnTxtClr"
+                android:background="@drawable/ripple_yellow_bg"
         />
 
         <TextView android:id="@+id/link_login"
@@ -99,7 +106,9 @@
                   android:layout_marginBottom="24dp"
                   android:text="Already a member? Login"
                   android:gravity="center"
-                  android:textSize="16dip"/>
+                  android:textSize="16dip"
+                  android:textColor="@color/colorAccentYellow"
+        />
 
     </LinearLayout>
 </ScrollView>

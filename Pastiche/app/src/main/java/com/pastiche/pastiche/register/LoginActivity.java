@@ -21,13 +21,12 @@ import com.pastiche.pastiche.R;
 
 /**
  * Login screen allows users to login with their username and password
- *
+ * <p>
  * Created by Aria Pahlavan on 10/16/16.
  */
-public class LoginActivity extends AppCompatActivity{
-    private static final String  ACTIVITY_TAG = "LoginActivity";
+public class LoginActivity extends AppCompatActivity {
+    private static final String ACTIVITY_TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-
 
 
     private EditText emailText;
@@ -44,7 +43,7 @@ public class LoginActivity extends AppCompatActivity{
 
         //make Navigation bar transparent with bg color
         //set status bar color
-        if ( Build.VERSION.SDK_INT >= 21) {
+        if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
@@ -68,10 +67,9 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if( validateLoginFormat(false)){
+                if ( validateLoginFormat(false) ) {
                     MainActivity.enableButton(loginButton);
-                }
-                else {
+                } else {
                     MainActivity.disableButton(loginButton);
                 }
             }
@@ -91,10 +89,9 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //if valid email and password -> enable login button
-                if( validateLoginFormat(false)){
+                if ( validateLoginFormat(false) ) {
                     MainActivity.enableButton(loginButton);
-                }
-                else {
+                } else {
                     MainActivity.disableButton(loginButton);
                 }
             }
@@ -110,8 +107,7 @@ public class LoginActivity extends AppCompatActivity{
 
         emailText.setOnFocusChangeListener((v, hasFocus) -> validateLoginFormat(true));
 
-        passwordText.setOnFocusChangeListener((v, hasFocus)->validateLoginFormat(true));
-
+        passwordText.setOnFocusChangeListener((v, hasFocus) -> validateLoginFormat(true));
 
 
         //User tapped on login button -> process login
@@ -124,8 +120,6 @@ public class LoginActivity extends AppCompatActivity{
             startActivityForResult(signUpIntent, REQUEST_SIGNUP);
         });
     }
-
-
 
 
     /**
@@ -143,14 +137,13 @@ public class LoginActivity extends AppCompatActivity{
         progressDialog.show();
 
 
-
         //TODO call Jesus' function,Frank
         new android.os.Handler().postDelayed(() -> {
-                    //TODO based on result either call onLoginSuccess or onLoginFailed
-                    onLoginSuccess();
-                    // onLoginFailed();
-                    progressDialog.dismiss();
-                }, 3000);
+            //TODO based on result either call onLoginSuccess or onLoginFailed
+            onLoginSuccess();
+            // onLoginFailed();
+            progressDialog.dismiss();
+        }, 3000);
     }
 
     /**
@@ -161,8 +154,8 @@ public class LoginActivity extends AppCompatActivity{
 
         int numTries = 3;
         //ensure user info is stored on device
-        while (!storeLoginUserInfo()){
-            if ( numTries == 0 ){
+        while ( !storeLoginUserInfo() ) {
+            if ( numTries == 0 ) {
                 Log.d(ACTIVITY_TAG, "CANNOT STORE USER INFO");
                 break;
             }
@@ -202,8 +195,8 @@ public class LoginActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
+        if ( requestCode == REQUEST_SIGNUP ) {
+            if ( resultCode == RESULT_OK ) {
 
                 // TODO: put successful signup logic here
                 //TODO remove finish
@@ -213,29 +206,28 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
-
     /**
      * verifies whether email and password have valid format
-     * @param displayError if true an error will be displayed specifying
-     *                     why the input is invalid
+     *
+     * @param displayError
+     *         if true an error will be displayed specifying
+     *         why the input is invalid
      * @return returns true if both password and email are valid, else returns false
      */
-    protected boolean validateLoginFormat(boolean displayError){
+    protected boolean validateLoginFormat(boolean displayError) {
         updateAttr();
         boolean isValidPass = true;
         boolean isValidEmail = true;
 
         //TODO add an error drawable icon
         //invalid pass length
-        if(password.length() < 8 && !password.isEmpty()){
+        if ( password.length() < 8 && !password.isEmpty() ) {
             if ( displayError )
                 passwordText.setError("Oops! Password must be at least 8 characters");
             isValidPass = false;
-        }
-        else if ( password.isEmpty() ){
+        } else if ( password.isEmpty() ) {
             isValidPass = false;
-        }
-        else {
+        } else {
             //remove errors
             passwordText.setError(null);
             isValidPass = true;
@@ -250,11 +242,10 @@ public class LoginActivity extends AppCompatActivity{
 //        else
 
         //invalid email or username
-        if ( email.isEmpty() ){
+        if ( email.isEmpty() ) {
             emailText.setError(null);
             isValidEmail = false;
-        }
-        else{
+        } else {
             //remove errors
             emailText.setError(null);
             isValidEmail = true;
@@ -266,7 +257,7 @@ public class LoginActivity extends AppCompatActivity{
     /**
      * updates login attributes
      */
-    private void updateAttr(){
+    private void updateAttr() {
         this.password = passwordText.getText().toString();
         this.email = emailText.getText().toString();
     }

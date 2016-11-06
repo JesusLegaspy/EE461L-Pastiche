@@ -1,23 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#34AF8F</color>
-    <!--Alternative Dark Primary: #CC0232-->
-    <color name="colorPrimaryDark">#34AF8F</color>
-    <color name="colorPrimaryDarker">#CC0232</color>
-    <color name="colorAccent">#FA0141</color>
-    <color name="toolbarItemColor">#CFD8DC</color>
-    <color name="windowBackground">@color/grey_900</color>
-    <color name="buttonPrimary">@color/colorPrimary</color>
-    <color name="buttonPrimaryPressed">#3ed283</color>
-    <color name="buttonPrimaryFocused">@color/colorPrimary</color>
-    <color name="buttonPrimaryDisabled">@color/medium_grey</color>
+    <!--<url>-->
+        <!--http://paletton.com/#uid=3370u0kw0uykCu8qsshybjcI3e4-->
+    <!--</url>-->
+    <color name="colorPrimaryLightest">#E0F2F1</color>
+    <color name="colorPrimaryLighter">#39A07E</color>
+    <color name="colorPrimaryLight">#1A966D</color>
+    <color name="colorPrimary">#00A26D</color>
+    <color name="colorPrimaryDark">#00A26D</color>
+    <color name="colorPrimaryDarker">#006644</color>
+    <color name="colorPrimaryDarkest">#004B32</color>
+
+    <color name="colorAccentPinkLight">#DD4E70</color>
+    <color name="colorAccentPink">#CF244C</color>
+    <color name="colorAccentPink2">#E00034</color>
+    <color name="colorAccentPinkDark">#8C0021</color>
+    <color name="colorAccentPinkDarker">#670018</color>
+
+    <color name="colorAccentYellowLighter">#F0B255</color>
+    <color name="colorAccentYellowLight">#E19727</color>
+    <color name="colorAccentYellow">#F39200</color>
+    <color name="colorAccentYellowDark">#995C00</color>
+    <color name="colorAccentYellowDarker">#704300</color>
+
+    <color name="toolbarItemColor">@color/colorPrimaryLightest</color>
+
+    <color name="windowBackground">@color/windowBackgroundLight</color>
+    <color name="windowBackgroundLight">@color/colorPrimaryLightest</color>
+    <color name="windowBackgroundDark">@color/colorPrimaryDarkest</color>
+    <color name="DarkBackgroundWindow">#202020</color>
+
+    <color name="pinkBtnPrimary">@color/colorAccentPinkLight</color>
+    <color name="pinkBtnPrimaryPressed">@color/colorAccentPink</color>
+    <color name="pinkBtnPrimaryFocused">@color/colorAccentPink</color>
+    <color name="pinkBtnPrimaryDisabled">@color/grey_800</color>
+    <color name="pinkBtnTxtClr">@color/black</color>
+
+    <color name="yellowBtnPrimary">@color/colorAccentYellowLight</color>
+    <color name="yellowBtnPrimaryPressed">@color/colorAccentYellow</color>
+    <color name="yellowBtnPrimaryFocused">@color/colorAccentYellow</color>
+    <color name="yellowBtnPrimaryDisabled">@color/grey_800</color>
+    <color name="yellowBtnTxtClr">@color/black</color>
+
     <color name="dark_grey">#424242</color>
     <color name="medium_grey">#9E9E9E</color>
     <color name="button_grey">#757575</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
     <color name="grey_bg">#303030</color>
-    <color name="loginStatusBar">@color/white</color>
 
 
     <color name="black">#000000</color>
@@ -31,3 +61,14 @@
     <color name="white">#FFFFFF</color>
 </resources>
 
+<!--<color name="colorPrimary">#34AF8F</color>-->
+        <!--&lt;!&ndash;Alternative Dark Primary: #CC0232&ndash;&gt;-->
+<!--<color name="colorPrimaryDark">#34AF8F</color>-->
+<!--<color name="colorPrimaryDarker">#CC0232</color>-->
+<!--<color name="colorAccent">#FA0141</color>-->
+<!--<color name="toolbarItemColor">#CFD8DC</color>-->
+<!--<color name="windowBackground">@color/grey_900</color>-->
+<!--<color name="buttonPrimary">@color/colorPrimary</color>-->
+<!--<color name="buttonPrimaryPressed">#3ed283</color>-->
+<!--<color name="buttonPrimaryFocused">@color/colorPrimary</color>-->
+<!--<color name="buttonPrimaryDisabled">@color/medium_grey</color>-->
