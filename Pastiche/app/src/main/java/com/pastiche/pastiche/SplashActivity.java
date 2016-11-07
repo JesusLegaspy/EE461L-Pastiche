@@ -3,7 +3,6 @@ package com.pastiche.pastiche;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.pastiche.pastiche.ui.ImageDetailActivity;
 
 /**
  * Screen only displayed if current part of the app is still configuring
