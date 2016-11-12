@@ -115,8 +115,41 @@ public class ServerHandler {
             }
         };
 
-        handle.bitmapPost("/photos", bmp, myResponse , myError);
+        handle.imagePost("/photos", bmp, myResponse , myError);
     }
+
+
+    public void postImg(String filepath, Consumer<Integer> response, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+
+        Consumer<NetworkResponse> myResponse = new Consumer<NetworkResponse>() {
+            @Override
+            public void accept(NetworkResponse x) {
+                String jsonAsStringObj = new String(x.data);
+                String test = null;
+                try {
+                    JSONObject tmp = new JSONObject(jsonAsStringObj);
+                    test = getResponse(tmp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String IDNum = trimMessage(test, "id");
+                Integer result = Integer.decode(IDNum);
+                response.accept(result);
+            }
+        };
+
+        Consumer<VolleyError> myError = new Consumer<VolleyError>() {
+            @Override
+            public void accept(VolleyError x) {
+                String errorMsg = onErrorResponse(x);
+                error.accept(errorMsg);
+            }
+        };
+
+        handle.imagePost("/photos", filepath, myResponse , myError);
+    }
+
 
 
     //call from UI to download an image
