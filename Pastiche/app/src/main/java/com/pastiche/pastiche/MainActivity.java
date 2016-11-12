@@ -13,7 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.toolbox.ImageLoader;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+
+
+
+
     }
 
     public void capturePicture(View view) {
@@ -78,9 +85,22 @@ public class MainActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             //do work
             ServerHandler handle = ServerHandler.getInstance(getApplicationContext());
-            handle.login("myname", "mypassword", x -> Log.d("Main_JesusTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_JesusTesting",x));
+            handle.login("kqtest", "mypassword", x -> Log.d("Main_KhalidTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_KhalidTesting",x));
+        testImage();
         } else {
             //log
         }
+    }
+
+    public void testImage() {
+        ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
+
+
+        ImageView mImageView;
+        mImageView = (ImageView) findViewById(R.id.regularImageView);
+        //mImageView.setImageBitmap();
+
+
+        handler.getImg(27, ImageView.ScaleType.CENTER, x -> mImageView.setImageBitmap(x), x -> Log.d("main", "Didn't work. " + x));
     }
 }
