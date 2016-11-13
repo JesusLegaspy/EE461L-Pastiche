@@ -2,6 +2,7 @@ package com.pastiche.pastiche;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -82,5 +83,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //log
         }
+    }
+
+//--------------------[Cache Testing]---------------------
+    private void testCache(){
+
     }
 }
