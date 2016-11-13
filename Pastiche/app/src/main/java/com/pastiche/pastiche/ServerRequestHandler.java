@@ -101,6 +101,8 @@ class ServerRequestHandler {
                 return params;
             }
         };
+        ServerRequestQueue queue = ServerRequestQueue.getInstance(mCtx);
+        queue.addToRequestQueue(multipartRequest);
     }
 
     public void imagePost(String url, String imagePath, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
@@ -122,6 +124,8 @@ class ServerRequestHandler {
                 return params;
             }
         };
+        ServerRequestQueue queue = ServerRequestQueue.getInstance(mCtx);
+        queue.addToRequestQueue(multipartRequest);
     }
 
     // convert from bitmap to byte array

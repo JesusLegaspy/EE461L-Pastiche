@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             //do work
             ServerHandler handle = ServerHandler.getInstance(getApplicationContext());
-            handle.login("kqtest", "mypassword", x -> Log.d("Main_KhalidTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_KhalidTesting",x));
+            handle.login("yaeltesting", "yes", x -> Log.d("Main_KhalidTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_KhalidTesting",x));
             testImage();
         } else {
             //log
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         //mImageView.setImageBitmap();
 
 
-        handler.getImg(27, ImageView.ScaleType.CENTER, x -> mImageView.setImageBitmap(x), x -> Log.d("main", "Didn't work. " + x));
+        handler.getImg(29, ImageView.ScaleType.CENTER, x -> mImageView.setImageBitmap(x), x -> Log.d("main", "Didn't work. " + x));
     }
 
     //--------------------[Cache Testing]---------------------
