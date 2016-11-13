@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         //set status bar color
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
         }
 

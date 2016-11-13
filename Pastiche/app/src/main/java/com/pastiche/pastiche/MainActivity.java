@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.register.LoginActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACTIVITY_TAG = "MainActivity";
@@ -25,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
+//    private List curUserEvents;
+
 
     public static String getSharedPreferenceName() {
         return SHARED_PREF_NAME;
@@ -46,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //set up the app bar
-        main_toolbar = (Toolbar) findViewById(R.id.toolbar);
+        main_toolbar = (Toolbar) findViewById(R.id.img_detail_toolbar);
         setSupportActionBar(main_toolbar);
         TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
 
@@ -54,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         Typeface title_font = Typeface.createFromAsset(getAssets(), "fonts/GreatVibes-Regular.ttf");
         app_name.setTypeface(title_font);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Setting ViewPager for each Tabs
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
         //authentication
         String id = new String();
@@ -63,6 +76,55 @@ public class MainActivity extends AppCompatActivity {
             Log.d(ACTIVITY_TAG, "logged_in");
         }
 
+        //update user's events
+        updateCurUserEvents();
+
+    }
+
+    /**
+     * updates the list of current user events
+     */
+    public void updateCurUserEvents() {
+        //TODO API call to get cur user list of events
+    }
+
+    /**
+     * Add event list fragment to Main Activity
+     * @param viewPager
+     */
+    private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new EventsListFragment(), "Tile");
+        viewPager.setAdapter(adapter);
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     /**
@@ -106,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
         button.setAlpha(ENABLE_ALPHA);
     }
 
-    //    //TODO need to add SplashActivity and move this method to it
     private void startAuthentications() {
 
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -134,6 +195,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if ( id == R.id.action_search) {
+            Integer[] event_results =  performSearch("keyword");
+
+
+            return true;
+        }
+
         if ( id == R.id.action_logout ) {
             logout();
             return true;
@@ -141,6 +209,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Performs a server call to acquire a list of events as a result of search
+     * for KEYWORD
+     * @param keyword
+     * @return
+     */
+    private Integer[] performSearch(String keyword) {
+        //TODO API call to perform search for events
+        Integer[] results = {1, 2, 3};
+        return results;
     }
 
     private void logout() {
