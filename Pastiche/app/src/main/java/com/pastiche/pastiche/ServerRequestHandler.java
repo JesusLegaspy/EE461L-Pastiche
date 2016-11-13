@@ -83,7 +83,7 @@ class ServerRequestHandler {
         pQueue.addToRequestQueue(imgRequest);
     }
 
-    public void bitmapPost(String url, Bitmap bitmapPhoto, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
+    public void imagePost(String url, Bitmap bitmapPhoto, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, baseURL + url, data::accept, errorData::accept) {
             @Override
             protected Map<String, String> getParams() {

@@ -39,6 +39,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             galleryAddPic();
+            upload();
             super.finish();
         }
     }
@@ -97,6 +98,11 @@ public class CameraActivity extends AppCompatActivity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    private void upload(){
+        ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
+        handler.postImg(mCurrentPhotoPath, x -> Log.d("CameraActivity", "Successful " + x), x -> Log.d("CameraActivity", "Error " + x));
     }
     // -------------- [End of Camera Code] ------------------
 

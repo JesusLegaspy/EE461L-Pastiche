@@ -32,7 +32,7 @@ public class BitmapCache {
     public void testMethod(){
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decod
+        //BitmapFactory.decod
         int imageHeight = options.outHeight;
         int imageWidth = options.outWidth;
         String imageType = options.outMimeType;
