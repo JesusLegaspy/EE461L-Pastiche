@@ -1,6 +1,10 @@
     apply plugin: 'com.android.application'
 
 android {
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {

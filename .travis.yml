@@ -23,7 +23,7 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 script:
-  - ./gradlew build connectedCheck -iS --no-daemon
+  - ./gradlew build connectedCheck --no-daemon
 before_cache:
   - "rm -f $HOME/.gradle/caches/modules-2/modules-2.lock"
 before_install: cd Pastiche
