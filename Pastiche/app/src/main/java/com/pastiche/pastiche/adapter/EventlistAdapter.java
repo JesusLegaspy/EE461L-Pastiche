@@ -17,7 +17,7 @@ import com.pastiche.pastiche.viewHolder.EventListViewHolder;
 public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> {
 
     // TODO number of recycler view items needs change to be dynamic
-    private static final int LENGTH = 1;
+    private static final int LENGTH = 20;
 
 
     private final String[] mEvents;

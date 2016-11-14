@@ -248,5 +248,8 @@ public class MainActivity extends AppCompatActivity{
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
+        //TODO reset fragment and FAB to their initial state
+        authenticateUser();
+
     }
 }
