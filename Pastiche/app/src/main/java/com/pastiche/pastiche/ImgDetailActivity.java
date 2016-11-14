@@ -16,7 +16,7 @@ public class ImgDetailActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        setSupportActionBar((Toolbar) findViewById(R.id.img_detail_toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Set Collapsing Toolbar layout to the screen
         CollapsingToolbarLayout collapsingToolbar =
@@ -26,7 +26,7 @@ public class ImgDetailActivity extends AppCompatActivity {
 
         int postion = getIntent().getIntExtra(EXTRA_POSITION, 0);
         Resources resources = getResources();
-        String[] places = resources.getStringArray(R.array.places);
+        String[] places = resources.getStringArray(R.array.events);
         collapsingToolbar.setTitle(places[postion % places.length]);
 
         String[] placeDetails = resources.getStringArray(R.array.place_details);
@@ -37,7 +37,7 @@ public class ImgDetailActivity extends AppCompatActivity {
         TextView placeLocation =  (TextView) findViewById(R.id.place_location);
         placeLocation.setText(placeLocations[postion % placeLocations.length]);
 
-        TypedArray placePictures = resources.obtainTypedArray(R.array.places_picture);
+        TypedArray placePictures = resources.obtainTypedArray(R.array.events_picture);
         ImageView placePicutre = (ImageView) findViewById(R.id.img_det_picture);
         placePicutre.setImageDrawable(placePictures.getDrawable(postion % placePictures.length()));
 

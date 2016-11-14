@@ -13,6 +13,8 @@
     <string name="Password">PASSWORD</string>
     <string name="Login">Log In</string>
     <string name="Create_account_msg">No account yet? Create one</string>
+    <string name="picture_capture">Capture</string>
+    <string name="camera">"This is the camera activity"</string>
     <string name="username">USERNAME</string>
     <string name="signup">Sign Up</string>
     <string name="signup_email">EMAIL</string>

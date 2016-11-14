@@ -12,9 +12,6 @@
             android:largeHeap="true"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
-
-
         <activity
                 android:name=".SplashActivity"
                 android:theme="@style/SplashTheme">
@@ -24,60 +21,45 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-
-
+<<<<<<< HEAD
         <activity
                 android:name=".MainActivity"
                 android:parentActivityName=".SplashActivity"
                 android:theme="@style/AppTheme"/>
-
-
-
-
         <activity
                 android:name=".EventActivity"
                 android:parentActivityName=".MainActivity"
                 android:theme="@style/AppTheme"/>
-
-
-
         <activity
                 android:name=".register.LoginActivity"
                 android:parentActivityName=".MainActivity"
                 android:theme="@style/AppTheme.Light.Login"/>
-
-
-
         <activity
                 android:name=".register.SignupActivity"
                 android:parentActivityName=".MainActivity"
-                android:theme="@style/AppTheme"/>
+                android:theme="@style/AppTheme.Light.Signup"/>
+        <activity android:name=".ImgDetailActivity">
+        </activity>
+    </application>
 
-
-
-        <activity android:name=".ImgDetailActivity"
-                  android:theme="@style/AppTheme.Light.Signup"/>
-
-
-
-
+</manifest>
+=======
+        <activity android:name=".PasticheLoginActivity" android:theme="@style/AppTheme.Dark" ></activity>
+        <activity android:name=".PasticheSignupActivity" android:theme="@style/AppTheme.Dark" ></activity>
         <activity android:name=".CameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT"/>
             </intent-filter>
         </activity>
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.pastiche.pastiche.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
         </provider>
-
     </application>
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
@@ -86,3 +68,4 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
+>>>>>>> origin/feature/12

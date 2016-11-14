@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Created by Aria Pahlavan on 11/12/16.
-  ~ UI for a event item
+  ~ UI for a event item (Fragment)
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,10 +9,12 @@
                 android:layout_height="wrap_content"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:background="?android:attr/selectableItemBackground"
-                android:padding="@dimen/tile_padding">
+                android:padding="@dimen/tile_padding"
+                android:id="@+id/event_item_frag"
+>
 
     <ImageView
-            android:id="@+id/event_tile_picture"
+            android:id="@+id/img_event_item"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
             android:scaleType="centerCrop"
@@ -20,13 +22,14 @@
     />
 
     <ImageView
+            android:id="@+id/img_event_item_filter"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
             android:alpha="0.3"
             android:background="@color/medium_grey" />
 
     <TextView
-            android:id="@+id/event_tile_title"
+            android:id="@+id/txt_event_item_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
             android:layout_gravity="center"

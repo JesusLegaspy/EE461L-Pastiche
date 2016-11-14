@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 <resources>
-    <string-array name="places">
+    <string-array name="events">
         <item>Palais Garnie</item>
         <item>Piazza del Duomo</item>
         <item>Manhattan</item>
@@ -85,12 +85,7 @@
         <item>At Meydanı No:7, 34122 Fatih/İstanbul, Turkey</item>
         <item>Cape Town, South Africa</item>
     </string-array>
-    <array name="places_picture">
+    <array name="events_picture">
         <item>@drawable/concert_img</item>
-        <item>@drawable/a</item>
-        <item>@drawable/b</item>
-        <item>@drawable/c</item>
-        <item>@drawable/e</item>
-        <item>@drawable/f</item>
     </array>
 </resources>
