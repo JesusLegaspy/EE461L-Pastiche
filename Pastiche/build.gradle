@@ -28,7 +28,6 @@ if (System.env.TRAVIS == 'true') {
             // containers (currently) have 2 dedicated cores and 4GB of memory
             maxParallelForks = 1
             minHeapSize = '128m'
-            org.gradle.daemon = false
         }
     }
 }
