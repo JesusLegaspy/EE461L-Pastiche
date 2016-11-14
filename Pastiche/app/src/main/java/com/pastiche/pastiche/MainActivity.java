@@ -1,15 +1,27 @@
 package com.pastiche.pastiche;
 
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.graphics.BitmapFactory;
+        import android.graphics.Typeface;
+        import android.net.ConnectivityManager;
+        import android.net.NetworkInfo;
+        import android.os.Bundle;
+        import android.support.v7.app.AppCompatActivity;
+        import android.support.v7.widget.Toolbar;
+        import android.util.Log;
+        import android.view.Menu;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.view.Window;
+        import android.widget.ImageView;
+        import android.widget.TextView;
+
+        import com.android.volley.toolbox.ImageLoader;
+
+        import java.net.CookieHandler;
+        import java.net.CookieManager;
+        import java.net.CookiePolicy;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) ); //TODO: remove??
 
         main_toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(main_toolbar);
@@ -56,10 +68,44 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+
+
+
+
     }
 
     public void capturePicture(View view) {
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
+    }
+    //-------------------[TESTING]------------------------
+    public void testLogin(View view) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //do work
+            ServerHandler handle = ServerHandler.getInstance(getApplicationContext());
+            handle.login("yaeltesting", "yes", x -> Log.d("Main_KhalidTesting", "ID: " + x.getId() + " UserID: " + x.getUserId()), x -> Log.d("Main_KhalidTesting",x));
+            testImage();
+        } else {
+            //log
+        }
+    }
+
+    public void testImage() {
+        ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
+
+
+        ImageView mImageView;
+        mImageView = (ImageView) findViewById(R.id.regularImageView);
+        //mImageView.setImageBitmap();
+
+
+        handler.getImg(29, ImageView.ScaleType.CENTER, x -> mImageView.setImageBitmap(x), x -> Log.d("main", "Didn't work. " + x));
+    }
+
+    //--------------------[Cache Testing]---------------------
+    private void testCache() {
     }
 }
