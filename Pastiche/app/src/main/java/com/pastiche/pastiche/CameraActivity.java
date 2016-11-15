@@ -12,7 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import com.pastiche.pastiche.Server.ServerHandler;
 
 import java.io.File;
 import java.io.IOException;
