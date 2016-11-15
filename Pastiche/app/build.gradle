@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.pastiche.pastiche"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
