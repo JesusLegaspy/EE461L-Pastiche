@@ -59,8 +59,6 @@ public class ServerHandler {
 
     //call from UI for new user request
     public void createUser(String username, String password, String email, Consumer<PSession> data, Consumer<String> error) {
-
-
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
         JSONObject body = new JSONObject();
         try{

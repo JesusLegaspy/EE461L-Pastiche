@@ -50,7 +50,15 @@ class ServerRequestHandler {
 
     public void jsonPost(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, baseURL + url, body, data::accept, errorData::accept);
+                (Request.Method.POST, baseURL + url, body, data::accept, errorData::accept) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+
+                return params;
+            }
+        };
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(jsObjRequest);
     }
@@ -101,6 +109,8 @@ class ServerRequestHandler {
                 return params;
             }
         };
+        ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
+        pQueue.addToRequestQueue(multipartRequest);
     }
 
     public void imagePost(String url, String imagePath, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
@@ -122,6 +132,8 @@ class ServerRequestHandler {
                 return params;
             }
         };
+        ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
+        pQueue.addToRequestQueue(multipartRequest);
     }
 
     // convert from bitmap to byte array
