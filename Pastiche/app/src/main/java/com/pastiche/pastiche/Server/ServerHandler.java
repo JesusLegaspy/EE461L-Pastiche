@@ -66,7 +66,7 @@ public class ServerHandler {
             body.put("password", password);
             body.put("email", email);
             handle.jsonPost("/users", body,
-                    x -> { data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PSession.class)); },
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PSession.class)),
                     x -> error.accept(onErrorResponse(x)));
 
         } catch (JSONException e) {

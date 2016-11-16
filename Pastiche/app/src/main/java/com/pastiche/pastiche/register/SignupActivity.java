@@ -17,7 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
+import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.ServerHandler;
 
 /**
  * Sign up screen allows guests to sing up with a username, email, and password
@@ -35,11 +37,16 @@ public class SignupActivity extends AppCompatActivity {
     private String username;
     private String email;
     private String password;
+    private ServerHandler serverReqest;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
+
 
         //make Navigation bar transparent with bg color
         //set status bar color
@@ -160,28 +167,31 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
 
 
+        System.out.println("We got here");
+        serverReqest.createUser( this.username,
+                                                 this.password,
+                                                 this.email,
+                                                 pSession->{
+                                                     onSignupSuccess(pSession);
+                                                     progressDialog.dismiss();
+                                                 },
+                                                 error->{onSignupFailed(error);
+                                                     progressDialog.dismiss();
+                                                 });
 
-        // TODO call Jesus' function,Frank
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        //TODO based on result either call onSignupSuccess or onSignupFailed
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);    }
+        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 3000);}
 
 
     /**
      * After a successful signup session, finish activities
+     * @param pSession
      */
-    public void onSignupSuccess() {
+    public void onSignupSuccess(PSession pSession) {
         signupButton.setEnabled(true);
 
         int numTries = 3;
         //ensure user info is stored on device
-        while (!storeSigninUserInfo()){
+        while (!storeSigninUserInfo(pSession)){
             if ( numTries == 0 ){
                 Log.d(ACTIVITY_TAG, "CANNOT STORE USER INFO");
                 break;
@@ -194,12 +204,11 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean storeSigninUserInfo() {
+    private boolean storeSigninUserInfo(PSession pSession) {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putString("id", username);
-        editor.putString("email", email);
+        editor.putString("id", String.valueOf(pSession.getId()));
         editor.putBoolean("logged_in", true);
         return editor.commit();
     }
@@ -212,9 +221,10 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * If signup not successful, display a toast message and allow user to retry
+     * @param error
      */
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String error) {
+        Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
 
         signupButton.setEnabled(true);
     }

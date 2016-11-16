@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
+import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.ServerHandler;
 
 
 /**
@@ -35,11 +37,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signupLink;
     private String password;
     private String email;
+    protected ServerHandler serverReqest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
 
         //make Navigation bar transparent with bg color
         //set status bar color
@@ -137,24 +142,29 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
 
-        //TODO call Jesus' function,Frank
-        new android.os.Handler().postDelayed(() -> {
-            //TODO based on result either call onLoginSuccess or onLoginFailed
-            onLoginSuccess();
-            // onLoginFailed();
-            progressDialog.dismiss();
-        }, 3000);
+        //TODO call Jesus' function, Frank
+        serverReqest.login( this.email,
+                            this.password,
+                            pSession->{
+                                onLoginSuccess(pSession);
+                                progressDialog.dismiss();
+                            },
+                            error->{onLoginFail(error);
+                                    progressDialog.dismiss();
+                            });
+
+        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 4000);
     }
 
     /**
      * After a successful login session, finish activities
+     * @param pSession
      */
-    private void onLoginSuccess() {
+    private void onLoginSuccess(PSession pSession) {
         loginButton.setEnabled(true);
-
         int numTries = 3;
         //ensure user info is stored on device
-        while ( !storeLoginUserInfo() ) {
+        while ( !storeLoginUserInfo(pSession) ) {
             if ( numTries == 0 ) {
                 Log.d(ACTIVITY_TAG, "CANNOT STORE USER INFO");
                 break;
@@ -168,11 +178,11 @@ public class LoginActivity extends AppCompatActivity {
         this.finish();
     }
 
-    private boolean storeLoginUserInfo() {
+    private boolean storeLoginUserInfo(PSession pSession) {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putString("id", email);
+        editor.putString("id", String.valueOf(pSession.getId()));
         editor.putBoolean("logged_in", true);
         return editor.commit();
     }
@@ -180,10 +190,11 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * If login not successful, display a toast message and allow user to retry
+     * @param error
      */
-    private void onLoginFail() {
+    private void onLoginFail(String error) {
         loginButton.setEnabled(true);
-        Toast.makeText(getBaseContext(), "Oops! Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
     }
 
 
