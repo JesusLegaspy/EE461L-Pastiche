@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:state_pressed="true" >
+        <shape>
+            <gradient
+                    android:startColor="@color/pinkBtnPrimaryPressed"
+                    android:endColor="@color/pinkBtnPrimaryPressed" android:angle="270" />
+
+            <stroke android:width="3dp" android:color="@color/pinkBtnPrimaryPressed" />
+
+            <corners android:radius="3dp" />
+
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true" >
+        <shape>
+            <gradient
+                    android:endColor="@color/pinkBtnPrimaryFocused"
+                    android:startColor="@color/pinkBtnPrimaryFocused"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/pinkBtnPrimaryFocused" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_enabled="true">
+        <shape>
+            <gradient
+                    android:endColor="@color/pinkBtnPrimary"
+                    android:startColor="@color/pinkBtnPrimary"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/pinkBtnPrimary" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+
+    <item android:state_enabled="false">
+        <shape>
+            <gradient
+                    android:endColor="@color/pinkBtnPrimaryDisabled"
+                    android:startColor="@color/pinkBtnPrimaryDisabled"
+                    android:angle="270" />
+            <stroke
+                    android:width="3dp"
+                    android:color="@color/pinkBtnPrimaryDisabled" />
+            <corners
+                    android:radius="3dp" />
+            <padding
+                    android:left="10dp"
+                    android:top="10dp"
+                    android:right="10dp"
+                    android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>
