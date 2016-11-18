@@ -1,5 +1,10 @@
 
 # Created by https://www.gitignore.io/api/android,macos,windows,intellij
+### Jesus Additions ###
+.gradle/
+.idea/
+Pastiche/.gradle/
+Pastiche/.idea/
 
 ### Android ###
 # Built application files
