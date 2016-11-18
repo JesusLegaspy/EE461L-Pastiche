@@ -40,8 +40,8 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             galleryAddPic();
             upload();
-            super.finish();
         }
+        super.finish();
     }
 
     // -------------- [Private Camera Methods] ------------------
