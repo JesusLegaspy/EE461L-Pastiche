@@ -67,15 +67,6 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 //        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
         Context appContext = EventsListFragment.getAppContext();
 
-
-        ServerHandler.getInstance(appContext).getImg(
-                27,
-                ImageView.ScaleType.FIT_CENTER,
-                img -> holder.setImg_event_item(new BitmapDrawable(appContext.getResources(), img)),
-                error -> Log.d(TAG, error)
-        );
-
-        holder.setTxt_event_item_title(mEvents[position % mEvents.length]);
     }
 
 
