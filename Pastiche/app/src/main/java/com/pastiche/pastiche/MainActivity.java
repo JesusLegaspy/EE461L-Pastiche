@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.PObject.PUser;
+import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.register.LoginActivity;
 
 import java.net.CookieHandler;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
         applicationSetup();
         appbarSetup();
         updateCurUserEvents();
@@ -91,9 +91,7 @@ public class MainActivity extends AppCompatActivity{
     private void applicationSetup() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL)); //TODO: remove??
-
-
+        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -106,11 +104,11 @@ public class MainActivity extends AppCompatActivity{
 
     /**
      * Check private storage for user info
-     * if nothing found, user is not registered
+     * if nothing found, user is not isRegistered
      *
      * @return true if user already logged in, false otherwise
      */
-    private boolean registered(String _id) {
+    private boolean isRegistered() {
         SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         String id = pref.getString("id", "");
@@ -119,7 +117,6 @@ public class MainActivity extends AppCompatActivity{
         Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
         Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
 
-        _id = id;
         return logged_in;
     }
 
@@ -153,14 +150,10 @@ public class MainActivity extends AppCompatActivity{
 
 
     /**
-     * if user not registered, initiate authentication process
+     * if user not isRegistered, initiate authentication process
      */
     private void authenticateUser() {
-        String id = new String();
-
-
-
-        if ( !registered(id) ) {
+        if ( !isRegistered() ) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else {
@@ -189,9 +182,7 @@ public class MainActivity extends AppCompatActivity{
 
         //noInspection SimplifiableIfStatement
         if ( id == R.id.action_settings ) {
-            String _id = new String();
-            registered(_id);
-            return true;
+            return isRegistered();
         }
 
         if ( id == R.id.action_search ) {
