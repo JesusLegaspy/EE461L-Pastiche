@@ -3,25 +3,38 @@ package com.pastiche.pastiche.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.pastiche.pastiche.EventsListFragment;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Aria Pahlavan on 11/5/16.
  */
 
 public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> {
+    private static final String TAG = "EventListAdapter";
+
 
     // TODO number of recycler view items needs change to be dynamic
-    private static final int LENGTH = 1000;
+    private static int LENGTH;
+    private List<Integer> events; //TODO: needs to be a pEvent
 
-
-    private final String[] mEvents;
-    private final Drawable[] mEventPictures;
+//    private final String[] mEvents;
+//    private final Drawable[] mEventPictures;
 
 
     /**
@@ -30,15 +43,16 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     public EventlistAdapter(Context context) {
 
-        //TODO data must be received from server dynamically
-        Resources resources = context.getResources();
-        mEvents = resources.getStringArray(R.array.events);
-        TypedArray a = resources.obtainTypedArray(R.array.events_picture);
-        mEventPictures = new Drawable[a.length()];
-        for (int i = 0; i < mEventPictures.length; i++) {
-            mEventPictures[i] = a.getDrawable(i);
-        }
-        a.recycle();//TODO to be removed?
+        events = new ArrayList<>(Arrays.asList(24,25,26,27,28,29,30));
+        LENGTH = events.size();
+//        Resources resources = context.getResources();
+//        mEvents = resources.getStringArray(R.array.events);
+//        TypedArray a = resources.obtainTypedArray(R.array.events_picture);
+//        mEventPictures = new Drawable[a.length()];
+//        for (int i = 0; i < mEventPictures.length; i++) {
+//            mEventPictures[i] = a.getDrawable(i);
+//        }
+//        a.recycle();//TODO to be removed?
     }
 
 
@@ -57,8 +71,11 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
-        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
-        holder.setTxt_event_item_title(mEvents[position % mEvents.length]);
+//        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
+        Context appContext = EventsListFragment.getAppContext();
+        String internetUrl = "http://api.pastiche.staging.jacobingalls.rocks:8080/photos/";
+
+        Glide.with(appContext).load(internetUrl + position).into(holder.getImg_event_item());
     }
 
 

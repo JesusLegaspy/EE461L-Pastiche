@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.PObject.PUser;
 import com.pastiche.pastiche.Server.PersistentCookieStore;
+import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.register.LoginActivity;
 
 import java.net.CookieHandler;
@@ -230,12 +231,21 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
+        ServerHandler.getInstance(this.getApplicationContext()).logout(
+                data -> onLogoutSuccess(editor),
+                error -> onLogoutFail(error));
+    }
+
+    private void onLogoutFail(String error) {
+        Log.d(ACTIVITY_TAG, error);
+    }
+
+    void onLogoutSuccess(SharedPreferences.Editor editor){
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
         //TODO reset fragment and FAB to their initial state
         authenticateUser();
-
     }
 }
 
