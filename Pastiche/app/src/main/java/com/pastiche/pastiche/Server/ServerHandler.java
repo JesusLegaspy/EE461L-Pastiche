@@ -57,6 +57,12 @@ public class ServerHandler {
         }
     }
 
+    public void logout (Consumer<String> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        //JSONObject body = new JSONObject();
+        handle.stringPost("/users/logout", "", x -> data.accept("Logout successful."), x -> error.accept("Error in logging out."));
+    }
+
     //call from UI for new user request
     public void createUser(String username, String password, String email, Consumer<PSession> data, Consumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
