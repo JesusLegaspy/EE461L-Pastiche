@@ -19,6 +19,7 @@ import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
+import com.pastiche.pastiche.viewHolder.PhotoListViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +33,8 @@ import java.util.stream.IntStream;
  * Created by Aria Pahlavan on 11/5/16.
  */
 
-public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> {
-    private static final String TAG = "EventListAdapter";
+public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
+    private static final String TAG = "PhotoListAdapter";
 
 
     private List<PEvent> events;
@@ -43,13 +44,10 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      * get resources (should be an array of event IDs)
      * @param context
      */
-    public EventlistAdapter(Context context) {
-
+    public PhotoListAdapter(Context context) {
+        // TODO replace logic with that to load a list of photos for a supplied event id
 
         events = new ArrayList<>(100);
-
-
-
         ServerHandler.getInstance(context).listEvents(data -> {
             events.clear();
             Collections.addAll(events, data);
@@ -80,8 +78,8 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
 
     @Override
-    public EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventListViewHolder(LayoutInflater.from(parent.getContext()), parent);
+    public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new PhotoListViewHolder(LayoutInflater.from(parent.getContext()), parent);
     }
 
 
@@ -92,7 +90,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      * @param position
      */
     @Override
-    public void onBindViewHolder(EventListViewHolder holder, int position) {
+    public void onBindViewHolder(PhotoListViewHolder holder, int position) {
 //        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
         Context appContext = EventsListFragment.getAppContext();
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";

@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.pastiche.pastiche.PObject.PEvent;
+import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.PObject.PUser;
 
@@ -230,13 +231,12 @@ public class ServerHandler {
     }
 
     private String getResponse(JSONObject x) {
-        JSONObject dataObj = null;
         try {
-            dataObj = (JSONObject) x.get("response");
+            return x.get("response").toString();
         } catch (JSONException e) {
             e.printStackTrace();
+            return "null";
         }
-        return dataObj.toString();
     }
 
     //Credit from "Submersed" on https://stackoverflow.com/questions/21867929/android-how-handle-message-error-from-the-server-using-volley
@@ -272,4 +272,31 @@ public class ServerHandler {
         }
         return trimmedString;
     }
+
+    public void listEvents(Consumer<PEvent[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            handle.jsonGet("/events", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent[].class)),
+                    x -> error.accept(onErrorResponse(x)));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listPhotosForAnEvent(int id, Consumer<PPhoto[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            handle.jsonGet("/events/"+id+"/photos", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PPhoto[].class)),
+                    x -> error.accept(onErrorResponse(x)));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

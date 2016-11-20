@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity{
      * set status bar color
      */
     private void applicationSetup() {
+        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
