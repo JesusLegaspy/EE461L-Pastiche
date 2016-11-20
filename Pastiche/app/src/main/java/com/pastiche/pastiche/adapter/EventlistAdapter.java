@@ -3,11 +3,16 @@ package com.pastiche.pastiche.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import com.pastiche.pastiche.EventsListFragment;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
 
 /**
@@ -15,9 +20,11 @@ import com.pastiche.pastiche.viewHolder.EventListViewHolder;
  */
 
 public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> {
+    private static final String TAG = "EventListAdapter";
+
 
     // TODO number of recycler view items needs change to be dynamic
-    private static final int LENGTH = 1000;
+    private static final int LENGTH = 1;
 
 
     private final String[] mEvents;
@@ -57,7 +64,17 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
-        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
+//        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
+        Context appContext = EventsListFragment.getAppContext();
+
+
+        ServerHandler.getInstance(appContext).getImg(
+                27,
+                ImageView.ScaleType.FIT_CENTER,
+                img -> holder.setImg_event_item(new BitmapDrawable(appContext.getResources(), img)),
+                error -> Log.d(TAG, error)
+        );
+
         holder.setTxt_event_item_title(mEvents[position % mEvents.length]);
     }
 
