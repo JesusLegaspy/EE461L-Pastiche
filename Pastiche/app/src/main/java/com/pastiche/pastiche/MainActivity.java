@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.PObject.PUser;
+import com.pastiche.pastiche.Server.PersistentCookieStore;
+import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.register.LoginActivity;
 
 import java.net.CookieHandler;
@@ -27,7 +29,6 @@ import java.util.List;
  */
 
 public class MainActivity extends AppCompatActivity{
-
 
 
     private static final String ACTIVITY_TAG = "MainActivity";
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         applicationSetup();
         appbarSetup();
@@ -91,16 +91,14 @@ public class MainActivity extends AppCompatActivity{
      * set status bar color
      */
     private void applicationSetup() {
+        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL)); //TODO: remove??
-
-
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
 
@@ -108,11 +106,11 @@ public class MainActivity extends AppCompatActivity{
 
     /**
      * Check private storage for user info
-     * if nothing found, user is not registered
+     * if nothing found, user is not isRegistered
      *
      * @return true if user already logged in, false otherwise
      */
-    private boolean registered(String _id) {
+    private boolean isRegistered() {
         SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         String id = pref.getString("id", "");
@@ -121,7 +119,6 @@ public class MainActivity extends AppCompatActivity{
         Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
         Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
 
-        _id = id;
         return logged_in;
     }
 
@@ -155,14 +152,10 @@ public class MainActivity extends AppCompatActivity{
 
 
     /**
-     * if user not registered, initiate authentication process
+     * if user not isRegistered, initiate authentication process
      */
     private void authenticateUser() {
-        String id = new String();
-
-
-
-        if ( !registered(id) ) {
+        if ( !isRegistered() ) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else {
@@ -191,9 +184,7 @@ public class MainActivity extends AppCompatActivity{
 
         //noInspection SimplifiableIfStatement
         if ( id == R.id.action_settings ) {
-            String _id = new String();
-            registered(_id);
-            return true;
+            return isRegistered();
         }
 
         if ( id == R.id.action_search ) {
@@ -212,8 +203,6 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
-
     /**
      * Initiate camera activity
      * @param view
@@ -222,8 +211,6 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
     }
-
-
 
     /**
      * Performs a server call to acquire a list of events as a result of search
@@ -245,11 +232,25 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
+        ServerHandler.getInstance(this.getApplicationContext()).logout(
+                data -> onLogoutSuccess(editor),
+                error -> onLogoutFail(error));
+    }
+
+
+
+    private void onLogoutFail(String error) {
+        Log.d(ACTIVITY_TAG, error);
+    }
+
+
+
+    void onLogoutSuccess(SharedPreferences.Editor editor){
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
         //TODO reset fragment and FAB to their initial state
         authenticateUser();
-
     }
 }
+

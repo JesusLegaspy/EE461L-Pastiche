@@ -26,6 +26,7 @@
     <color name="toolbarItemColor">@color/colorPrimaryLightest</color>
 
     <color name="windowBackground">#F7F7F7</color>
+    <!--<color name="windowBackground">@color/grey_900</color>-->
     <color name="windowBackgroundDarker">@color/aluminum</color>
     <color name="windowBackgroundLight">@color/colorPrimaryLightest</color>
     <color name="windowBackgroundDark">@color/colorPrimaryDarkest</color>

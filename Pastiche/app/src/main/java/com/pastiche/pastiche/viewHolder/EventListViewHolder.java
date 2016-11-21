@@ -42,6 +42,9 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
+    public ImageView getImg_event_item() {
+        return img_event_item;
+    }
 
     public void setImg_event_item(Drawable img_event_item) {
         this.img_event_item.setImageDrawable(img_event_item);

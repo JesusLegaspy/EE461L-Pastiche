@@ -26,12 +26,12 @@ package com.pastiche.pastiche.Server;
  * Created by jesus on 10/25/2016.
  */
 
-class ServerRequestHandler {
+public class ServerRequestHandler {
     @SuppressLint("StaticFieldLeak") // Okay as long as this.getApplicationContext is passed as a parameter in getInstance.
     private static ServerRequestHandler mInstance;
     @SuppressLint("StaticFieldLeak") // https://stackoverflow.com/questions/40094020/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memor
     private static Context mCtx;
-    private static String baseURL = "http://api.pastiche.staging.jacobingalls.rocks:8080";
+    public static String baseURL = "http://api.pastiche.staging.jacobingalls.rocks:8080";
 
     private ServerRequestHandler (Context context){
         mCtx = context;

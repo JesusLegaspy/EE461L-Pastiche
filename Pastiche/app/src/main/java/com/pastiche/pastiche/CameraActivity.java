@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 import com.pastiche.pastiche.Server.ServerHandler;
 
 import java.io.File;
@@ -40,8 +41,8 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             galleryAddPic();
             upload();
-            super.finish();
         }
+        super.finish();
     }
 
     // -------------- [Private Camera Methods] ------------------
@@ -62,6 +63,8 @@ public class CameraActivity extends AppCompatActivity {
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 // ...
+                Toast.makeText(this, "camera is not responsive", Toast.LENGTH_LONG).show();
+                finishAfterTransition();
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
