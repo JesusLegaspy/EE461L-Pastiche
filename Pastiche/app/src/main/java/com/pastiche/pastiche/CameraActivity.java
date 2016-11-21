@@ -105,7 +105,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private void upload(){
         ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
-        handler.postImg(mCurrentPhotoPath, x -> Log.d("CameraActivity", "Successful " + x), x -> Log.d("CameraActivity", "Error " + x));
+        handler.postImg(mCurrentPhotoPath, x -> Toast.makeText(getApplicationContext(), "Uploaded as pic " + x.toString(),
+                Toast.LENGTH_LONG).show(), x -> Toast.makeText(getApplicationContext(), x,
+                Toast.LENGTH_LONG).show());
     }
     // -------------- [End of Camera Code] ------------------
 
