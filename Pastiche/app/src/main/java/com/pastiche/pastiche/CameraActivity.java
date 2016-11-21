@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.pastiche.pastiche.Server.ServerHandler;
 
@@ -30,6 +31,10 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        if ( Build.VERSION.SDK_INT >= 21 ) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         dispatchTakePictureIntent();
     }
 
