@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
-import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
@@ -52,22 +51,42 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
         );
     }
 
+    /**
+     * Load the list of all events
+     * @param data
+     */
     private void loadListEvents(PEvent[] data) {
         ServerHandler handler = ServerHandler.getInstance(appContext);
 
         events.clear();
         Collections.addAll(events, data);
-        this.notifyDataSetChanged(); //TODO remove?
 
         eventFirstPictures = new ConcurrentHashMap<>();
 
-        events.parallelStream().forEach(event -> handler.listPhotosForAnEvent(event.getEventId(), listPhotos -> {
-            if ( listPhotos.length > 0 ) {
-                eventFirstPictures.put(event.getEventId(), listPhotos[listPhotos.length - 1]);//TODO get the most seen photo
-            }
+        events.parallelStream().forEach(
 
-            this.notifyDataSetChanged();
-        }, error -> Log.e(TAG, error)));
+                event -> handler.listPhotosForAnEvent(
+                        event.getEventId(),
+                        listPhotos -> loadEventFirstPhotos(event, listPhotos),
+                        error -> Log.e(TAG, error)
+                )
+
+        );
+    }
+
+    /**
+     * load the first photo of event into corresponding slot in listPhotos
+     * and notify the adapter that data has changed
+     *
+     * @param event
+     * @param listPhotos
+     */
+    private void loadEventFirstPhotos(PEvent event, PPhoto[] listPhotos) {
+        if ( listPhotos.length > 0 ) {
+            eventFirstPictures.put(event.getEventId(), listPhotos[listPhotos.length - 1]);//TODO get the most seen photo
+        }
+
+        this.notifyDataSetChanged();
     }
 
 
@@ -90,13 +109,12 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
         PEvent event = events.get(position);
 
+
+
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
 
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
             Glide.with(appContext).load(url).into(holder.getImg_event_item());
-        }
-        else {
-            holder.setImg_event_item(appContext.getDrawable(R.drawable.empty_photo));
         }
 
         holder.setTxt_event_item_title(event.getName());
