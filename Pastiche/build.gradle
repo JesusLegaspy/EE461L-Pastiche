@@ -20,16 +20,22 @@ allprojects {
 
 
 if (System.env.TRAVIS == 'true') {
-  allprojects {
-    tasks.withType(GroovyCompile) {
-      groovyOptions.fork = false
+    allprojects {
+        tasks.withType(GroovyCompile) {
+            groovyOptions.fork = false
+        }
+        tasks.withType(Test) {
+            // containers (currently) have 2 dedicated cores and 4GB of memory
+            maxParallelForks = 2
+            minHeapSize = '128m'
+        }
     }
-    tasks.withType(Test) {
-      // containers (currently) have 2 dedicated cores and 4GB of memory
-      maxParallelForks = 2
-      minHeapSize = '128m'
-    }
-  }
+}
+
+ext {
+    travisBuild = System.getenv("TRAVIS") == "true"
+    // allows for -Dpre-dex=false to be set
+    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 }
 
 ext {
