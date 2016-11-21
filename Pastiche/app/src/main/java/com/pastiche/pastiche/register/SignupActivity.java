@@ -162,12 +162,11 @@ public class SignupActivity extends AppCompatActivity {
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("hang tight (ᵔᴥᵔ)");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setMessage("hang tight ( ͡° ͜ʖ ͡°)");
         progressDialog.show();
 
 
-        System.out.println("We got here");
         serverReqest.createUser( this.username,
                                                  this.password,
                                                  this.email,
@@ -179,7 +178,7 @@ public class SignupActivity extends AppCompatActivity {
                                                      progressDialog.dismiss();
                                                  });
 
-        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 3000);}
+        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 10000);}
 
 
     /**

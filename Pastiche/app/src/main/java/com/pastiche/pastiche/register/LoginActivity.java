@@ -137,8 +137,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("hang tight (ᵔᴥᵔ)");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setMessage("hang tight ( ͡° ͜ʖ ͡°)");
         progressDialog.show();
 
 
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                             });
 
-        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 4000);
+        new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 10000);
     }
 
     /**

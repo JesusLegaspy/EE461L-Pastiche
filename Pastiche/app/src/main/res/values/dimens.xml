@@ -4,8 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="card_height">304dp</dimen>
     <dimen name="md_keylines">16dp</dimen>
-    <dimen name="tile_padding">8dp</dimen>
+    <dimen name="tile_padding">2dp</dimen>
     <dimen name="tile_height">160dp</dimen>
+    <dimen name="tile_title_height">25dp</dimen>
     <dimen name="app_bar_height">56dp</dimen>
     <dimen name="article_keylines">72dp</dimen>
     <dimen name="avator_size">40dp</dimen>
