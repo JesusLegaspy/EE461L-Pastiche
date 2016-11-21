@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
 
@@ -236,9 +236,13 @@ public class MainActivity extends AppCompatActivity{
                 error -> onLogoutFail(error));
     }
 
+
+
     private void onLogoutFail(String error) {
         Log.d(ACTIVITY_TAG, error);
     }
+
+
 
     void onLogoutSuccess(SharedPreferences.Editor editor){
         editor.clear();

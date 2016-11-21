@@ -18,22 +18,28 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
             android:scaleType="centerCrop"
-            tools:src="@drawable/def_event_img"
+            tools:src="@drawable/empty_photo"
     />
 
     <ImageView
             android:id="@+id/img_event_item_filter"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
-            android:alpha="0.3"
-            android:background="@color/medium_grey" />
+            android:alpha="0.1"
+            android:background="@color/colorAccentYellow" />
+    <ImageView
+            android:id="@+id/img_event_item_filter2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tile_title_height"
+            android:layout_alignBottom="@id/img_event_item_filter"
+            android:alpha="0.4"
+            android:background="@color/grey_900" />
 
     <TextView
             android:id="@+id/txt_event_item_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tile_height"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:gravity="center|bottom"
             tools:text="@string/default_event"
             android:textColor="@color/white"
             android:textSize="@dimen/article_titles" />

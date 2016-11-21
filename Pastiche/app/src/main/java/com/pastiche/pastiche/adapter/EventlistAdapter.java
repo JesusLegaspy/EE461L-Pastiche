@@ -1,18 +1,11 @@
 package com.pastiche.pastiche.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
-import com.pastiche.pastiche.EventsListFragment;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.R;
@@ -21,12 +14,10 @@ import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.IntStream;
 
 /**
  * Created by Aria Pahlavan on 11/5/16.
@@ -35,48 +26,49 @@ import java.util.stream.IntStream;
 public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> {
     private static final String TAG = "EventListAdapter";
 
+    private final Context appContext;
 
     private List<PEvent> events;
     private Map<Integer, PPhoto> eventFirstPictures;
 
     /**
      * get resources (should be an array of event IDs)
+     *
      * @param context
      */
     public EventlistAdapter(Context context) {
 
+        appContext = context;
 
+        ServerHandler handler = ServerHandler.getInstance(appContext);
         events = new ArrayList<>(100);
 
 
+        handler.listEvents(
 
-        ServerHandler.getInstance(context).listEvents(data -> {
-            events.clear();
-            Collections.addAll(events, data);
-            this.notifyDataSetChanged();
+                data -> loadListEvents(data),
 
-            eventFirstPictures = new ConcurrentHashMap<>();
-
-            events.parallelStream().forEach(event -> {
-                ServerHandler.getInstance(context).listPhotosForAnEvent(event.getEventId(), photoDate -> {
-                    if(photoDate.length > 0) {
-                        eventFirstPictures.put(event.getEventId(), photoDate[photoDate.length-1]);
-                    } else {
-                        // TODO use default picture or gradient
-                    }
-
-                    this.notifyDataSetChanged();
-                }, error -> {
-                    Log.e(TAG, error);
-                });
-            });
-        }, error -> {
-            Log.e(TAG, error);
-        });
+                error -> Log.e(TAG, error)
+        );
     }
 
+    private void loadListEvents(PEvent[] data) {
+        ServerHandler handler = ServerHandler.getInstance(appContext);
 
+        events.clear();
+        Collections.addAll(events, data);
+        this.notifyDataSetChanged(); //TODO remove?
 
+        eventFirstPictures = new ConcurrentHashMap<>();
+
+        events.parallelStream().forEach(event -> handler.listPhotosForAnEvent(event.getEventId(), listPhotos -> {
+            if ( listPhotos.length > 0 ) {
+                eventFirstPictures.put(event.getEventId(), listPhotos[listPhotos.length - 1]);//TODO get the most seen photo
+            }
+
+            this.notifyDataSetChanged();
+        }, error -> Log.e(TAG, error)));
+    }
 
 
     @Override
@@ -85,29 +77,30 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     }
 
 
-
     /**
      * assemble the view HOLDER for given POSITION
+     *
      * @param holder
      * @param position
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
 //        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
-        Context appContext = EventsListFragment.getAppContext();
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
 
         PEvent event = events.get(position);
 
-        if(eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId())) {
+        if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
+
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
             Glide.with(appContext).load(url).into(holder.getImg_event_item());
+        }
+        else {
+            holder.setImg_event_item(appContext.getDrawable(R.drawable.empty_photo));
         }
 
         holder.setTxt_event_item_title(event.getName());
     }
-
-
 
 
     @Override
