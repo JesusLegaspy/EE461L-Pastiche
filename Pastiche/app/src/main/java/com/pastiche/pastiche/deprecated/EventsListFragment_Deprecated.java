@@ -59,7 +59,7 @@ public class EventsListFragment_Deprecated extends Fragment {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, EventActivity.class);
-                    intent.putExtra(EventActivity.EXTRA_POSITION, getAdapterPosition());
+                    intent.putExtra(EventActivity.EXTRA_EVENT_ID, getAdapterPosition());
                     context.startActivity(intent);
                 }
             });
