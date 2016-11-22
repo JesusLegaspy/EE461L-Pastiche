@@ -14,9 +14,16 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
 import com.pastiche.pastiche.PObject.PUser;
 import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.Server.ServerRequestHandler;
+import com.pastiche.pastiche.Server.ServerRequestQueue;
 import com.pastiche.pastiche.register.LoginActivity;
 
 import java.net.CookieHandler;
@@ -92,6 +99,8 @@ public class MainActivity extends AppCompatActivity{
      */
     private void applicationSetup() {
         CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
+        Glide.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
@@ -199,6 +208,10 @@ public class MainActivity extends AppCompatActivity{
             return true;
         }
 
+        if (id == R.id.action_refresh ) {
+            refresh();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -237,6 +250,11 @@ public class MainActivity extends AppCompatActivity{
                 error -> onLogoutFail(error));
     }
 
+    private void refresh() {
+        EventsListFragment elf = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.frg_events_main);
+        ServerRequestQueue.getInstance(getApplicationContext()).getRequestQueue().getCache().clear();
+        elf.refresh();
+    }
 
 
     private void onLogoutFail(String error) {
