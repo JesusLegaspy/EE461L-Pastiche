@@ -22,6 +22,7 @@ import java.util.List;
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
     private Context context;
     private static final String TAG = "PhotoListAdapter";
+    private int id;
 
 
     private List<PPhoto> photos;
@@ -34,15 +35,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
      */
     public PhotoListAdapter(Context context, int id) {
         this.context = context;
-
-
-        photos = new ArrayList<>(100);
-        ServerHandler.getInstance(context).listPhotosForAnEvent(
-
-                id,
-                photosList -> loadPhotos(photosList),
-                error -> Log.e(TAG, error)
-        );
+        this.id = id;
+        refresh();
     }
 
     /**
@@ -92,5 +86,14 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     @Override
     public int getItemCount() {
         return photos.size();
+    }
+
+    public void refresh() {
+        photos = new ArrayList<>(100);
+        ServerHandler.getInstance(context).listPhotosForAnEvent(
+                id,
+                photosList -> loadPhotos(photosList),
+                error -> Log.e(TAG, error)
+        );
     }
 }
