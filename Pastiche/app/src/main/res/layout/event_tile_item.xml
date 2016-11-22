@@ -10,7 +10,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="@dimen/tile_padding"
-                android:id="@+id/event_item_frag"
+                android:id="@+id/photo_tile_item"
 >
 
     <ImageView
