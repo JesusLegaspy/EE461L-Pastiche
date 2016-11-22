@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
@@ -258,7 +260,8 @@ public class ServerHandler {
             }
             //Additional cases
         }
-        return "Unexpected VolleyError";
+
+        return "Unexpected VolleyError: "+error.toString();
     }
 
     public String trimMessage(String json, String key){

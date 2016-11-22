@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
@@ -44,10 +46,11 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
 
         handler.listEvents(
-
                 data -> loadListEvents(data),
-
-                error -> Log.e(TAG, error)
+                error -> {
+                    Log.e(TAG, error);
+                    Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                }
         );
     }
 
@@ -64,11 +67,12 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
         eventFirstPictures = new ConcurrentHashMap<>();
 
         events.parallelStream().forEach(
-
-                event -> handler.listPhotosForAnEvent(
-                        event.getEventId(),
+                event -> handler.listPhotosForAnEvent( event.getEventId(),
                         listPhotos -> loadEventFirstPhotos(event, listPhotos),
-                        error -> Log.e(TAG, error)
+                        error -> {
+                            Log.e(TAG, error);
+                            Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
+                        }
                 )
 
         );
