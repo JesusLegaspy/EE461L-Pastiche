@@ -14,10 +14,10 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PUser;
 import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.register.LoginActivity;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity{
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
-    private List<Integer> curUserEvents;
+    private List<PEvent> eventSearchResult;
+    private PEvent curUserEvent;
     private PUser pUser;
 
 
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity{
         applicationSetup();
         appbarSetup();
         updateCurUserEvents();
-        authenticateUser();
     }
 
 
@@ -103,24 +103,6 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    /**
-     * Check private storage for user info
-     * if nothing found, user is not isRegistered
-     *
-     * @return true if user already logged in, false otherwise
-     */
-    private boolean isRegistered() {
-        SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        String id = pref.getString("id", "");
-        boolean logged_in = pref.getBoolean("logged_in", false);
-
-        Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
-        Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
-
-        return logged_in;
-    }
-
 
 
 
@@ -150,19 +132,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    /**
-     * if user not isRegistered, initiate authentication process
-     */
-    private void authenticateUser() {
-        if ( !isRegistered() ) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        } else {
-            Log.d(ACTIVITY_TAG, "logged_in");
-        }
-
-    }
-
 
 
     @Override
@@ -183,7 +152,7 @@ public class MainActivity extends AppCompatActivity{
 
         //noInspection SimplifiableIfStatement
         if ( id == R.id.action_settings ) {
-            return isRegistered();
+            Toast.makeText(this, "No settings!", Toast.LENGTH_SHORT).show();
         }
 
         if ( id == R.id.action_search ) {
@@ -202,6 +171,8 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+
+
     /**
      * Initiate camera activity
      * @param view
@@ -210,6 +181,8 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
     }
+
+
 
     /**
      * Performs a server call to acquire a list of events as a result of search
@@ -223,6 +196,8 @@ public class MainActivity extends AppCompatActivity{
         Integer[] results = { 1, 2, 3 };
         return results;
     }
+
+
 
     /**
      * logout user.. clean up shared preferences
@@ -239,7 +214,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     private void onLogoutFail(String error) {
-        Log.d(ACTIVITY_TAG, error);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT);
     }
 
 
@@ -248,8 +223,7 @@ public class MainActivity extends AppCompatActivity{
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
-        //TODO reset fragment and FAB to their initial state
-        authenticateUser();
+        finish();
     }
 }
 

@@ -45,26 +45,17 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
-
-
-        //make Navigation bar transparent with bg color
-        //set status bar color
-        if ( Build.VERSION.SDK_INT >= 21) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
-        }
-
-        //Credentials provided by user
-        usernameText = (EditText) findViewById(R.id.input_signup_username);
-        emailText = (EditText) findViewById(R.id.input_signup_email);
-        passwordText = (EditText) findViewById(R.id.input_signup_password);
-        signupButton = (Button) findViewById(R.id.btn_signup);
-        loginLink = (TextView) findViewById(R.id.link_login);
-
+        setupActivity();
+        bindViews();
         MainActivity.disableButton(signupButton);
+        activateListeners();
 
+
+    }
+
+
+
+    private void activateListeners() {
         //check if valid password to enable signup button
         passwordText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -114,6 +105,7 @@ public class SignupActivity extends AppCompatActivity {
 
         //check if valid email to enable signup button
         emailText.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -149,7 +141,35 @@ public class SignupActivity extends AppCompatActivity {
 
         //User tapped on "create new account" link -> switch to Signup Activity
         loginLink.setOnClickListener(v -> finish());
+
     }
+
+
+
+    private void bindViews() {
+        //Credentials provided by user
+        usernameText = (EditText) findViewById(R.id.input_signup_username);
+        emailText = (EditText) findViewById(R.id.input_signup_email);
+        passwordText = (EditText) findViewById(R.id.input_signup_password);
+        signupButton = (Button) findViewById(R.id.btn_signup);
+        loginLink = (TextView) findViewById(R.id.link_login);
+    }
+
+
+
+    private void setupActivity() {
+        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
+
+
+        //make Navigation bar transparent with bg color
+        //set status bar color
+        if ( Build.VERSION.SDK_INT >= 21) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
+        }
+    }
+
 
 
     /**
@@ -157,7 +177,8 @@ public class SignupActivity extends AppCompatActivity {
      */
     private void signup() {
         Log.d(ACTIVITY_TAG, "Signup");
-        signupButton.setEnabled(false);
+        MainActivity.enableButton(signupButton);
+
         updateAttr();
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
@@ -186,7 +207,7 @@ public class SignupActivity extends AppCompatActivity {
      * @param pSession
      */
     public void onSignupSuccess(PSession pSession) {
-        signupButton.setEnabled(true);
+        MainActivity.enableButton(signupButton);
 
         int numTries = 3;
         //ensure user info is stored on device
@@ -203,6 +224,8 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+
+
     private boolean storeSigninUserInfo(PSession pSession) {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -212,11 +235,15 @@ public class SignupActivity extends AppCompatActivity {
         return editor.commit();
     }
 
+
+
     private void updateAttr(){
         this.username = usernameText.getText().toString();
         this.email = emailText.getText().toString();
         this.password = passwordText.getText().toString();
     }
+
+
 
     /**
      * If signup not successful, display a toast message and allow user to retry
@@ -224,9 +251,10 @@ public class SignupActivity extends AppCompatActivity {
      */
     public void onSignupFailed(String error) {
         Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
-
-        signupButton.setEnabled(true);
+        MainActivity.enableButton(signupButton);
     }
+
+
 
     /**
      * verifies whether username, email and password have valid format

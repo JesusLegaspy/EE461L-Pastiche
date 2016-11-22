@@ -36,11 +36,4 @@
 
 </android.support.design.widget.CoordinatorLayout>
 
-<!--<fragment-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:name="com.pastiche.pastiche.EventPhotosListFragment"-->
-<!--android:id="@+id/frg_events_main"-->
-<!--android:layout_below="@id/main_toolbar"-->
-<!--tools:layout="@layout/recycler_view"/>-->
 
