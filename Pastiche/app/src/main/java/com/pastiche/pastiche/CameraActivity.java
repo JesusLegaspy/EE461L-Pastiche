@@ -56,7 +56,7 @@ public class CameraActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         // Do some checking...
         checkSDCardState(); //todo work on sdcard handling
-        if(isStoragePermissionGranted() == false)return; //todo write this more elegantly
+        if(!isStoragePermissionGranted())finish(); //todo write this more elegantly
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -146,17 +146,17 @@ public class CameraActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG,"Permission is granted");
+                Log.d(TAG,"Permission is granted");
                 return true;
             } else {
 
-                Log.v(TAG,"Permission is revoked");
+                Log.d(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
         else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG,"Permission is granted");
+            Log.d(TAG,"Permission is granted");
             return true;
         }
     }
