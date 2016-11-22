@@ -38,18 +38,20 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      * @param context
      */
     public EventlistAdapter(Context context) {
-
         appContext = context;
+        refresh();
+    }
 
-        ServerHandler handler = ServerHandler.getInstance(appContext);
+    public void refresh() {
+        Log.d(TAG, "Refreshing events");
         events = new ArrayList<>(100);
 
-
+        ServerHandler handler = ServerHandler.getInstance(appContext);
         handler.listEvents(
                 data -> loadListEvents(data),
                 error -> {
                     Log.e(TAG, error);
-                    Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
                 }
         );
     }
