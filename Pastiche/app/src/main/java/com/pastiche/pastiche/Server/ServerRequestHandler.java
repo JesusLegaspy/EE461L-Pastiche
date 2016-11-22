@@ -7,8 +7,10 @@ package com.pastiche.pastiche.Server;
         import android.util.Log;
         import android.widget.ImageView;
 
+        import com.android.volley.DefaultRetryPolicy;
         import com.android.volley.NetworkResponse;
         import com.android.volley.Request;
+        import com.android.volley.RetryPolicy;
         import com.android.volley.VolleyError;
         import com.android.volley.toolbox.ImageRequest;
         import com.android.volley.toolbox.JsonObjectRequest;
@@ -59,6 +61,7 @@ public class ServerRequestHandler {
                 return params;
             }
         };
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1000, 10, 2));
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(jsObjRequest);
     }
@@ -66,6 +69,7 @@ public class ServerRequestHandler {
     public void jsonGet(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException{
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, baseURL + url, body, data::accept, errorData::accept);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1000, 10, 2));
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(jsObjRequest);
     }
