@@ -199,6 +199,13 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
+
+
+
     /**
      * logout user.. clean up shared preferences
      */
