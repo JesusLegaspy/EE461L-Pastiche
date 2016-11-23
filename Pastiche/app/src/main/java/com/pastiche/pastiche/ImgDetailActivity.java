@@ -12,6 +12,8 @@ import android.widget.TextView;
 public class ImgDetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "position";
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,13 +14,24 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.MemoryCategory;
+<<<<<<< HEAD
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PUser;
 import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
+=======
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
+import com.pastiche.pastiche.PObject.PUser;
+import com.pastiche.pastiche.Server.PersistentCookieStore;
+import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.Server.ServerRequestQueue;
+import com.pastiche.pastiche.register.LoginActivity;
+>>>>>>> 968a45a9b2a6c796db9d8dfac6a67b6524064e7d
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -32,6 +43,7 @@ import java.util.List;
  */
 
 public class MainActivity extends AppCompatActivity{
+
 
     private static final String ACTIVITY_TAG = "MainActivity";
     private static final String SHARED_PREF_NAME = "PUSER_INFO";
@@ -105,6 +117,9 @@ public class MainActivity extends AppCompatActivity{
 //            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
+
+
+
 
 
 
@@ -224,14 +239,11 @@ public class MainActivity extends AppCompatActivity{
                 error -> onLogoutFail(error));
     }
 
-
-
     private void refresh() {
         EventsListFragment elf = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.frg_events_main);
         ServerRequestQueue.getInstance(getApplicationContext()).getRequestQueue().getCache().clear();
         elf.refresh();
     }
-
 
 
     private void onLogoutFail(String error) {

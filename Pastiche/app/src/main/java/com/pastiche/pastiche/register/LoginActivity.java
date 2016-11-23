@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     protected ServerHandler serverReqest;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -305,7 +307,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
     /**
      * if user not isRegistered, initiate authentication process
      */
@@ -319,7 +320,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
 
 
 
