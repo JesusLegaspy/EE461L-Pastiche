@@ -153,6 +153,32 @@ public class ServerHandler {
         handle.imagePost("/photos", filepath, myResponse , myError);
     }
 
+    //call from UI to upload an image when you have the filepath
+    public void postImg(int event, String filepath, Consumer<Integer> response, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+
+        Consumer<NetworkResponse> myResponse = x -> {
+            String jsonAsStringObj = new String(x.data);
+            String test = null;
+            try {
+                JSONObject tmp = new JSONObject(jsonAsStringObj);
+                test = getResponse(tmp);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String IDNum = trimMessage(test, "id");
+            Integer result = Integer.decode(IDNum);
+            response.accept(result);
+        };
+
+        Consumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
+        };
+
+        handle.imagePost("/events/"+event+"/photos", filepath, myResponse , myError);
+    }
+
     //Uploads an image to an event when you have the bitmap-- a general post image manager is coming soon
     public void postImg(PEvent event, Bitmap bmp, Consumer<Integer> response, Consumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);

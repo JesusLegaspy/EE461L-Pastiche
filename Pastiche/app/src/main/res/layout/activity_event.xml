@@ -33,6 +33,20 @@
 
     </RelativeLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        app:srcCompat="@drawable/camera_icon"
+        app:fabSize="normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:layout_behavior="com.pastiche.pastiche.ScrollAwareFABBehavior"
+        android:id="@+id/floatingActionButton"
+        app:layout_anchor="@id/rel_activity_main"
+        app:layout_anchorGravity="bottom|right|end"
+        android:onClick="capturePicture"
+        android:backgroundTint="@color/colorAccentPinkLight"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
 
