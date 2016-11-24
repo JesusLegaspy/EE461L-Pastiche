@@ -30,4 +30,6 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder {
         return img_photo_item;
     }
 
+
+
 }

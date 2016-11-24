@@ -5,17 +5,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.PObject.PUser;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,6 +148,32 @@ public class ServerHandler {
         handle.imagePost("/photos", filepath, myResponse , myError);
     }
 
+    //call from UI to upload an image when you have the filepath
+    public void postImg(int event, String filepath, Consumer<Integer> response, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+
+        Consumer<NetworkResponse> myResponse = x -> {
+            String jsonAsStringObj = new String(x.data);
+            String test = null;
+            try {
+                JSONObject tmp = new JSONObject(jsonAsStringObj);
+                test = getResponse(tmp);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String IDNum = trimMessage(test, "id");
+            Integer result = Integer.decode(IDNum);
+            response.accept(result);
+        };
+
+        Consumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
+        };
+
+        handle.imagePost("/events/"+event+"/photos", filepath, myResponse , myError);
+    }
+
     //Uploads an image to an event when you have the bitmap-- a general post image manager is coming soon
     public void postImg(PEvent event, Bitmap bmp, Consumer<Integer> response, Consumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
@@ -258,7 +281,8 @@ public class ServerHandler {
             }
             //Additional cases
         }
-        return "Unexpected VolleyError";
+
+        return "Unexpected VolleyError: "+error.toString();
     }
 
     public String trimMessage(String json, String key){
@@ -299,4 +323,17 @@ public class ServerHandler {
         }
     }
 
+    //call from UI for new event request
+    public void createEvent(String eventName, Consumer<PEvent> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            body.put("name", eventName);
+            handle.jsonPost("/events", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

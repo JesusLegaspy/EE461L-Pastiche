@@ -20,50 +20,45 @@ import java.util.List;
  */
 
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
+
     private Context context;
     private static final String TAG = "PhotoListAdapter";
-
-
+    private int eventID;
     private List<PPhoto> photos;
+
+
 
     /**
      * get resources (should be an array of event IDs)
      *
      * @param context
-     * @param id
+     * @param eventId
      */
-    public PhotoListAdapter(Context context, int id) {
+    public PhotoListAdapter(Context context, int eventId) {
         this.context = context;
-
-
-        photos = new ArrayList<>(100);
-        ServerHandler.getInstance(context).listPhotosForAnEvent(
-
-                id,
-                photosList -> loadPhotos(photosList),
-                error -> Log.e(TAG, error)
-        );
+        this.eventID = eventId;
+        refresh();
     }
+
+
 
     /**
      * loads the list of photos corresponding to cur event
      * @param photosList
      */
     private void loadPhotos(PPhoto[] photosList) {
-        photos.clear();
         Collections.addAll(photos, photosList);
-
-
-
-
         this.notifyDataSetChanged();
     }
+
 
 
     @Override
     public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new PhotoListViewHolder(LayoutInflater.from(parent.getContext()), parent);
     }
+
+
 
 
     /**
@@ -89,8 +84,22 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
     }
 
 
+
     @Override
     public int getItemCount() {
         return photos.size();
+    }
+
+
+
+    public void refresh() {
+        photos = new ArrayList<>(100);
+        photos.clear();
+
+        ServerHandler.getInstance(context).listPhotosForAnEvent(
+                eventID,
+                photosList -> loadPhotos(photosList),
+                error -> Log.e(TAG, error)
+        );
     }
 }

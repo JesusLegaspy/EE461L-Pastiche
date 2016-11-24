@@ -17,6 +17,7 @@ import com.pastiche.pastiche.adapter.EventlistAdapter;
 
 public class EventsListFragment extends Fragment {
     private static Context appContext;
+    private EventlistAdapter adapter;
 
 
     public static Context getAppContext() {
@@ -29,7 +30,7 @@ public class EventsListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
         appContext = getActivity().getApplicationContext();
 
-        EventlistAdapter adapter = new EventlistAdapter(recyclerView.getContext());
+        adapter = new EventlistAdapter(recyclerView.getContext());
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
 
@@ -43,43 +44,7 @@ public class EventsListFragment extends Fragment {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void refresh() {
+        adapter.refresh();
+    }
 }

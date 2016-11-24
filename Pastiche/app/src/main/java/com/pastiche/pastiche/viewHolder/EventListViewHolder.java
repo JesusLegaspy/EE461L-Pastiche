@@ -20,10 +20,10 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
 
 
     public static final String TAG = "EventListViewHolder";
+    private String eventName;
     private ImageView eventPhoto;
     private TextView eventTitle;
     private int eventId;
-
 
 
     public EventListViewHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -40,6 +40,7 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
             Context context = v.getContext();
             Intent intent = new Intent(context, EventActivity.class);
             Log.d(TAG, "itemView Listener: "+eventId );
+            intent.putExtra(EventActivity.EXTRA_EVENT_NAME, this.eventName);
             intent.putExtra(EventActivity.EXTRA_EVENT_ID, this.eventId);
             context.startActivity(intent);
         });
@@ -60,5 +61,9 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
     public void setEventId(int eventId) {
         Log.d(TAG, "setEventId: "+eventId );
         this.eventId = eventId;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 }

@@ -14,7 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.Server.ServerRequestQueue;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +29,9 @@ import java.util.Date;
  */
 
 public class CameraActivity extends AppCompatActivity {
+    public static final String EXTRA_EVENT_ID = "eventId";
+
+    int bingo = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class CameraActivity extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         dispatchTakePictureIntent();
+
+        bingo = retrieveEventId(savedInstanceState);
     }
 
     private static final String TAG = new String();
@@ -56,7 +64,7 @@ public class CameraActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         // Do some checking...
         checkSDCardState(); //todo work on sdcard handling
-        if(isStoragePermissionGranted() == false)return; //todo write this more elegantly
+        if(!isStoragePermissionGranted())finish(); //todo write this more elegantly
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -110,7 +118,15 @@ public class CameraActivity extends AppCompatActivity {
 
     private void upload(){
         ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
-        handler.postImg(mCurrentPhotoPath, x -> Log.d("CameraActivity", "Successful " + x), x -> Log.d("CameraActivity", "Error " + x));
+        if(bingo >= 0) {
+            handler.postImg(bingo, mCurrentPhotoPath, x -> Toast.makeText(getApplicationContext(), "Uploaded as pic " + x.toString(),
+                    Toast.LENGTH_LONG).show(), x -> Toast.makeText(getApplicationContext(), x,
+                    Toast.LENGTH_LONG).show());
+        } else {
+            handler.postImg(mCurrentPhotoPath, x -> Toast.makeText(getApplicationContext(), "Uploaded as pic " + x.toString(),
+                    Toast.LENGTH_LONG).show(), x -> Toast.makeText(getApplicationContext(), x,
+                    Toast.LENGTH_LONG).show());
+        }
     }
     // -------------- [End of Camera Code] ------------------
 
@@ -144,17 +160,17 @@ public class CameraActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG,"Permission is granted");
+                Log.d(TAG,"Permission is granted");
                 return true;
             } else {
 
-                Log.v(TAG,"Permission is revoked");
+                Log.d(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
         else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG,"Permission is granted");
+            Log.d(TAG,"Permission is granted");
             return true;
         }
     }
@@ -166,5 +182,27 @@ public class CameraActivity extends AppCompatActivity {
             Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
             //resume tasks needing this permission
         }
+    }
+
+    /**
+     * retrieve event id from callee (which is an eventListViewHolder)
+     * @param savedInstanceState
+     * @return
+     */
+    private int retrieveEventId(Bundle savedInstanceState) {
+        int eventId;
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                eventId = -1;
+            } else {
+                eventId = extras.getInt(EXTRA_EVENT_ID);
+            }
+        } else {
+            eventId = (int) savedInstanceState.getSerializable(EXTRA_EVENT_ID);
+        }
+
+        return eventId;
     }
 }

@@ -1,10 +1,12 @@
 package com.pastiche.pastiche.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
@@ -30,26 +32,35 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     private List<PEvent> events;
     private Map<Integer, PPhoto> eventFirstPictures;
 
+
+
     /**
      * get resources (should be an array of event IDs)
      *
      * @param context
      */
     public EventlistAdapter(Context context) {
-
         appContext = context;
+        refresh();
+    }
 
-        ServerHandler handler = ServerHandler.getInstance(appContext);
+
+
+    public void refresh() {
+        Log.d(TAG, "Refreshing events");
         events = new ArrayList<>(100);
 
-
+        ServerHandler handler = ServerHandler.getInstance(appContext);
         handler.listEvents(
-
                 data -> loadListEvents(data),
-
-                error -> Log.e(TAG, error)
+                error -> {
+                    Log.e(TAG, error);
+                    Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
+                }
         );
     }
+
+
 
     /**
      * Load the list of all events
@@ -63,16 +74,33 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
         eventFirstPictures = new ConcurrentHashMap<>();
 
-        events.parallelStream().forEach(
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+            events.parallelStream().forEach(
+                    event -> handler.listPhotosForAnEvent( event.getEventId(),
+                            listPhotos -> loadEventFirstPhotos(event, listPhotos),
+                            error -> {
+                                Log.e(TAG, error);
+                                Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
+                            }
+                    )
 
-                event -> handler.listPhotosForAnEvent(
-                        event.getEventId(),
+            );
+        }
+        else {
+            for ( PEvent event : events ) {
+
+                handler.listPhotosForAnEvent(event.getEventId(),
                         listPhotos -> loadEventFirstPhotos(event, listPhotos),
-                        error -> Log.e(TAG, error)
-                )
-
-        );
+                        error -> {
+                            Log.e(TAG, error);
+                            Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
+                        }
+                );
+            }
+        }
     }
+
+
 
     /**
      * load the first photo of event into corresponding slot in listPhotos
@@ -83,17 +111,19 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     private void loadEventFirstPhotos(PEvent event, PPhoto[] listPhotos) {
         if ( listPhotos.length > 0 ) {
-            eventFirstPictures.put(event.getEventId(), listPhotos[listPhotos.length - 1]);//TODO get the most seen photo
+            eventFirstPictures.put(event.getEventId(), listPhotos[0]);
         }
 
         this.notifyDataSetChanged();
     }
 
 
+
     @Override
     public EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new EventListViewHolder(LayoutInflater.from(parent.getContext()), parent);
     }
+
 
 
     /**
@@ -104,7 +134,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
-//        holder.setEventPhoto(mEventPictures[position % mEventPictures.length]);
+
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
 
         PEvent event = events.get(position);
@@ -120,8 +150,10 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
             holder.setEventId(event.getEventId());
         }
 
+        holder.setEventName(event.getName());
         holder.setEventTitle(event.getName());
     }
+
 
 
     @Override

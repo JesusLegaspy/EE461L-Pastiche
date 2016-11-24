@@ -7,21 +7,22 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
+import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PUser;
-import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.register.LoginActivity;
+import com.pastiche.pastiche.Server.ServerRequestQueue;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 
 /**
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity{
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
-    private List<Integer> curUserEvents;
+    private List<PEvent> eventSearchResult;
+    private PEvent curUserEvent;
     private PUser pUser;
 
 
@@ -51,10 +53,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        applicationSetup();
+        setupActivity();
         appbarSetup();
         updateCurUserEvents();
-        authenticateUser();
     }
 
 
@@ -90,38 +91,17 @@ public class MainActivity extends AppCompatActivity{
      * make Navigation bar transparent with bg color
      * set status bar color
      */
-    private void applicationSetup() {
-        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
+    private void setupActivity() {
+        Glide.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
-
-
-
-    /**
-     * Check private storage for user info
-     * if nothing found, user is not isRegistered
-     *
-     * @return true if user already logged in, false otherwise
-     */
-    private boolean isRegistered() {
-        SharedPreferences pref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        String id = pref.getString("id", "");
-        boolean logged_in = pref.getBoolean("logged_in", false);
-
-        Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
-        Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
-
-        return logged_in;
-    }
-
 
 
 
@@ -151,19 +131,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    /**
-     * if user not isRegistered, initiate authentication process
-     */
-    private void authenticateUser() {
-        if ( !isRegistered() ) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        } else {
-            Log.d(ACTIVITY_TAG, "logged_in");
-        }
-
-    }
-
 
 
     @Override
@@ -184,7 +151,7 @@ public class MainActivity extends AppCompatActivity{
 
         //noInspection SimplifiableIfStatement
         if ( id == R.id.action_settings ) {
-            return isRegistered();
+            Toast.makeText(this, "No settings!", Toast.LENGTH_SHORT).show();
         }
 
         if ( id == R.id.action_search ) {
@@ -199,9 +166,20 @@ public class MainActivity extends AppCompatActivity{
             return true;
         }
 
+        if (id == R.id.action_refresh ) {
+            refresh();
+            return true;
+        }
+
+        if (id == R.id.action_addEvent ) {
+            addEvent();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     /**
      * Initiate camera activity
@@ -211,6 +189,8 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
     }
+
+
 
     /**
      * Performs a server call to acquire a list of events as a result of search
@@ -224,6 +204,15 @@ public class MainActivity extends AppCompatActivity{
         Integer[] results = { 1, 2, 3 };
         return results;
     }
+
+
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
+
+
 
     /**
      * logout user.. clean up shared preferences
@@ -239,8 +228,16 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+    private void refresh() {
+        EventsListFragment elf = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.frg_events_main);
+        ServerRequestQueue.getInstance(getApplicationContext()).getRequestQueue().getCache().clear();
+        elf.refresh();
+    }
+
+
+
     private void onLogoutFail(String error) {
-        Log.d(ACTIVITY_TAG, error);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT);
     }
 
 
@@ -249,8 +246,32 @@ public class MainActivity extends AppCompatActivity{
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
-        //TODO reset fragment and FAB to their initial state
-        authenticateUser();
+        finish();
+    }
+
+
+
+    void addEvent(){
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.new_event_user_input_dialog_box, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Send", (dialogBox, id) -> ServerHandler.getInstance(getApplicationContext())
+                        .createEvent(userInputDialogEditText.getText().toString(),
+                                x -> {
+                                    Toast.makeText(getApplicationContext(), "Event" + x.getName() + "Created", Toast.LENGTH_SHORT).show();
+                                    refresh();
+                                },
+                                x -> Toast.makeText(getApplicationContext(), x, Toast.LENGTH_LONG).show()))
+
+                .setNegativeButton("Cancel", (dialogBox, id) -> dialogBox.cancel());
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 }
 

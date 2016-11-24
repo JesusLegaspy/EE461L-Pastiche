@@ -18,7 +18,12 @@ import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
 import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 
 /**
@@ -39,29 +44,25 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     protected ServerHandler serverReqest;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
-
-        //make Navigation bar transparent with bg color
-        //set status bar color
-        if ( Build.VERSION.SDK_INT >= 21 ) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
-        }
-
-        //Credentials provided by user
-        emailText = (EditText) findViewById(R.id.input_login_email);
-        passwordText = (EditText) findViewById(R.id.input_login_password);
-        loginButton = (Button) findViewById(R.id.btn_login);
-        signupLink = (TextView) findViewById(R.id.link_signup);
-
+        setupApplication();
+        authenticateUser();
+        bindViews();
         MainActivity.disableButton(loginButton);
+        activateListeners();
 
+
+    }
+
+
+
+    private void activateListeners() {
         //check if valid password to enable login button
         passwordText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,6 +128,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
+    private void setupApplication() {
+        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
+        this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
+
+        //make Navigation bar transparent with bg color
+        //set status bar color
+        if ( Build.VERSION.SDK_INT >= 21 ) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccentPink));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
+        }
+    }
+
+
+
+    private void bindViews() {
+        emailText = (EditText) findViewById(R.id.input_login_email);
+        passwordText = (EditText) findViewById(R.id.input_login_password);
+        loginButton = (Button) findViewById(R.id.btn_login);
+        signupLink = (TextView) findViewById(R.id.link_signup);
+    }
+
+
+
     /**
      * Attempts to login using credentials provided by user through server req handler
      */
@@ -156,12 +182,14 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> progressDialog.dismiss(), 10000);
     }
 
+
+
     /**
      * After a successful login session, finish activities
      * @param pSession
      */
     private void onLoginSuccess(PSession pSession) {
-        loginButton.setEnabled(true);
+        MainActivity.enableButton(loginButton);
         int numTries = 3;
         //ensure user info is stored on device
         while ( !storeLoginUserInfo(pSession) ) {
@@ -174,9 +202,13 @@ public class LoginActivity extends AppCompatActivity {
 
         Toast.makeText(getBaseContext(), "Login was successful", Toast.LENGTH_SHORT).show();
 
+        passwordText.setText("");
 
-        this.finish();
+        authenticateUser();
+
     }
+
+
 
     private boolean storeLoginUserInfo(PSession pSession) {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
@@ -188,14 +220,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * If login not successful, display a toast message and allow user to retry
      * @param error
      */
     private void onLoginFail(String error) {
-        loginButton.setEnabled(true);
+        MainActivity.enableButton(loginButton);
         Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
     }
+
 
 
     @Override
@@ -204,17 +238,19 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ( requestCode == REQUEST_SIGNUP ) {
             if ( resultCode == RESULT_OK ) {
 
-                // TODO: put successful signup logic here
-                //TODO remove finish
-                this.finish();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         }
     }
+
 
 
     /**
@@ -265,12 +301,51 @@ public class LoginActivity extends AppCompatActivity {
         return isValidEmail & isValidPass;
     }
 
+
+
     /**
      * updates login attributes
      */
     private void updateAttr() {
         this.password = passwordText.getText().toString();
         this.email = emailText.getText().toString();
+    }
+
+
+
+    /**
+     * if user not isRegistered, initiate authentication process
+     */
+    private void authenticateUser() {
+        if ( !isRegistered() ) {
+            return;
+        } else {
+            Log.d(ACTIVITY_TAG, "logged_in");
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
+
+
+    /**
+     * Check private storage for user info
+     * if nothing found, user is not isRegistered
+     *
+     * @return true if user already logged in, false otherwise
+     */
+    private boolean isRegistered() {
+        SharedPreferences pref = getSharedPreferences(
+                MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
+
+        String id = pref.getString("id", "");
+        boolean logged_in = pref.getBoolean("logged_in", false);
+
+        Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
+        Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
+
+        return logged_in;
     }
 
 }

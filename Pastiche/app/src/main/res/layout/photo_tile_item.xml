@@ -3,7 +3,7 @@
   ~ Created by Aria Pahlavan on 11/12/16.
   ~ UI for a event item (Fragment)
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
 
               android:layout_width="wrap_content"
@@ -22,4 +22,4 @@
             android:src="@drawable/empty_photo"
     />
 
-</LinearLayout>
+</RelativeLayout>
