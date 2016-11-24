@@ -1,17 +1,14 @@
 package com.pastiche.pastiche;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.pastiche.pastiche.adapter.PhotoListAdapter;
-
-import java.util.Random;
 
 /**
  * Created by Aria Pahlavan on 11/12/16.
