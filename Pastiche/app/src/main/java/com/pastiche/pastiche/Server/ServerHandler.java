@@ -328,4 +328,17 @@ public class ServerHandler {
         }
     }
 
+    //call from UI for new event request
+    public void createEvent(String eventName, Consumer<PEvent> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            body.put("name", eventName);
+            handle.jsonPost("/events", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

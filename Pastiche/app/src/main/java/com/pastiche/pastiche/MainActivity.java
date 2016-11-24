@@ -1,28 +1,28 @@
 package com.pastiche.pastiche;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
 import com.pastiche.pastiche.PObject.PUser;
 import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.Server.ServerRequestQueue;
 import com.pastiche.pastiche.register.LoginActivity;
 
@@ -213,6 +213,11 @@ public class MainActivity extends AppCompatActivity{
             return true;
         }
 
+        if (id == R.id.action_addEvent ) {
+            addEvent();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -269,6 +274,29 @@ public class MainActivity extends AppCompatActivity{
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
         //TODO reset fragment and FAB to their initial state
         authenticateUser();
+    }
+
+    void addEvent(){
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.new_event_user_input_dialog_box, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
+        alertDialogBuilderUserInput.setView(mView);
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("Send", (dialogBox, id) -> ServerHandler.getInstance(getApplicationContext())
+                        .createEvent(userInputDialogEditText.getText().toString(),
+                                x -> {
+                                    Toast.makeText(getApplicationContext(), "Event" + x.getName() + "Created", Toast.LENGTH_SHORT).show();
+                                    refresh();
+                                },
+                                x -> Toast.makeText(getApplicationContext(), x, Toast.LENGTH_LONG).show()))
+
+                .setNegativeButton("Cancel", (dialogBox, id) -> dialogBox.cancel());
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 }
 
