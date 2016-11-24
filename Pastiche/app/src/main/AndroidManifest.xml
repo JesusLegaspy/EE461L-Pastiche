@@ -55,13 +55,6 @@
                 android:theme="@style/AppTheme"/>
 
 
-
-        <activity android:name=".ImgDetailActivity"
-                  android:theme="@style/AppTheme.Light.Signup"/>
-
-
-
-
         <activity android:name=".CameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT"/>
