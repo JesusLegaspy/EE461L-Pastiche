@@ -104,7 +104,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
-//        holder.setImg_event_item(mEventPictures[position % mEventPictures.length]);
+//        holder.setEventPhoto(mEventPictures[position % mEventPictures.length]);
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
 
         PEvent event = events.get(position);
@@ -114,10 +114,13 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
 
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
-            Glide.with(appContext).load(url).into(holder.getImg_event_item());
+            Glide.with(appContext).load(url).into(holder.getEventPhoto());
+
+
+            holder.setEventId(event.getEventId());
         }
 
-        holder.setTxt_event_item_title(event.getName());
+        holder.setEventTitle(event.getName());
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,9 +19,10 @@ import com.pastiche.pastiche.R;
 public class EventListViewHolder extends RecyclerView.ViewHolder {
 
 
-
-    private ImageView img_event_item;
-    private TextView txt_event_item_title;
+    public static final String TAG = "EventListViewHolder";
+    private ImageView eventPhoto;
+    private TextView eventTitle;
+    private int eventId;
 
 
 
@@ -29,28 +31,34 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
 
 
 
-        img_event_item = (ImageView) itemView.findViewById(R.id.img_event_item);
-        txt_event_item_title = (TextView) itemView.findViewById(R.id.txt_event_item_title);
+        eventPhoto = (ImageView) itemView.findViewById(R.id.img_event_item);
+        eventTitle = (TextView) itemView.findViewById(R.id.txt_event_item_title);
 
 
 
         itemView.setOnClickListener(v->{
             Context context = v.getContext();
             Intent intent = new Intent(context, EventActivity.class);
-            intent.putExtra(EventActivity.EXTRA_POSITION, getAdapterPosition());
+            Log.d(TAG, "itemView Listener: "+eventId );
+            intent.putExtra(EventActivity.EXTRA_EVENT_ID, this.eventId);
             context.startActivity(intent);
         });
     }
 
-    public ImageView getImg_event_item() {
-        return img_event_item;
+    public ImageView getEventPhoto() {
+        return eventPhoto;
     }
 
-    public void setImg_event_item(Drawable img_event_item) {
-        this.img_event_item.setImageDrawable(img_event_item);
+    public void setEventPhoto(Drawable eventPhoto) {
+        this.eventPhoto.setImageDrawable(eventPhoto);
     }
 
-    public void setTxt_event_item_title(String txt_event_item_title) {
-        this.txt_event_item_title.setText(txt_event_item_title);
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle.setText(eventTitle);
+    }
+
+    public void setEventId(int eventId) {
+        Log.d(TAG, "setEventId: "+eventId );
+        this.eventId = eventId;
     }
 }
