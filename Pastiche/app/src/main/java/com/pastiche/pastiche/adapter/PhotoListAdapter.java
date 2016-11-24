@@ -23,7 +23,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
 
     private Context context;
     private static final String TAG = "PhotoListAdapter";
-    private int id;
+    private int eventID;
     private List<PPhoto> photos;
 
 
@@ -32,11 +32,11 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
      * get resources (should be an array of event IDs)
      *
      * @param context
-     * @param id
+     * @param eventId
      */
-    public PhotoListAdapter(Context context, int id) {
+    public PhotoListAdapter(Context context, int eventId) {
         this.context = context;
-        this.id = id;
+        this.eventID = eventId;
         refresh();
     }
 
@@ -97,7 +97,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
         photos.clear();
 
         ServerHandler.getInstance(context).listPhotosForAnEvent(
-                id,
+                eventID,
                 photosList -> loadPhotos(photosList),
                 error -> Log.e(TAG, error)
         );

@@ -147,10 +147,10 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
             Glide.with(appContext).load(url).into(holder.getEventPhoto());
 
 
-            holder.setEventName(event.getName());
             holder.setEventId(event.getEventId());
         }
 
+        holder.setEventName(event.getName());
         holder.setEventTitle(event.getName());
     }
 
