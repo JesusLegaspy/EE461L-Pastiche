@@ -1,7 +1,6 @@
 package com.pastiche.pastiche;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -17,18 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PUser;
-import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestQueue;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.util.List;
 
 /**
@@ -58,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        applicationSetup();
+        setupActivity();
         appbarSetup();
         updateCurUserEvents();
     }
@@ -96,17 +90,15 @@ public class MainActivity extends AppCompatActivity{
      * make Navigation bar transparent with bg color
      * set status bar color
      */
-    private void applicationSetup() {
-        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
+    private void setupActivity() {
         Glide.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
 

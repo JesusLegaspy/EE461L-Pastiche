@@ -18,7 +18,12 @@ import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
 import com.pastiche.pastiche.PObject.PSession;
 import com.pastiche.pastiche.R;
+import com.pastiche.pastiche.Server.PersistentCookieStore;
 import com.pastiche.pastiche.Server.ServerHandler;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 
 /**
@@ -46,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        setupActivity();
+        setupApplication();
         authenticateUser();
         bindViews();
         MainActivity.disableButton(loginButton);
@@ -124,15 +129,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void setupActivity() {
+    private void setupApplication() {
+        CookieHandler.setDefault( new CookieManager( new PersistentCookieStore(this), CookiePolicy.ACCEPT_ALL ) );
         this.serverReqest = ServerHandler.getInstance(this.getApplicationContext());
 
         //make Navigation bar transparent with bg color
         //set status bar color
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccentPink));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackground));
         }
     }
 

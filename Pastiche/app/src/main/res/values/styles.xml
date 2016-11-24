@@ -6,6 +6,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccentPink</item>
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
     </style>
 
     <!-- APP_THEME DARK  DIALOG-->
@@ -26,6 +28,8 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="android:textColorHint">@color/aluminum</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
     </style>
 
 
@@ -37,6 +41,8 @@
 
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:textColorHint">@color/aluminum</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
     </style>
 
 
@@ -49,6 +55,8 @@
 
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:textColorHint">@color/aluminum</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
     </style>
 
     <!-- SPLASH THEME -->
