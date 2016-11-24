@@ -1,14 +1,17 @@
 package com.pastiche.pastiche;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.pastiche.pastiche.adapter.PhotoListAdapter;
+
+import java.util.Random;
 
 /**
  * Created by Aria Pahlavan on 11/12/16.
@@ -17,12 +20,10 @@ import com.pastiche.pastiche.adapter.PhotoListAdapter;
 public class EventActivity extends AppCompatActivity {
     public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_EVENT_NAME = "eventName";
-    private final int INVALID_ID = -1;
-    private int eventID = -1;
-    private String eventName = null;
-    private PhotoListAdapter adapter = null;
-
-
+    protected final int INVALID_ID = -1;
+    protected int eventID = -1;
+    protected String eventName = null;
+    protected PhotoListAdapter adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -174,5 +175,15 @@ public class EventActivity extends AppCompatActivity {
 
     public void refresh() {
         adapter.refresh();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

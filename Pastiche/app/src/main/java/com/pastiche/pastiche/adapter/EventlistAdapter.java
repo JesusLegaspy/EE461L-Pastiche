@@ -111,7 +111,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     private void loadEventFirstPhotos(PEvent event, PPhoto[] listPhotos) {
         if ( listPhotos.length > 0 ) {
-            eventFirstPictures.put(event.getEventId(), listPhotos[listPhotos.length - 1]);//TODO get the most seen photo
+            eventFirstPictures.put(event.getEventId(), listPhotos[0]);
         }
 
         this.notifyDataSetChanged();
