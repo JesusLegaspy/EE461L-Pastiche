@@ -272,10 +272,10 @@ public class ServerHandler {
                 case 400:
                 case 401:
                 case 404:
-                    json = new String(response.data);
-                    json = trimMessage(json, "error");
-                    if(json != null) return json;
-                    break;
+                    return ("HTTP error code " + response.statusCode +": Malformed request from client.");
+                case 500:
+                case 504:
+                    return ("HTTP error code " + response.statusCode + ": No response from server.");
                 default:
                     return "Unhandled error code " + response.statusCode;
             }
@@ -365,5 +365,14 @@ public class ServerHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getEvent(int id, Consumer<PEvent> data, Consumer<String> error) throws JSONException {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/events/";
+        url = url.concat(Integer.toString(id));
+        handle.jsonGet(url, new JSONObject(),
+                x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                x -> error.accept(onErrorResponse(x)));
     }
 }
