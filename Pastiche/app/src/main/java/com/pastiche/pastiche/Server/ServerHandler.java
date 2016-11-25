@@ -323,4 +323,47 @@ public class ServerHandler {
         }
     }
 
+    public void searchEvents(String query, Consumer<PEvent[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String events = trimMessage(info, "response");   //strips "response"
+                events = trimMessage(events, "events");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(events, PEvent[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(),myData,
+                   x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchUsers(String query, Consumer<PUser[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String users = trimMessage(info, "response");   //strips "response"
+                users = trimMessage(users, "users");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(users, PUser[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(), myData,
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
