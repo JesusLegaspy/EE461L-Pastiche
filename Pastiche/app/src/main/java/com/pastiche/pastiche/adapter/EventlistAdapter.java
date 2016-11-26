@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.Server.ServerHandler;
@@ -158,7 +159,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
 
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
-            Glide.with(appContext).load(url).into(holder.getEventPhoto());
+            Glide.with(appContext).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getEventPhoto());
 
 
             holder.setEventId(event.getEventId());
