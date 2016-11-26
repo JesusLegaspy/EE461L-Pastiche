@@ -38,8 +38,9 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      * get resources (should be an array of event IDs)
      *
      * @param context
+     * @param results
      */
-    public EventlistAdapter(Context context) {
+    public EventlistAdapter(Context context, List<PEvent> results) {
         appContext = context;
         refresh();
     }

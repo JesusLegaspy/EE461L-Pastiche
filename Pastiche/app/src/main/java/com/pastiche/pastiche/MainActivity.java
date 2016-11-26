@@ -154,9 +154,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         if ( id == R.id.action_search ) {
-            Integer[] event_results = performSearch("keyword");
-
-
+            onSearchRequested();
             return true;
         }
 
@@ -187,21 +185,6 @@ public class MainActivity extends AppCompatActivity{
     public void capturePicture(View view) {
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
-    }
-
-
-
-    /**
-     * Performs a server call to acquire a list of events as a result of search
-     * for KEYWORD
-     *
-     * @param keyword
-     * @return
-     */
-    private Integer[] performSearch(String keyword) {
-        //TODO API call to perform search for events
-        Integer[] results = { 1, 2, 3 };
-        return results;
     }
 
 
@@ -271,6 +254,12 @@ public class MainActivity extends AppCompatActivity{
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+
+    @Override
+    public boolean onSearchRequested(SearchEvent searchEvent) {
+        return super.onSearchRequested(searchEvent);
     }
 }
 

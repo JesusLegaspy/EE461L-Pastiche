@@ -32,5 +32,6 @@
     <string name="enter_event_name">Enter Name</string>
     <string name="action_addEvent">Add Event</string>
     <string name="remove">remove</string>
+    <string name="search_hint">Search Pastiche Events</string>
 
 </resources>
