@@ -70,7 +70,9 @@
 
 
         <activity android:name=".SearchableActivity"
-                  android:label="@string/title_activity_search_results"/>
+                  android:label="@string/title_activity_search_results"
+                  android:screenOrientation="portrait"
+        />
 
 
         <activity
