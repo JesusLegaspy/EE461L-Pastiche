@@ -16,11 +16,12 @@ import java.util.Date;
  * Created by Aria Pahlavan on 11/13/16.
  */
 
-public class PhotoListViewHolder extends RecyclerView.ViewHolder {
+public class PhotoListViewHolder extends RecyclerView.ViewHolder{
     public static final String TAG = "PhotoListViewHolder";
     private ImageView img_photo_item;
     private int photoId;
     private int userId;
+    private int eventId;
     private String uploadDate;
 
 
@@ -35,6 +36,7 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder {
             Intent intent = new Intent(context, ImgDetailActivity.class);
             Log.d(TAG, "itemView Listener: " + photoId );
             intent.putExtra(ImgDetailActivity.EXTRA_PHOTO_ID, this.photoId);
+            intent.putExtra(ImgDetailActivity.EXTRA_EVENT_ID, this.eventId);
             intent.putExtra(ImgDetailActivity.EXTRA_IMG_USER_ID, this.userId);
             intent.putExtra(ImgDetailActivity.EXTRA_IMG_UPLOAD, this.uploadDate);
             context.startActivity(intent);
@@ -58,5 +60,9 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder {
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate.toString();
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 }

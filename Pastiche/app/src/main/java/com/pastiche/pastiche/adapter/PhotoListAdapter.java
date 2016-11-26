@@ -82,6 +82,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
         }
 
         holder.setPhotoId(photos.get(position).getId());
+        holder.setEventId(eventID);
         holder.setUserId(photos.get(position).getUserId());
         holder.setUploadDate(photos.get(position).getUploaded());
 

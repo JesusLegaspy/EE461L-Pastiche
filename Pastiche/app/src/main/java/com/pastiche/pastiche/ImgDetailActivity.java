@@ -14,16 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 
 public class ImgDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO_ID = "photoId";
+    public static final String EXTRA_EVENT_ID = "eventId";
     public static final String EXTRA_IMG_USER_ID = "imgUserID";
     public static final String EXTRA_IMG_UPLOAD = "imgUploadDate";
     public static final String ACTIVITY_TAG = "ImgDetailActivity";
 
 
     private int photoId;
+    private int eventId;
     private int curUserId;
     private int imgUserId;
     private String uploadDate;
@@ -84,6 +87,7 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private void retrieveData(Bundle savedInstanceState) {
         this.photoId = retrieveId(savedInstanceState, EXTRA_PHOTO_ID);
+        this.eventId = retrieveId(savedInstanceState, EXTRA_EVENT_ID);
         this.imgUserId = retrieveId(savedInstanceState, EXTRA_IMG_USER_ID);
         this.uploadDate = retrieveString(savedInstanceState, EXTRA_IMG_UPLOAD);
         this.curUserId = getCurUserId();
@@ -178,8 +182,24 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private void removeImage() {
 
-        // TODO: 11/25/16 write code to remove photo with this.photoId
-        Toast.makeText(this, "Image is removed", Toast.LENGTH_SHORT).show();
+        ServerHandler.getInstance(getApplicationContext())
+                .removePhotoFromEvent(
+                        String.valueOf(photoId),
+                        String.valueOf(eventId),
+                        data -> onRemoveSuccess(data),
+                        error -> onRemoveFail(error)
+                        );
+    }
+
+    private void onRemoveFail(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        Log.d(ACTIVITY_TAG, "couldn't remove photo!");
+    }
+
+    private void onRemoveSuccess(String data) {
+        Toast.makeText(this, "you removed a photo :(", Toast.LENGTH_SHORT).show();
+        Log.d(ACTIVITY_TAG, "success " + data);
+        finish();
     }
 
 

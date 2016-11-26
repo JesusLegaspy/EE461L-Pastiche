@@ -45,7 +45,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitStart"
-                    android:layout_marginTop="@dimen/app_bar_height"
+                    android:layout_marginTop="58dp"
+                    android:layout_marginRight="@dimen/tile_padding"
+                    android:layout_marginLeft="@dimen/tile_padding"
             />
 
             <TextView

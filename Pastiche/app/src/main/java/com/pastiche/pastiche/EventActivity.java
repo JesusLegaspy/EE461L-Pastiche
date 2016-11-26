@@ -171,10 +171,10 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         refresh();
+        adapter.notifyDataSetChanged();
 //        super.finish();
     }
 
