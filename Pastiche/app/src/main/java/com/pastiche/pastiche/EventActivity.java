@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -60,6 +61,8 @@ public class EventActivity extends AppCompatActivity {
         eventID = retrieveEventId(savedInstanceState);
         eventName = retrieveEventName(savedInstanceState);
 
+        Toolbar eventToolbar = (Toolbar) findViewById(R.id.event_toolbar);
+        eventToolbar.setBackgroundColor(getResources().getColor(R.color.colorAccentYellow));
         TextView event_name = (TextView) findViewById(R.id.txt_event_toolbar);
         event_name.setText(eventName);
 
@@ -67,7 +70,7 @@ public class EventActivity extends AppCompatActivity {
         //set status bar color
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccentYellow));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.windowBackgroundDarker));
         }
     }
