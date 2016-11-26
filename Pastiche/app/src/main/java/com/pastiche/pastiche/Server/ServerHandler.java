@@ -272,10 +272,10 @@ public class ServerHandler {
                 case 400:
                 case 401:
                 case 404:
-                    json = new String(response.data);
-                    json = trimMessage(json, "error");
-                    if(json != null) return json;
-                    break;
+                    return ("HTTP error code " + response.statusCode +": Malformed request from client.");
+                case 500:
+                case 504:
+                    return ("HTTP error code " + response.statusCode + ": No response from server.");
                 default:
                     return "Unhandled error code " + response.statusCode;
             }
@@ -351,5 +351,57 @@ public class ServerHandler {
                 x -> data.accept(getResponse(x)),
                 x -> error.accept(onErrorResponse(x))
         );
+    }
+    public void searchEvents(String query, Consumer<PEvent[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String events = trimMessage(info, "response");   //strips "response"
+                events = trimMessage(events, "events");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(events, PEvent[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(),myData,
+                   x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void searchUsers(String query, Consumer<PUser[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String users = trimMessage(info, "response");   //strips "response"
+                users = trimMessage(users, "users");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(users, PUser[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(), myData,
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getEvent(int id, Consumer<PEvent> data, Consumer<String> error) throws JSONException {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/events/";
+        url = url.concat(Integer.toString(id));
+        handle.jsonGet(url, new JSONObject(),
+                x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                x -> error.accept(onErrorResponse(x)));
     }
 }
