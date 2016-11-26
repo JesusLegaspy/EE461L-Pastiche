@@ -63,7 +63,7 @@ public class ImgDetailActivity extends AppCompatActivity {
         setImage(photoView);
 
         TextView imgUserId = (TextView) findViewById(R.id.txt_username_img_detail);
-        imgUserId.setText(String.valueOf(this.imgUserId)); // TODO: 11/25/16 change this to be the username of the photo owner
+        imgUserId.setText(String.valueOf(this.photoId)); // TODO: 11/25/16 change this to be the username of the photo owner
 
         TextView uploadDate = (TextView) findViewById(R.id.txt_upload_img_detail);
         uploadDate.setText(this.uploadDate);
