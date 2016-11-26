@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_addEvent:
                 addEvent();
                 break;
+            case R.id.action_my_photos:
+                goto_my_photos();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -215,6 +218,13 @@ public class MainActivity extends AppCompatActivity {
         ServerHandler.getInstance(this.getApplicationContext()).logout(
                 data -> onLogoutSuccess(editor),
                 error -> onLogoutFail(error));
+    }
+
+    private void goto_my_photos() {
+        Intent intent = new Intent(this.getApplicationContext(), MyPhotosActivity.class);
+        intent.putExtra(MyPhotosActivity.EXTRA_USER_ID, 1);
+        intent.putExtra(MyPhotosActivity.EXTRA_USER_NAME, "Sure");
+        this.getApplicationContext().startActivity(intent);
     }
 
 

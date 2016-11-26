@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
@@ -323,6 +324,20 @@ public class ServerHandler {
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("Error within the listPhotosForAnEvent() function.");
+        }
+    }
+
+    public void listPhotosForAnUser(int id, Consumer<PPhoto[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            handle.jsonGet("/users/"+id+"/photos", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PPhoto[].class)),
+                    x -> error.accept(onErrorResponse(x)));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the listPhotosForAnUser() function.");
         }
     }
 
