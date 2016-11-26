@@ -63,8 +63,8 @@
 
 
         <activity android:name=".ImgDetailActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.Light.Signup"/>
+                  android:parentActivityName=".EventActivity"
+                  android:theme="@style/AppTheme"/>
 
 
 

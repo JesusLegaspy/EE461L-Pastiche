@@ -81,6 +81,10 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             Glide.with(context).load(url).into(holder.getImg_event_item());
         }
 
+        holder.setPhotoId(photos.get(position).getId());
+        holder.setUserId(photos.get(position).getUserId());
+        holder.setUploadDate(photos.get(position).getUploaded());
+
     }
 
 

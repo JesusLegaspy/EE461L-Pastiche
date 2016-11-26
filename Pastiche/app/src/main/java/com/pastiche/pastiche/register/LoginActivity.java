@@ -214,7 +214,9 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
+
         editor.putString("id", String.valueOf(pSession.getId()));
+        editor.putInt("userId", pSession.getUserId());
         editor.putBoolean("logged_in", true);
         return editor.commit();
     }
