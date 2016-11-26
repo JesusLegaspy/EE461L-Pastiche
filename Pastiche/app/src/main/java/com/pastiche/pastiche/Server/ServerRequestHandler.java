@@ -140,6 +140,13 @@ public class ServerRequestHandler {
         pQueue.addToRequestQueue(multipartRequest);
     }
 
+    public void delete(String url, Consumer<JSONObject> data, Consumer<VolleyError> errorData){
+        JsonObjectRequest deleteRequest = new JsonObjectRequest
+                (Request.Method.DELETE, baseURL + url, new JSONObject(), data::accept, errorData::accept);
+        ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
+        pQueue.addToRequestQueue(deleteRequest);
+    }
+
     // convert from bitmap to byte array
     public byte[] getBytesFromBitmap(Bitmap bitmap) {
         if(bitmap != null) {
