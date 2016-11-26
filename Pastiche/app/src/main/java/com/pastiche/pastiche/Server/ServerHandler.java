@@ -399,4 +399,27 @@ public class ServerHandler {
             System.out.println("Error within the getUser() method of ServerHandler.");
         }
     }
+
+    public void isSessionValid(Consumer<String> answer, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        Consumer <JSONObject> obj = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                System.out.println("The string reads: " + info);
+            }
+        };
+        Consumer<VolleyError> vError = new Consumer<VolleyError>() {
+            @Override
+            public void accept(VolleyError volleyError) {
+                System.out.println("A volley error occurred.");
+            }
+        };
+        try {
+            handle.jsonGet("/users/session", new JSONObject(), obj, vError);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the isSessionValid() method of ServerHandler.");
+        }
+    }
 }
