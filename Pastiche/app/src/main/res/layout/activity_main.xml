@@ -9,6 +9,8 @@
         tools:context="com.pastiche.pastiche.MainActivity"
         android:fitsSystemWindows="false"
 >
+
+
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/rel_activity_main"
@@ -41,6 +43,13 @@
             android:backgroundTint="@color/colorAccentPinkLight"
     />
 
+
+    <ImageView
+            android:id="@+id/img_main_search_filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/iron" />
 
 </android.support.design.widget.CoordinatorLayout>
 

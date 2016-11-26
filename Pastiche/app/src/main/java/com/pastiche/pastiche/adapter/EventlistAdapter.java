@@ -33,16 +33,18 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     private Map<Integer, PPhoto> eventFirstPictures;
 
 
-
     /**
      * get resources (should be an array of event IDs)
      *
      * @param context
      * @param results
      */
-    public EventlistAdapter(Context context, List<PEvent> results) {
+    public EventlistAdapter(Context context, PEvent[] results) {
         appContext = context;
-        refresh();
+        if ( results == null )
+            refresh();
+        else
+            refreshFromSearch(results);
     }
 
 
@@ -62,9 +64,22 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     }
 
 
+    /**
+     * This is refresh as a result of search query by user
+     * @param results
+     */
+    public void refreshFromSearch(PEvent[] results) {
+        Log.d(TAG, "Refreshing events with search results");
+        events = new ArrayList<>(100);
+
+        loadListEvents(results);
+    }
+
+
 
     /**
      * Load the list of all events
+     *
      * @param data
      */
     private void loadListEvents(PEvent[] data) {
@@ -77,7 +92,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
             events.parallelStream().forEach(
-                    event -> handler.listPhotosForAnEvent( event.getEventId(),
+                    event -> handler.listPhotosForAnEvent(event.getEventId(),
                             listPhotos -> loadEventFirstPhotos(event, listPhotos),
                             error -> {
                                 Log.e(TAG, error);
@@ -86,8 +101,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
                     )
 
             );
-        }
-        else {
+        } else {
             for ( PEvent event : events ) {
 
                 handler.listPhotosForAnEvent(event.getEventId(),
@@ -139,7 +153,6 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
 
         PEvent event = events.get(position);
-
 
 
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
