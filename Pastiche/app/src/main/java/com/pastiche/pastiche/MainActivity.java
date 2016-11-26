@@ -221,10 +221,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goto_my_photos() {
-        Intent intent = new Intent(this.getApplicationContext(), MyPhotosActivity.class);
-        intent.putExtra(MyPhotosActivity.EXTRA_USER_ID, 1);
-        intent.putExtra(MyPhotosActivity.EXTRA_USER_NAME, "Sure");
-        this.getApplicationContext().startActivity(intent);
+        ServerHandler.getInstance(this.getApplicationContext()).getUserSession(
+                data -> {
+                    ServerHandler.getInstance(this.getApplicationContext()).getUser(data.getUserId(),
+                        d -> {
+                            Intent intent = new Intent(this.getApplicationContext(), MyPhotosActivity.class);
+                            intent.putExtra(MyPhotosActivity.EXTRA_USER_ID, d.getID());
+                            intent.putExtra(MyPhotosActivity.EXTRA_USER_NAME, d.getUsername());
+                            this.getApplicationContext().startActivity(intent);
+                        },
+                        error -> Toast.makeText(this.getApplicationContext(), error, Toast.LENGTH_SHORT).show()
+                    );
+                },
+                error -> Toast.makeText(this.getApplicationContext(), error, Toast.LENGTH_SHORT).show()
+        );
     }
 
 

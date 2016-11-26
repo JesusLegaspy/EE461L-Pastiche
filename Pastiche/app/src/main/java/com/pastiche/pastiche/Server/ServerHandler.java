@@ -210,30 +210,6 @@ public class ServerHandler {
         handle.imagePost(url, bmp, myResponse , myError);
     }
 
-    //Couldn't get around removing the "throws JSONException", since the JSON is empty and can't be contained in a
-    //try/catch statement. Will try to remove this in the future, just for simplicity --K
-    public void getUsersImgs(PUser user, Consumer<ArrayList<Integer>> response, Consumer<String> error) throws JSONException {
-        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
-        int id = user.getID();
-        String url = "/users/" + id + "/photos";
-        JSONObject emptyJSON = new JSONObject();
-        Consumer<JSONObject> imgList = new Consumer<JSONObject>() {
-            @Override
-            public void accept(JSONObject x) {
-                String tmp = trimMessage(x.toString(), "id");
-
-            }
-        };
-        Consumer<VolleyError> errorData = new Consumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
-        };
-        handle.jsonGet(url, emptyJSON, imgList, errorData);
-    }
-
     //call from UI to download an image
     public void getImg(int photoID, ImageView.ScaleType scaleType, Consumer<Bitmap> img, Consumer<String> error){
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
@@ -437,6 +413,19 @@ public class ServerHandler {
         try {
             handle.jsonGet(url, new JSONObject(),
                     x -> user.accept(getGsonDeserializedDate().fromJson(getResponse(x), PUser.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getUser() method of ServerHandler.");
+        }
+    }
+
+    public void getUserSession(Consumer<PSession> user, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/users/session";
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> user.accept(getGsonDeserializedDate().fromJson(getResponse(x), PSession.class)),
                     x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
