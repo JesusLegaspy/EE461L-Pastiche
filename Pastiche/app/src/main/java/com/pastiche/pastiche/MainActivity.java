@@ -31,6 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private static final String ACTIVITY_TAG = "MainActivity";
     private static final String SHARED_PREF_NAME = "PUSER_INFO";
     private static final float DISASBLE_ALPHA = (float) 0.4;

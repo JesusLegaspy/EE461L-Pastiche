@@ -108,4 +108,9 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
                 error -> Log.e(TAG, error)
         );
     }
+
+    @Override
+    public long getItemId(int position) {
+        return photos.get(position).getId();
+    }
 }

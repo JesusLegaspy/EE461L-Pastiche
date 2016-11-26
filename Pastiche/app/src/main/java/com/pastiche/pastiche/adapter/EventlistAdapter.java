@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import com.pastiche.pastiche.R;
 
 /**
  * Created by Aria Pahlavan on 11/5/16.
@@ -150,21 +151,18 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
      */
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int position) {
-
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
-
         PEvent event = events.get(position);
 
-
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
-
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
             Glide.with(appContext).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getEventPhoto());
-
-
-            holder.setEventId(event.getEventId());
+            Glide.with(appContext).load(url).into(holder.getEventPhoto());
+        } else {
+            holder.getEventPhoto().setImageDrawable(appContext.getDrawable(R.drawable.empty_photo));
         }
 
+        holder.setEventId(event.getEventId());
         holder.setEventName(event.getName());
         holder.setEventTitle(event.getName());
     }
@@ -174,5 +172,10 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     @Override
     public int getItemCount() {
         return events.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return events.get(position).getEventId();
     }
 }
