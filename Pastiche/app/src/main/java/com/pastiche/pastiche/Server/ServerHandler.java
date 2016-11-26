@@ -336,4 +336,20 @@ public class ServerHandler {
             e.printStackTrace();
         }
     }
+
+    public void removePhotoFromEvent(String photoID, String eventID, Consumer<String> data, Consumer<String> error){
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        handle.delete("/photos/" + photoID + "/events/" + eventID,
+                x -> data.accept(getResponse(x)),
+                x -> error.accept(onErrorResponse(x))
+        );
+    }
+
+    public void removePhotoFromEvent(PPhoto photo, PEvent event, Consumer<String> data, Consumer<String> error){
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        handle.delete("/photos/" + photo.getId() + "/events/" + event.getEventId(),
+                x -> data.accept(getResponse(x)),
+                x -> error.accept(onErrorResponse(x))
+        );
+    }
 }

@@ -81,6 +81,11 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             Glide.with(context).load(url).into(holder.getImg_event_item());
         }
 
+        holder.setPhotoId(photos.get(position).getId());
+        holder.setEventId(eventID);
+        holder.setUserId(photos.get(position).getUserId());
+        holder.setUploadDate(photos.get(position).getUploaded());
+
     }
 
 
@@ -101,5 +106,10 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
                 photosList -> loadPhotos(photosList),
                 error -> Log.e(TAG, error)
         );
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return photos.get(position).getId();
     }
 }
