@@ -79,7 +79,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
         if(photos != null && photos.size() >= position && photos.get(position).getId() > 11) {
             String url = internetUrl + photos.get(position).getId();
             Log.d("PhotoListAdapter", "photo picked: " +photos.get(position).getId());
-            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getImg_event_item());
+            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getImg_event_item());
         }
 
         holder.setPhotoId(photos.get(position).getId());
