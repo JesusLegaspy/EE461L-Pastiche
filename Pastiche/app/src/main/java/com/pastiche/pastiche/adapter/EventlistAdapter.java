@@ -142,14 +142,11 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
 
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
-
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
             Glide.with(appContext).load(url).into(holder.getEventPhoto());
-
-
-            holder.setEventId(event.getEventId());
         }
 
+        holder.setEventId(event.getEventId());
         holder.setEventName(event.getName());
         holder.setEventTitle(event.getName());
     }
