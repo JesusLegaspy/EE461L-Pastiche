@@ -56,6 +56,7 @@ public class ServerHandler {
                     x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the login() method of ServerHandler.");
         }
     }
 
@@ -81,6 +82,7 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Errow within the createUser() method of ServerHandler.");
         }
     }
 
@@ -281,7 +283,6 @@ public class ServerHandler {
             }
             //Additional cases
         }
-
         return "Unexpected VolleyError: "+error.toString();
     }
 
@@ -307,6 +308,7 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the listEvents() method of ServerHandler.");
         }
     }
 
@@ -320,6 +322,7 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the listPhotosForAnEvent() function.");
         }
     }
 
@@ -342,6 +345,7 @@ public class ServerHandler {
                    x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the searchEvents() method of ServerHandler.");
         }
     }
 
@@ -364,15 +368,35 @@ public class ServerHandler {
                     x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the searchUsers() method of ServerHandler.");
         }
     }
 
-    public void getEvent(int id, Consumer<PEvent> data, Consumer<String> error) throws JSONException {
+    public void getEvent(int id, Consumer<PEvent> event, Consumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
         String url = "/events/";
         url = url.concat(Integer.toString(id));
-        handle.jsonGet(url, new JSONObject(),
-                x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
-                x -> error.accept(onErrorResponse(x)));
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> event.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch(JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getEvent() method of ServerHandler.");
+        }
+    }
+
+    public void getUser(int id, Consumer<PUser> user, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/users/";
+        url = url.concat(Integer.toString(id));
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> user.accept(getGsonDeserializedDate().fromJson(getResponse(x), PUser.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getUser() method of ServerHandler.");
+        }
     }
 }
