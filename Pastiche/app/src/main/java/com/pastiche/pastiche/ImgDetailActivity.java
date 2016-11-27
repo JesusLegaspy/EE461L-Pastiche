@@ -31,6 +31,7 @@ public class ImgDetailActivity extends AppCompatActivity {
     private int curUserId;
     private int imgUserId;
     private String uploadDate;
+    private String username;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class ImgDetailActivity extends AppCompatActivity {
         setImage(photoView);
 
         TextView imgUserId = (TextView) findViewById(R.id.txt_username_img_detail);
-        imgUserId.setText(String.valueOf(this.imgUserId)); // TODO: 11/25/16 change this to be the username of the photo owner
+        imgUserId.setText(username);
 
         TextView uploadDate = (TextView) findViewById(R.id.txt_upload_img_detail);
         uploadDate.setText(this.uploadDate);
@@ -93,6 +94,16 @@ public class ImgDetailActivity extends AppCompatActivity {
         this.imgUserId = retrieveId(savedInstanceState, EXTRA_IMG_USER_ID);
         this.uploadDate = retrieveString(savedInstanceState, EXTRA_IMG_UPLOAD);
         this.curUserId = getCurUserId();
+
+        ServerHandler.getInstance(getApplicationContext()).getUser(this.imgUserId,
+                data -> {
+                    this.username = data.getUsername();
+                    bindViews();
+                },
+                error -> {
+                    this.username = "Unknown (Error: "+error+")";
+                    bindViews();
+                });
     }
 
 
