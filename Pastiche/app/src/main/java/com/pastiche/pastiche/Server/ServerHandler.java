@@ -413,7 +413,7 @@ public class ServerHandler {
                     String id = trimMessage(tmp2, "id");
                     String userID = trimMessage(tmp2, "user_id");
                     String expireDate = trimMessage(tmp2, "expires");
-                    resp = ("Session valid. Session ID = " + id + ", User ID = " +
+                    resp = ("Session valid. Session ID = " + id + ", User ID = " + userID +
                             ", session expires on " + expireDate + ".");
                     System.out.println("resp says " + resp);
                 }
