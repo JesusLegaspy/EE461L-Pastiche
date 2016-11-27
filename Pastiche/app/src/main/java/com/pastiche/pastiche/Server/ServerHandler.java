@@ -406,7 +406,7 @@ public class ServerHandler {
             @Override
             public void accept(JSONObject x) {
                 String info = x.toString();
-                String tmp = info.substring(0,9);
+                String tmp = info.substring(0,10);
                 String resp;
                 if(tmp.equals("{\"response")) {
                     String tmp2 = trimMessage(info, "response");
