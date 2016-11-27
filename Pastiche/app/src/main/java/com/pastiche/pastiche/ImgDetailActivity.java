@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 
@@ -80,6 +81,7 @@ public class ImgDetailActivity extends AppCompatActivity {
         Log.d("ImgDetailActivity", "photo picked: " + this.photoId);
         Glide.with(getApplicationContext())
                 .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(photoView);
     }
 

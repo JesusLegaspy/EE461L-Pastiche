@@ -1,7 +1,6 @@
 package com.pastiche.pastiche.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.Server.ServerHandler;
@@ -35,15 +35,18 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     private Map<Integer, PPhoto> eventFirstPictures;
 
 
-
     /**
      * get resources (should be an array of event IDs)
      *
      * @param context
+     * @param results
      */
-    public EventlistAdapter(Context context) {
+    public EventlistAdapter(Context context, PEvent[] results) {
         appContext = context;
-        refresh();
+        if ( results == null )
+            refresh();
+        else
+            refreshFromSearch(results);
     }
 
 
@@ -63,9 +66,22 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
     }
 
 
+    /**
+     * This is refresh as a result of search query by user
+     * @param results
+     */
+    public void refreshFromSearch(PEvent[] results) {
+        Log.d(TAG, "Refreshing events with search results");
+        events = new ArrayList<>(100);
+
+        loadListEvents(results);
+    }
+
+
 
     /**
      * Load the list of all events
+     *
      * @param data
      */
     private void loadListEvents(PEvent[] data) {
@@ -78,7 +94,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
             events.parallelStream().forEach(
-                    event -> handler.listPhotosForAnEvent( event.getEventId(),
+                    event -> handler.listPhotosForAnEvent(event.getEventId(),
                             listPhotos -> loadEventFirstPhotos(event, listPhotos),
                             error -> {
                                 Log.e(TAG, error);
@@ -87,8 +103,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
                     )
 
             );
-        }
-        else {
+        } else {
             for ( PEvent event : events ) {
 
                 handler.listPhotosForAnEvent(event.getEventId(),
@@ -141,6 +156,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
 
         if ( eventFirstPictures != null && eventFirstPictures.containsKey(event.getEventId()) ) {
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
+            Glide.with(appContext).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getEventPhoto());
             Glide.with(appContext).load(url).into(holder.getEventPhoto());
         } else {
             holder.getEventPhoto().setImageDrawable(appContext.getDrawable(R.drawable.empty_photo));

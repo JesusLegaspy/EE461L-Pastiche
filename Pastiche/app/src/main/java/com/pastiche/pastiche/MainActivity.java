@@ -1,5 +1,7 @@
 package com.pastiche.pastiche;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,13 +11,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
 import com.pastiche.pastiche.PObject.PEvent;
@@ -29,7 +29,7 @@ import java.util.List;
  * Created by Aria Pahlavan on 11/13/16.
  */
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
 
     private static final String ACTIVITY_TAG = "MainActivity";
@@ -37,16 +37,16 @@ public class MainActivity extends AppCompatActivity{
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
     private Toolbar main_toolbar;
+    private ImageView searchFilter;
+    private SearchView searchView;
     private List<PEvent> eventSearchResult;
     private PEvent curUserEvent;
     private PUser pUser;
 
 
-
     public static String getSharedPreferenceName() {
         return SHARED_PREF_NAME;
     }
-
 
 
     @Override
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity{
         setupActivity();
         appbarSetup();
         updateCurUserEvents();
-    }
 
+    }
 
 
     /**
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity{
     public void updateCurUserEvents() {
         //TODO API call to get cur user list of events
     }
-
 
 
     /**
@@ -78,13 +77,13 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(main_toolbar);
         TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
 
+        searchFilter = (ImageView) findViewById(R.id.img_main_search_filter);
 
         //set up app name font
         Typeface title_font = Typeface.createFromAsset(getAssets(), "fonts/GreatVibes-Regular.ttf");
         app_name.setTypeface(title_font);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-
 
 
     /**
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     /**
      * testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
      * <p>
@@ -118,8 +116,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
     /**
      * Enables the button and sets the enable transparency
      *
@@ -131,58 +127,69 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //inflate the option main_menu
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint("Search Pastiche Event");
+        ComponentName componentName = new ComponentName(this, SearchableActivity.class);
+        searchView.setSearchableInfo( searchManager.getSearchableInfo(componentName) );
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(ACTIVITY_TAG, query);
+                Intent intent  = new Intent(MainActivity.this, SearchableActivity.class);
+                intent.putExtra(SearchableActivity.QUERY, query);
+                startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noInspection SimplifiableIfStatement
-        if ( id == R.id.action_settings ) {
-            Toast.makeText(this, "No settings!", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(this, "No settings!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_search:
+                break;
+            case R.id.action_logout:
+                logout();
+                break;
+            case R.id.action_refresh:
+                refresh();
+                break;
+            case R.id.action_addEvent:
+                addEvent();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        if ( id == R.id.action_search ) {
-            Integer[] event_results = performSearch("keyword");
-
-
-            return true;
-        }
-
-        if ( id == R.id.action_logout ) {
-            logout();
-            return true;
-        }
-
-        if (id == R.id.action_refresh ) {
-            refresh();
-            return true;
-        }
-
-        if (id == R.id.action_addEvent ) {
-            addEvent();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 
 
     /**
      * Initiate camera activity
+     *
      * @param view
      */
     public void capturePicture(View view) {
@@ -191,27 +198,11 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-    /**
-     * Performs a server call to acquire a list of events as a result of search
-     * for KEYWORD
-     *
-     * @param keyword
-     * @return
-     */
-    private Integer[] performSearch(String keyword) {
-        //TODO API call to perform search for events
-        Integer[] results = { 1, 2, 3 };
-        return results;
-    }
-
-
-
     @Override
     public void onBackPressed() {
+        searchFilter.setAlpha((float) 0.0);
         finishAffinity();
     }
-
 
 
     /**
@@ -227,7 +218,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     private void refresh() {
         EventsListFragment elf = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.frg_events_main);
         ServerRequestQueue.getInstance(getApplicationContext()).getRequestQueue().getCache().clear();
@@ -235,14 +225,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     private void onLogoutFail(String error) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT);
     }
 
 
-
-    void onLogoutSuccess(SharedPreferences.Editor editor){
+    void onLogoutSuccess(SharedPreferences.Editor editor) {
         editor.clear();
         boolean is_loggedout = editor.commit();
         Log.d(ACTIVITY_TAG, "Logout: " + is_loggedout);
@@ -250,8 +238,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-    void addEvent(){
+    void addEvent() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
         View mView = layoutInflaterAndroid.inflate(R.layout.new_event_user_input_dialog_box, null);
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
@@ -272,6 +259,12 @@ public class MainActivity extends AppCompatActivity{
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+
+    @Override
+    public boolean onSearchRequested(SearchEvent searchEvent) {
+        return super.onSearchRequested(searchEvent);
     }
 }
 

@@ -46,6 +46,8 @@ public class EventListViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
+
+
     public ImageView getEventPhoto() {
         return eventPhoto;
     }

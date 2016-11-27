@@ -30,11 +30,10 @@ public class EventsListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
         appContext = getActivity().getApplicationContext();
 
-        adapter = new EventlistAdapter(recyclerView.getContext());
+        adapter = new EventlistAdapter(recyclerView.getContext(), null);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
 
-        //TODO might need to change to allow download as scrolling
         recyclerView.setHasFixedSize(true);
         // Set padding for Tiles
         int tilePadding = getResources().getDimensionPixelSize(R.dimen.tile_padding);
