@@ -46,6 +46,7 @@ public class UserPhotoListViewHolder extends RecyclerView.ViewHolder{
 
 
     public ImageView getImg_event_item() {
+        img_photo_item.layout(0,0,0,0);
         return img_photo_item;
     }
 

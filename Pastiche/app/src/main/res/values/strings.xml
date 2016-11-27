@@ -10,7 +10,7 @@
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_my_photos">View my Photos</string>
+    <string name="action_my_photos">My Photos</string>
     <string name="Login_Email">EMAIL OR USERNAME</string>
     <string name="Password">PASSWORD</string>
     <string name="Login">Log In</string>
@@ -29,9 +29,9 @@
     <string name="detail_location">"8 Rue Scribe, 75009 Paris, France"</string>
     <string name="item_title">Image</string>
     <string name="default_event_name">Pastiche Event</string>
-    <string name="new_event_dialog_title">Add Event</string>
+    <string name="new_event_dialog_title">Create Event</string>
     <string name="enter_event_name">Enter Name</string>
-    <string name="action_addEvent">Add Event</string>
+    <string name="action_addEvent">Create Event</string>
     <string name="remove">Remove</string>
     <string name="search_hint">Search Pastiche Events</string>
     <string name="title_activity_search_results">Search Results</string>
