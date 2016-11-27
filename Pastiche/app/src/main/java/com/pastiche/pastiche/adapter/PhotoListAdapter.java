@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PPhoto;
 import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
@@ -83,7 +82,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             Glide.with(context)
                     .load(url)
                     .placeholder(context.getDrawable(R.drawable.empty_photo))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.getImg_event_item());
 
             holder.setPhotoId(photos.get(position).getId());

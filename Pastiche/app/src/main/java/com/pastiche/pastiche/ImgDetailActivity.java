@@ -45,9 +45,9 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private void setupActivity(Bundle savedInstanceState) {
         Toolbar img_toolbar = (Toolbar) findViewById(R.id.photo_detail_toolbar);
-//        setSupportActionBar(img_toolbar);
+        setSupportActionBar(img_toolbar);
         img_toolbar.setBackgroundColor(getColor(R.color.colorAccentPink));
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
