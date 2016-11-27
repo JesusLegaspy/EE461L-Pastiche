@@ -14,10 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.pastiche.pastiche.PObject.PEvent;
 import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestQueue;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +25,15 @@ import java.util.Date;
  * Created by jesus legaspy on 10/17/2016.
  */
 
+enum REQ_RESULT {
+    DENIED,
+    GRANTED,
+    WAIT
+}
+
 public class CameraActivity extends AppCompatActivity {
     public static final String EXTRA_EVENT_ID = "eventId";
+    private REQ_RESULT permission_result = REQ_RESULT.WAIT;
 
     int bingo = -1;
 
@@ -51,7 +55,7 @@ public class CameraActivity extends AppCompatActivity {
     // -------------- [Camera Interactions] ------------------
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+        if ( requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK ) {
             galleryAddPic();
             upload();
         }
@@ -64,11 +68,19 @@ public class CameraActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         // Do some checking...
         checkSDCardState(); //todo work on sdcard handling
-        if(!isStoragePermissionGranted())finish(); //todo write this more elegantly
+        isStoragePermissionGranted();
 
+        if ( permission_result == REQ_RESULT.DENIED )
+            finish();
+
+        else if ( permission_result == REQ_RESULT.GRANTED )
+            onPermissionGranted();
+    }
+
+    private void onPermissionGranted() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if ( takePictureIntent.resolveActivity(getPackageManager()) != null ) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -80,7 +92,7 @@ public class CameraActivity extends AppCompatActivity {
                 finishAfterTransition();
             }
             // Continue only if the File was successfully created
-            if (photoFile != null) {
+            if ( photoFile != null ) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.pastiche.pastiche.fileprovider",
                         photoFile);
@@ -116,9 +128,9 @@ public class CameraActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void upload(){
+    private void upload() {
         ServerHandler handler = ServerHandler.getInstance(getApplicationContext());
-        if(bingo >= 0) {
+        if ( bingo >= 0 ) {
             handler.postImg(bingo, mCurrentPhotoPath, x -> Toast.makeText(getApplicationContext(), "Uploaded as pic " + x.toString(),
                     Toast.LENGTH_LONG).show(), x -> Toast.makeText(getApplicationContext(), x,
                     Toast.LENGTH_LONG).show());
@@ -132,17 +144,17 @@ public class CameraActivity extends AppCompatActivity {
 
     // --------------- [SD Card]------------------
     // Credit: "Melquiades" from https://stackoverflow.com/questions/20114206/android-failed-to-mkdir-on-sd-card
-    private void checkSDCardState(){
+    private void checkSDCardState() {
         //made for debugging
         //TODO actually do something when SDcard is unavailable
         boolean mExternalStorageAvailable = false;
         boolean mExternalStorageWriteable = false;
         String state = Environment.getExternalStorageState();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
+        if ( Environment.MEDIA_MOUNTED.equals(state) ) {
             // We can read and write the media
             mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        } else if ( Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) ) {
             // We can only read the media
             mExternalStorageAvailable = true;
             mExternalStorageWriteable = false;
@@ -156,45 +168,52 @@ public class CameraActivity extends AppCompatActivity {
     //----------------[API 23+ Proper Permissions]--------------
     //Credit: "MetaSnarf" from https://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow
 
-    private  boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"Permission is granted");
-                return true;
+    private void isStoragePermissionGranted() {
+        if ( Build.VERSION.SDK_INT >= 23 ) {
+            if ( checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED ) {
+                Log.d(TAG, "Permission is granted");
+                permission_result =  REQ_RESULT.GRANTED;
             } else {
 
-                Log.d(TAG,"Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
+                Log.d(TAG, "Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1);
+                permission_result = REQ_RESULT.WAIT;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.d(TAG,"Permission is granted");
-            return true;
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.d(TAG, "Permission is granted");
+            permission_result = REQ_RESULT.GRANTED;
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
-            //resume tasks needing this permission
+        if ( grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
+            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+            onPermissionGranted();
         }
+        else {
+            onPermissionDenied();
+        }
+    }
+
+    private void onPermissionDenied() {
+        finish();
     }
 
     /**
      * retrieve event id from callee (which is an eventListViewHolder)
+     *
      * @param savedInstanceState
      * @return
      */
     private int retrieveEventId(Bundle savedInstanceState) {
         int eventId;
 
-        if (savedInstanceState == null) {
+        if ( savedInstanceState == null ) {
             Bundle extras = getIntent().getExtras();
-            if (extras == null) {
+            if ( extras == null ) {
                 eventId = -1;
             } else {
                 eventId = extras.getInt(EXTRA_EVENT_ID);
@@ -205,4 +224,15 @@ public class CameraActivity extends AppCompatActivity {
 
         return eventId;
     }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }
+
+
+
+
+

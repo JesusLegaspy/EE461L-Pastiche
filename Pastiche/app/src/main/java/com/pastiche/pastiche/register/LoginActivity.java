@@ -345,7 +345,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean logged_in = pref.getBoolean("logged_in", false);
 
         Log.d(ACTIVITY_TAG, "id: " + id + " is logged in? " + logged_in);
-        Toast.makeText(this, "id: " + id + " is logged in? " + logged_in, Toast.LENGTH_LONG).show();
+
 
         return logged_in;
     }

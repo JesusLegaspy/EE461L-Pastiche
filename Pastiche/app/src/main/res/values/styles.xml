@@ -60,6 +60,18 @@
 
     </style>
 
+    <!-- APP_THEME DARK -->
+    <style name="AppTheme.Light.ImgDetail" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorAccentPink</item>
+        <item name="colorPrimaryDark">@color/colorAccentPink</item>
+        <item name="colorAccent">@color/colorAccentPink</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textColorHint">@color/aluminum</item>
+
+
+    </style>
+
     <!-- SPLASH THEME -->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>

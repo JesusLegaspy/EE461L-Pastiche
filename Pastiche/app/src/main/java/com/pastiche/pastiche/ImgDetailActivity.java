@@ -45,9 +45,10 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private void setupActivity(Bundle savedInstanceState) {
         Toolbar img_toolbar = (Toolbar) findViewById(R.id.photo_detail_toolbar);
-        setSupportActionBar(img_toolbar);
-        img_toolbar.setBackgroundColor(getResources().getColor(R.color.colorAccentPink));
-        TextView app_name = (TextView) findViewById(R.id.txt_photo_det_toolbar);
+//        setSupportActionBar(img_toolbar);
+        img_toolbar.setBackgroundColor(getColor(R.color.colorAccentPink));
+
+
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

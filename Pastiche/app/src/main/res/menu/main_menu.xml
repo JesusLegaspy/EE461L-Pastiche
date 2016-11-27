@@ -9,22 +9,11 @@
           android:orderInCategory="100"
           app:showAsAction="ifRoom|collapseActionView"
           app:actionViewClass="android.support.v7.widget.SearchView"/>
-    <item
-            android:id="@+id/action_refresh"
-            android:orderInCategory="100"
-            app:showAsAction="never"
-            android:title="@string/action_refresh"/>
 
-    <item
-            android:id="@+id/action_settings"
-            android:orderInCategory="100"
-            app:showAsAction="never"
-            android:title="@string/action_settings"/>
-    <item
-            android:id="@+id/action_logout"
-            android:orderInCategory="100"
-            app:showAsAction="never"
-            android:title="@string/action_logout"/>
+
+
+
+
 
     <item
             android:id="@+id/action_addEvent"
@@ -37,4 +26,23 @@
             android:orderInCategory="100"
             app:showAsAction="never"
             android:title="@string/action_my_photos"/>
+
+
+    <item
+            android:id="@+id/action_refresh"
+            android:orderInCategory="100"
+            app:showAsAction="never"
+            android:title="@string/action_refresh"/>
+
+    <item
+            android:id="@+id/action_settings"
+            android:orderInCategory="100"
+            app:showAsAction="never"
+            android:title="@string/action_settings"/>
+
+    <item
+            android:id="@+id/action_logout"
+            android:orderInCategory="100"
+            app:showAsAction="never"
+            android:title="@string/action_logout"/>
 </menu>

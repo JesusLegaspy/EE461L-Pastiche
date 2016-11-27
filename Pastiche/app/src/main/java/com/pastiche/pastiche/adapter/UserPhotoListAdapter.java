@@ -5,13 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PPhoto;
+import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
-import com.pastiche.pastiche.viewHolder.PhotoListViewHolder;
 import com.pastiche.pastiche.viewHolder.UserPhotoListViewHolder;
 
 import java.util.ArrayList;
@@ -81,7 +80,11 @@ public class UserPhotoListAdapter extends RecyclerView.Adapter<UserPhotoListView
         if(photos != null && photos.size() >= position && photos.get(position).getId() > 11) {
             String url = internetUrl + photos.get(position).getId();
             Log.d(TAG, "photo picked: " +url);
-            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getImg_event_item());
+            Glide.with(context)
+                    .load(url)
+                    .placeholder(context.getDrawable(R.drawable.empty_photo))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.getImg_event_item());
         }
         holder.setPhotoId(photos.get(position).getId());
         holder.setUserId(photos.get(position).getUserId());

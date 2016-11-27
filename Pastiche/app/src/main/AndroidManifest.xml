@@ -64,14 +64,14 @@
                 android:name=".register.SignupActivity"
                 android:parentActivityName=".register.LoginActivity"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+                android:theme="@style/AppTheme.Light.Signup"/>
 
 
         <activity
                 android:name=".ImgDetailActivity"
                 android:parentActivityName=".EventActivity"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme"/>
+                android:theme="@style/AppTheme.Light.ImgDetail"/>
 
 
         <activity android:name=".SearchableActivity"
