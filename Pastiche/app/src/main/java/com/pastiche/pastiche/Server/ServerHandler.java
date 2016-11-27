@@ -406,17 +406,25 @@ public class ServerHandler {
             @Override
             public void accept(JSONObject x) {
                 String info = x.toString();
-                System.out.println("The string reads: " + info);
-            }
-        };
-        Consumer<VolleyError> vError = new Consumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError volleyError) {
-                System.out.println("A volley error occurred.");
+                String tmp = info.substring(0,9);
+                String resp;
+                if(tmp.equals("{\"response")) {
+                    String tmp2 = trimMessage(info, "response");
+                    String id = trimMessage(tmp2, "id");
+                    String userID = trimMessage(tmp2, "user_id");
+                    String expireDate = trimMessage(tmp2, "expires");
+                    resp = ("Session valid. Session ID = " + id + ", User ID = " +
+                            ", session expires on " + expireDate + ".");
+                    System.out.println("resp says " + resp);
+                }
+                else { resp = "Invalid session."; }
+                System.out.println("resp says " + resp);
+                answer.accept(resp);
             }
         };
         try {
-            handle.jsonGet("/users/session", new JSONObject(), obj, vError);
+            handle.jsonGet("/users/session", new JSONObject(), obj,
+                    x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("Error within the isSessionValid() method of ServerHandler.");
