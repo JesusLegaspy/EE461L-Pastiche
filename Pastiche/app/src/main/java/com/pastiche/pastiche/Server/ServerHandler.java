@@ -417,7 +417,7 @@ public class ServerHandler {
                             ", session expires on " + expireDate + ".");
                 }
                 else { resp = "Invalid session."; }
-                answer.accept(resp);
+                error.accept(resp);
             }
         };
         try {
