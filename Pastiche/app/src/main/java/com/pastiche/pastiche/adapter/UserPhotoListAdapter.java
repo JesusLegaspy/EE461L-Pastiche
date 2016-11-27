@@ -5,13 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PPhoto;
-import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.PhotoListViewHolder;
+import com.pastiche.pastiche.viewHolder.UserPhotoListViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,11 +22,11 @@ import java.util.List;
  * Created by Aria Pahlavan on 11/5/16.
  */
 
-public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> {
+public class UserPhotoListAdapter extends RecyclerView.Adapter<UserPhotoListViewHolder> {
 
     private Context context;
-    private static final String TAG = "PhotoListAdapter";
-    private int eventID;
+    private static final String TAG = "UserPhotoListAdapter";
+    private int userID;
     private List<PPhoto> photos;
 
 
@@ -34,11 +35,11 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
      * get resources (should be an array of event IDs)
      *
      * @param context
-     * @param eventId
+     * @param userID
      */
-    public PhotoListAdapter(Context context, int eventId) {
+    public UserPhotoListAdapter(Context context, int userID) {
         this.context = context;
-        this.eventID = eventId;
+        this.userID = userID;
         refresh();
     }
 
@@ -56,8 +57,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
 
 
     @Override
-    public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PhotoListViewHolder(LayoutInflater.from(parent.getContext()), parent);
+    public UserPhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new UserPhotoListViewHolder(LayoutInflater.from(parent.getContext()), parent);
     }
 
 
@@ -70,32 +71,21 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
      * @param position
      */
     @Override
-    public void onBindViewHolder(PhotoListViewHolder holder, int position) {
+    public void onBindViewHolder(UserPhotoListViewHolder holder, int position) {
 
         String internetUrl = ServerRequestHandler.baseURL + "/photos/";
 
 //        PPhoto curPhoto = photos.get(position);
-        Log.d("PhotoListAdapter", "photos size: " +photos.size());
+//        Log.d(TAG, "photos size: " +photos.size());
 
         if(photos != null && photos.size() >= position && photos.get(position).getId() > 11) {
             String url = internetUrl + photos.get(position).getId();
-            Log.d("PhotoListAdapter", "photo picked: " +photos.get(position).getId());
-            Glide.with(context)
-                    .load(url)
-                    .placeholder(context.getDrawable(R.drawable.empty_photo))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.getImg_event_item());
-
-            holder.setPhotoId(photos.get(position).getId());
-            holder.setEventId(eventID);
-            holder.setUserId(photos.get(position).getUserId());
-            holder.setUploadDate(photos.get(position).getUploaded());
+            Log.d(TAG, "photo picked: " +url);
+            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getImg_event_item());
         }
-        else {
-            holder.getImg_event_item().setImageDrawable(context.getDrawable(R.drawable.empty_photo));
-        }
-
-
+        holder.setPhotoId(photos.get(position).getId());
+        holder.setUserId(photos.get(position).getUserId());
+        holder.setUploadDate(photos.get(position).getUploaded());
 
     }
 
@@ -112,8 +102,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
         photos = new ArrayList<>(100);
         photos.clear();
 
-        ServerHandler.getInstance(context).listPhotosForAnEvent(
-                eventID,
+        ServerHandler.getInstance(context).listPhotosForAnUser(
+                userID,
                 photosList -> loadPhotos(photosList),
                 error -> Log.e(TAG, error)
         );

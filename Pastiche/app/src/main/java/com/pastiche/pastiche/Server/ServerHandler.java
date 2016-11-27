@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
@@ -56,6 +57,7 @@ public class ServerHandler {
                     x -> error.accept(onErrorResponse(x)));
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the login() method of ServerHandler.");
         }
     }
 
@@ -81,6 +83,7 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Errow within the createUser() method of ServerHandler.");
         }
     }
 
@@ -207,30 +210,6 @@ public class ServerHandler {
         handle.imagePost(url, bmp, myResponse , myError);
     }
 
-    //Couldn't get around removing the "throws JSONException", since the JSON is empty and can't be contained in a
-    //try/catch statement. Will try to remove this in the future, just for simplicity --K
-    public void getUsersImgs(PUser user, Consumer<ArrayList<Integer>> response, Consumer<String> error) throws JSONException {
-        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
-        int id = user.getID();
-        String url = "/users/" + id + "/photos";
-        JSONObject emptyJSON = new JSONObject();
-        Consumer<JSONObject> imgList = new Consumer<JSONObject>() {
-            @Override
-            public void accept(JSONObject x) {
-                String tmp = trimMessage(x.toString(), "id");
-
-            }
-        };
-        Consumer<VolleyError> errorData = new Consumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
-        };
-        handle.jsonGet(url, emptyJSON, imgList, errorData);
-    }
-
     //call from UI to download an image
     public void getImg(int photoID, ImageView.ScaleType scaleType, Consumer<Bitmap> img, Consumer<String> error){
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
@@ -272,16 +251,15 @@ public class ServerHandler {
                 case 400:
                 case 401:
                 case 404:
-                    json = new String(response.data);
-                    json = trimMessage(json, "error");
-                    if(json != null) return json;
-                    break;
+                    return ("HTTP error code " + response.statusCode +": Malformed request from client.");
+                case 500:
+                case 504:
+                    return ("HTTP error code " + response.statusCode + ": No response from server.");
                 default:
                     return "Unhandled error code " + response.statusCode;
             }
             //Additional cases
         }
-
         return "Unexpected VolleyError: "+error.toString();
     }
 
@@ -307,6 +285,7 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the listEvents() method of ServerHandler.");
         }
     }
 
@@ -320,6 +299,21 @@ public class ServerHandler {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("Error within the listPhotosForAnEvent() function.");
+        }
+    }
+
+    public void listPhotosForAnUser(int id, Consumer<PPhoto[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        JSONObject body = new JSONObject();
+        try{
+            handle.jsonGet("/users/"+id+"/photos", body,
+                    x -> data.accept(getGsonDeserializedDate().fromJson(getResponse(x), PPhoto[].class)),
+                    x -> error.accept(onErrorResponse(x)));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the listPhotosForAnUser() function.");
         }
     }
 
@@ -351,5 +345,91 @@ public class ServerHandler {
                 x -> data.accept(getResponse(x)),
                 x -> error.accept(onErrorResponse(x))
         );
+    }
+    public void searchEvents(String query, Consumer<PEvent[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String events = trimMessage(info, "response");   //strips "response"
+                events = trimMessage(events, "events");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(events, PEvent[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(),myData,
+                   x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the searchEvents() method of ServerHandler.");
+        }
+    }
+
+    public void searchUsers(String query, Consumer<PUser[]> data, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/search?q=";
+        url = url.concat(query);
+        Consumer<JSONObject> myData = new Consumer<JSONObject>() {
+            @Override
+            public void accept(JSONObject x) {
+                String info = x.toString();
+                String users = trimMessage(info, "response");   //strips "response"
+                users = trimMessage(users, "users");    //strips "users"
+
+                data.accept(getGsonDeserializedDate().fromJson(users, PUser[].class));
+            }
+        };
+        try{
+            handle.jsonGet(url, new JSONObject(), myData,
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the searchUsers() method of ServerHandler.");
+        }
+    }
+
+    public void getEvent(int id, Consumer<PEvent> event, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/events/";
+        url = url.concat(Integer.toString(id));
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> event.accept(getGsonDeserializedDate().fromJson(getResponse(x), PEvent.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch(JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getEvent() method of ServerHandler.");
+        }
+    }
+
+    public void getUser(int id, Consumer<PUser> user, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/users/";
+        url = url.concat(Integer.toString(id));
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> user.accept(getGsonDeserializedDate().fromJson(getResponse(x), PUser.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getUser() method of ServerHandler.");
+        }
+    }
+
+    public void getUserSession(Consumer<PSession> user, Consumer<String> error) {
+        ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
+        String url = "/users/session";
+        try {
+            handle.jsonGet(url, new JSONObject(),
+                    x -> user.accept(getGsonDeserializedDate().fromJson(getResponse(x), PSession.class)),
+                    x -> error.accept(onErrorResponse(x)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("Error within the getUser() method of ServerHandler.");
+        }
     }
 }

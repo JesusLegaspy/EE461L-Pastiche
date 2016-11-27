@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.pastiche.pastiche.ImgDetailActivity;
 import com.pastiche.pastiche.R;
 
@@ -16,17 +17,16 @@ import java.util.Date;
  * Created by Aria Pahlavan on 11/13/16.
  */
 
-public class PhotoListViewHolder extends RecyclerView.ViewHolder{
-    public static final String TAG = "PhotoListViewHolder";
+public class UserPhotoListViewHolder extends RecyclerView.ViewHolder{
+    public static final String TAG = "UserPhotoListViewHolder";
     private ImageView img_photo_item;
     private int photoId;
     private int userId;
-    private int eventId;
     private String uploadDate;
 
 
 
-    public PhotoListViewHolder(LayoutInflater inflater, ViewGroup parent) {
+    public UserPhotoListViewHolder(LayoutInflater inflater, ViewGroup parent) {
         super(inflater.inflate(R.layout.photo_tile_item, parent, false));
 
         img_photo_item = (ImageView) itemView.findViewById(R.id.img_photo_item);
@@ -36,7 +36,6 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder{
             Intent intent = new Intent(context, ImgDetailActivity.class);
             Log.d(TAG, "itemView Listener: " + photoId );
             intent.putExtra(ImgDetailActivity.EXTRA_PHOTO_ID, this.photoId);
-            intent.putExtra(ImgDetailActivity.EXTRA_EVENT_ID, this.eventId);
             intent.putExtra(ImgDetailActivity.EXTRA_IMG_USER_ID, this.userId);
             intent.putExtra(ImgDetailActivity.EXTRA_IMG_UPLOAD, this.uploadDate);
             context.startActivity(intent);
@@ -47,7 +46,6 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder{
 
 
     public ImageView getImg_event_item() {
-        img_photo_item.layout(0,0,0,0);
         return img_photo_item;
     }
 
@@ -61,9 +59,5 @@ public class PhotoListViewHolder extends RecyclerView.ViewHolder{
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate.toString();
-    }
-
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
     }
 }
