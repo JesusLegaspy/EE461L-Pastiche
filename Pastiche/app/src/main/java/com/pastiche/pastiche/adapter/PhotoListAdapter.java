@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pastiche.pastiche.PObject.PPhoto;
+import com.pastiche.pastiche.R;
 import com.pastiche.pastiche.Server.ServerHandler;
 import com.pastiche.pastiche.Server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.PhotoListViewHolder;
@@ -79,13 +80,22 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
         if(photos != null && photos.size() >= position && photos.get(position).getId() > 11) {
             String url = internetUrl + photos.get(position).getId();
             Log.d("PhotoListAdapter", "photo picked: " +photos.get(position).getId());
-            Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.getImg_event_item());
+            Glide.with(context)
+                    .load(url)
+                    .placeholder(context.getDrawable(R.drawable.empty_photo))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.getImg_event_item());
+
+            holder.setPhotoId(photos.get(position).getId());
+            holder.setEventId(eventID);
+            holder.setUserId(photos.get(position).getUserId());
+            holder.setUploadDate(photos.get(position).getUploaded());
+        }
+        else {
+            holder.getImg_event_item().setImageDrawable(context.getDrawable(R.drawable.empty_photo));
         }
 
-        holder.setPhotoId(photos.get(position).getId());
-        holder.setEventId(eventID);
-        holder.setUserId(photos.get(position).getUserId());
-        holder.setUploadDate(photos.get(position).getUploaded());
+
 
     }
 
