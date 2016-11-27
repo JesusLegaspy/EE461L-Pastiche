@@ -415,9 +415,12 @@ public class ServerHandler {
                     String expireDate = trimMessage(tmp2, "expires");
                     resp = ("Session valid. Session ID = " + id + ", User ID = " + userID +
                             ", session expires on " + expireDate + ".");
+                    answer.accept(resp);
                 }
-                else { resp = "Invalid session."; }
-                error.accept(resp);
+                else {
+                    resp = "Invalid session.";
+                    error.accept(resp);
+                }
             }
         };
         try {
