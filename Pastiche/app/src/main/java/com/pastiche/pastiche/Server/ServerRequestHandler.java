@@ -34,6 +34,7 @@ public class ServerRequestHandler {
     @SuppressLint("StaticFieldLeak") // https://stackoverflow.com/questions/40094020/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memor
     private static Context mCtx;
     public static String baseURL = "http://api.pastiche.staging.jacobingalls.rocks:8080";
+    public static String TAG = "SvrReqHandlr";
 
     private ServerRequestHandler (Context context){
         mCtx = context;
@@ -50,7 +51,11 @@ public class ServerRequestHandler {
         return mInstance;
     }
 
-    public void jsonPost(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException {
+    public void jsonPost(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException, NullPointerException {
+        if (data == null || errorData == null){
+            Log.d(TAG, "Consumer is null");
+            throw new NullPointerException();
+        }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, baseURL + url, body, data::accept, errorData::accept) {
             @Override
@@ -67,6 +72,10 @@ public class ServerRequestHandler {
     }
 
     public void jsonGet(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException{
+        if (data == null || errorData == null){
+            Log.d(TAG, "Consumer is null");
+            throw new NullPointerException();
+        }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, baseURL + url, body, data::accept, errorData::accept);
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1000, 10, 2));
@@ -82,6 +91,15 @@ public class ServerRequestHandler {
     }
 
     public void stringGet(String url, String body, Consumer<String> data, Consumer<VolleyError> errorData) {
+        String logError = "error: stringGet null parameter";
+        if (url == null || body == null || data == null){
+            Log.d(TAG, logError);
+            errorData.accept(new VolleyError(logError));
+        }
+        if (errorData == null){
+            Log.d(TAG, logError);
+            return;
+        }
         StringRequest strRequest = new StringRequest
                 (Request.Method.GET, baseURL + url, data::accept, errorData::accept);
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
