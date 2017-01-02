@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
-import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.server.ServerHandler;
 
 import java.io.File;
 import java.io.IOException;

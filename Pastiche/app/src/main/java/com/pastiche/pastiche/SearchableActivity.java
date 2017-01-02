@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
-import com.pastiche.pastiche.PObject.PEvent;
-import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.pObject.PEvent;
+import com.pastiche.pastiche.server.ServerHandler;
 import com.pastiche.pastiche.adapter.EventlistAdapter;
 
 public class SearchableActivity extends AppCompatActivity {

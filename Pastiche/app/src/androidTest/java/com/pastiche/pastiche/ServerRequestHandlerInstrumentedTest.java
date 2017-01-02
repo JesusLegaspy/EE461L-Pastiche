@@ -3,17 +3,13 @@ package com.pastiche.pastiche;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
-import com.pastiche.pastiche.Server.ServerRequestQueue;
+import com.pastiche.pastiche.server.ServerRequestHandler;
 
 import junit.framework.Assert;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;

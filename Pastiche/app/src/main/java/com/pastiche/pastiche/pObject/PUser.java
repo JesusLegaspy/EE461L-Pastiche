@@ -1,4 +1,4 @@
-package com.pastiche.pastiche.PObject;
+package com.pastiche.pastiche.pObject;
 
 /**
  * Created by Khalid on 10/22/2016.

@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
+import com.pastiche.pastiche.server.ServerHandler;
+import com.pastiche.pastiche.server.ServerRequestHandler;
 
 public class ImgDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO_ID = "photoId";

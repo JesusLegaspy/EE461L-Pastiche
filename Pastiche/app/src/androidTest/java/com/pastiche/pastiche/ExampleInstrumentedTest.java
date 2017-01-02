@@ -3,7 +3,7 @@ package com.pastiche.pastiche;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.server.ServerHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

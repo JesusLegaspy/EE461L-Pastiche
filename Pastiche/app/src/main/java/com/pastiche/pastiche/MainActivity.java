@@ -18,10 +18,10 @@ import android.view.*;
 import android.widget.*;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
-import com.pastiche.pastiche.PObject.PEvent;
-import com.pastiche.pastiche.PObject.PUser;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestQueue;
+import com.pastiche.pastiche.pObject.PEvent;
+import com.pastiche.pastiche.pObject.PUser;
+import com.pastiche.pastiche.server.ServerHandler;
+import com.pastiche.pastiche.server.ServerRequestQueue;
 
 import java.util.List;
 

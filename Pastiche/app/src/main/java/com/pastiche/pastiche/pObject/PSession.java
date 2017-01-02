@@ -1,4 +1,4 @@
-package com.pastiche.pastiche.PObject;
+package com.pastiche.pastiche.pObject;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.pastiche.pastiche.PObject.PEvent;
-import com.pastiche.pastiche.PObject.PPhoto;
+import com.pastiche.pastiche.pObject.PEvent;
+import com.pastiche.pastiche.pObject.PPhoto;
 import com.pastiche.pastiche.R;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
+import com.pastiche.pastiche.server.ServerHandler;
+import com.pastiche.pastiche.server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.EventListViewHolder;
 
 import java.util.ArrayList;

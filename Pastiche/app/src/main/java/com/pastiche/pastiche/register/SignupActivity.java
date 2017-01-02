@@ -17,9 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
-import com.pastiche.pastiche.PObject.PSession;
+import com.pastiche.pastiche.pObject.PSession;
 import com.pastiche.pastiche.R;
-import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.server.ServerHandler;
 
 /**
  * Sign up screen allows guests to sing up with a username, email, and password

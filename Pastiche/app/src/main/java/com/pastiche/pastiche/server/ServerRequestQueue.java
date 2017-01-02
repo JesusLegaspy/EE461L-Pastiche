@@ -1,4 +1,4 @@
-package com.pastiche.pastiche.Server;
+package com.pastiche.pastiche.server;
 
 import android.content.Context;
 import android.graphics.Bitmap;
