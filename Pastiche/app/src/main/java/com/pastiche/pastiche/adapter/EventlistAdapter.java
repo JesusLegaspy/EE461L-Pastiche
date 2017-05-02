@@ -158,7 +158,7 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
             String url = internetUrl + eventFirstPictures.get(event.getEventId()).getId();
             Glide.with(appContext)
                     .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(holder.getEventPhoto());
         } else {
             holder.getEventPhoto().setImageDrawable(appContext.getResources()
