@@ -88,29 +88,23 @@ public class ServerHandler {
     public void postImg(Bitmap bmp, PConsumer<Integer> response, PConsumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
 
-        PConsumer<NetworkResponse> myResponse = new PConsumer<NetworkResponse>() {
-            @Override
-            public void accept(NetworkResponse x) {
-                String jsonAsStringObj = new String(x.data);
-                String test = null;
-                try {
-                    JSONObject tmp = new JSONObject(jsonAsStringObj);
-                    test = getResponse(tmp);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String IDNum = trimMessage(test, "id");
-                Integer result = Integer.decode(IDNum);
-                response.accept(result);
+        PConsumer<NetworkResponse> myResponse = x -> {
+            String jsonAsStringObj = new String(x.data);
+            String test = null;
+            try {
+                JSONObject tmp = new JSONObject(jsonAsStringObj);
+                test = getResponse(tmp);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            String IDNum = trimMessage(test, "id");
+            Integer result = Integer.decode(IDNum);
+            response.accept(result);
         };
 
-        PConsumer<VolleyError> myError = new PConsumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
+        PConsumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
         };
 
         handle.imagePost("/photos", bmp, myResponse , myError);
@@ -120,29 +114,23 @@ public class ServerHandler {
     public void postImg(String filepath, PConsumer<Integer> response, PConsumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
 
-        PConsumer<NetworkResponse> myResponse = new PConsumer<NetworkResponse>() {
-            @Override
-            public void accept(NetworkResponse x) {
-                String jsonAsStringObj = new String(x.data);
-                String test = null;
-                try {
-                    JSONObject tmp = new JSONObject(jsonAsStringObj);
-                    test = getResponse(tmp);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String IDNum = trimMessage(test, "id");
-                Integer result = Integer.decode(IDNum);
-                response.accept(result);
+        PConsumer<NetworkResponse> myResponse = x -> {
+            String jsonAsStringObj = new String(x.data);
+            String test = null;
+            try {
+                JSONObject tmp = new JSONObject(jsonAsStringObj);
+                test = getResponse(tmp);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            String IDNum = trimMessage(test, "id");
+            Integer result = Integer.decode(IDNum);
+            response.accept(result);
         };
 
-        PConsumer<VolleyError> myError = new PConsumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
+        PConsumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
         };
 
         handle.imagePost("/photos", filepath, myResponse , myError);
@@ -178,29 +166,23 @@ public class ServerHandler {
     public void postImg(PEvent event, Bitmap bmp, PConsumer<Integer> response, PConsumer<String> error) {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
 
-        PConsumer<NetworkResponse> myResponse = new PConsumer<NetworkResponse>() {
-            @Override
-            public void accept(NetworkResponse x) {
-                String jsonAsStringObj = new String(x.data);
-                String test = null;
-                try {
-                    JSONObject tmp = new JSONObject(jsonAsStringObj);
-                    test = getResponse(tmp);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String IDNum = trimMessage(test, "id");
-                Integer result = Integer.decode(IDNum);
-                response.accept(result);
+        PConsumer<NetworkResponse> myResponse = x -> {
+            String jsonAsStringObj = new String(x.data);
+            String test = null;
+            try {
+                JSONObject tmp = new JSONObject(jsonAsStringObj);
+                test = getResponse(tmp);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            String IDNum = trimMessage(test, "id");
+            Integer result = Integer.decode(IDNum);
+            response.accept(result);
         };
 
-        PConsumer<VolleyError> myError = new PConsumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
+        PConsumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
         };
         int id = event.getEventId();
         String url = "/events/" + id + "/photos";
@@ -214,14 +196,11 @@ public class ServerHandler {
         Integer id = photoID;
         String url = tmp.concat(id.toString());
 
-        PConsumer<VolleyError> myError = new PConsumer<VolleyError>() {
-            @Override
-            public void accept(VolleyError x) {
-                String errorMsg = onErrorResponse(x);
-                error.accept(errorMsg);
-            }
+        PConsumer<VolleyError> myError = x -> {
+            String errorMsg = onErrorResponse(x);
+            error.accept(errorMsg);
         };
-        handle.imageGet(url, scaleType, img::accept, myError);
+        handle.imageGet(url, scaleType, img, myError);
     }
 
     @NonNull
@@ -240,7 +219,6 @@ public class ServerHandler {
 
     //Credit from "Submersed" on https://stackoverflow.com/questions/21867929/android-how-handle-message-error-from-the-server-using-volley
     public String onErrorResponse(VolleyError error) {
-        String json = null;
 
         NetworkResponse response = error.networkResponse;
         if(response != null && response.data != null){
@@ -261,7 +239,7 @@ public class ServerHandler {
     }
 
     public String trimMessage(String json, String key){
-        String trimmedString = null;
+        String trimmedString;
         try{
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
@@ -347,15 +325,12 @@ public class ServerHandler {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
         String url = "/search?q=";
         url = url.concat(query);
-        PConsumer<JSONObject> myData = new PConsumer<JSONObject>() {
-            @Override
-            public void accept(JSONObject x) {
-                String info = x.toString();
-                String events = trimMessage(info, "response");   //strips "response"
-                events = trimMessage(events, "events");    //strips "users"
+        PConsumer<JSONObject> myData = x -> {
+            String info = x.toString();
+            String events = trimMessage(info, "response");   //strips "response"
+            events = trimMessage(events, "events");    //strips "users"
 
-                data.accept(getGsonDeserializedDate().fromJson(events, PEvent[].class));
-            }
+            data.accept(getGsonDeserializedDate().fromJson(events, PEvent[].class));
         };
         try{
             handle.jsonGet(url, new JSONObject(),myData,
@@ -370,15 +345,12 @@ public class ServerHandler {
         ServerRequestHandler handle = ServerRequestHandler.getInstance(mCtx);
         String url = "/search?q=";
         url = url.concat(query);
-        PConsumer<JSONObject> myData = new PConsumer<JSONObject>() {
-            @Override
-            public void accept(JSONObject x) {
-                String info = x.toString();
-                String users = trimMessage(info, "response");   //strips "response"
-                users = trimMessage(users, "users");    //strips "users"
+        PConsumer<JSONObject> myData = x -> {
+            String info = x.toString();
+            String users = trimMessage(info, "response");   //strips "response"
+            users = trimMessage(users, "users");    //strips "users"
 
-                data.accept(getGsonDeserializedDate().fromJson(users, PUser[].class));
-            }
+            data.accept(getGsonDeserializedDate().fromJson(users, PUser[].class));
         };
         try{
             handle.jsonGet(url, new JSONObject(), myData,

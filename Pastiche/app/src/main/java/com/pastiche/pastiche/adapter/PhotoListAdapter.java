@@ -82,7 +82,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             Log.d("PhotoListAdapter", "photo picked: " +photos.get(position).getId());
             Glide.with(context)
                     .load(url)
-                    .placeholder(context.getDrawable(R.drawable.empty_photo))
+                    .placeholder(context.getResources().getDrawable(R.drawable.empty_photo))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.getImg_event_item());
 
@@ -92,7 +92,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             holder.setUploadDate(photos.get(position).getUploaded());
         }
         else {
-            holder.getImg_event_item().setImageDrawable(context.getDrawable(R.drawable.empty_photo));
+            holder.getImg_event_item().setImageDrawable(context.getResources()
+                                                               .getDrawable(R.drawable.empty_photo));
         }
 
 
@@ -114,7 +115,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
 
         ServerHandler.getInstance(context).listPhotosForAnEvent(
                 eventID,
-                photosList -> loadPhotos(photosList),
+                this::loadPhotos,
                 error -> Log.e(TAG, error)
         );
     }

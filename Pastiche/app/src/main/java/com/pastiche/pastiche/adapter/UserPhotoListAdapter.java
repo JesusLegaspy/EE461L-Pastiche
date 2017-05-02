@@ -82,7 +82,7 @@ public class UserPhotoListAdapter extends RecyclerView.Adapter<UserPhotoListView
             Log.d(TAG, "photo picked: " +url);
             Glide.with(context)
                     .load(url)
-                    .placeholder(context.getDrawable(R.drawable.empty_photo))
+                    .placeholder(context.getResources().getDrawable(R.drawable.empty_photo))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.getImg_event_item());
         }
@@ -107,7 +107,7 @@ public class UserPhotoListAdapter extends RecyclerView.Adapter<UserPhotoListView
 
         ServerHandler.getInstance(context).listPhotosForAnUser(
                 userID,
-                photosList -> loadPhotos(photosList),
+                this::loadPhotos,
                 error -> Log.e(TAG, error)
         );
     }

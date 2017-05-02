@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.pastiche.pastiche.server.ServerRequestHandler;
 
@@ -14,10 +13,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.function.Consumer;
-
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -44,16 +40,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.jsonPost("https://jsonplaceholder.typicode.com/posts", null, new Consumer<JSONObject>() {
-                @Override
-                public void accept(JSONObject jsonObject) {
+            sRH.jsonPost("https://jsonplaceholder.typicode.com/posts", null, jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){
@@ -66,16 +56,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.jsonPost(null, new JSONObject(), new Consumer<JSONObject>() {
-                @Override
-                public void accept(JSONObject jsonObject) {
+            sRH.jsonPost(null, new JSONObject(), jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){
@@ -100,16 +84,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.jsonGet("https://jsonplaceholder.typicode.com/posts", null, new Consumer<JSONObject>() {
-                @Override
-                public void accept(JSONObject jsonObject) {
+            sRH.jsonGet("https://jsonplaceholder.typicode.com/posts", null, jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){
@@ -122,16 +100,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.jsonGet(null, new JSONObject(), new Consumer<JSONObject>() {
-                @Override
-                public void accept(JSONObject jsonObject) {
+            sRH.jsonGet(null, new JSONObject(), jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){
@@ -144,16 +116,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.stringPost("https://jsonplaceholder.typicode.com/posts", null, new Consumer<String>() {
-                @Override
-                public void accept(String jsonObject) {
+            sRH.stringPost("https://jsonplaceholder.typicode.com/posts", null, jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){
@@ -166,16 +132,10 @@ public class ServerRequestHandlerInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         ServerRequestHandler sRH = ServerRequestHandler.getInstance(appContext);
         try {
-            sRH.stringGet("https://jsonplaceholder.typicode.com/posts", null, new Consumer<String>() {
-                @Override
-                public void accept(String jsonObject) {
+            sRH.stringGet("https://jsonplaceholder.typicode.com/posts", null, jsonObject -> {
 
-                }
-            }, new Consumer<VolleyError>() {
-                @Override
-                public void accept(VolleyError volleyError) {
+            }, volleyError -> {
 
-                }
             });
         }
         catch (Exception e){

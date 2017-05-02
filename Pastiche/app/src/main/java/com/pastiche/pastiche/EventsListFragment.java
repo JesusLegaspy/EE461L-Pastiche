@@ -1,6 +1,5 @@
 package com.pastiche.pastiche;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.pastiche.pastiche.adapter.EventlistAdapter;
 
 /**
@@ -16,19 +16,14 @@ import com.pastiche.pastiche.adapter.EventlistAdapter;
  */
 
 public class EventsListFragment extends Fragment {
-    private static Context appContext;
     private EventlistAdapter adapter;
 
 
-    public static Context getAppContext() {
-        return appContext;
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.recycler_view, container, false);
-        appContext = getActivity().getApplicationContext();
 
         adapter = new EventlistAdapter(recyclerView.getContext(), null);
         adapter.setHasStableIds(true);

@@ -161,7 +161,8 @@ public class EventlistAdapter extends RecyclerView.Adapter<EventListViewHolder> 
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.getEventPhoto());
         } else {
-            holder.getEventPhoto().setImageDrawable(appContext.getDrawable(R.drawable.empty_photo));
+            holder.getEventPhoto().setImageDrawable(appContext.getResources()
+                                                              .getDrawable(R.drawable.empty_photo));
         }
 
         holder.setEventId(event.getEventId());

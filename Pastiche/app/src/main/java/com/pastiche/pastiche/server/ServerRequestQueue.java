@@ -18,7 +18,7 @@ public class ServerRequestQueue {
     private static ServerRequestQueue mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
+    private Context mCtx;
 
     private ServerRequestQueue(Context context) {
         mCtx = context;
@@ -27,7 +27,7 @@ public class ServerRequestQueue {
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
+                            cache = new LruCache<>(20);
 
                     @Override
                     public Bitmap getBitmap(String url) {

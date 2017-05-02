@@ -50,7 +50,8 @@ public class PersistentCookieStore implements CookieStore, Runnable {
         SharedPreferences pref = app.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String json = gson.toJson(store.getCookies());
 
-        store.getURIs().forEach(uri -> Log.d(SHARED_PREF_NAME, uri.toString()));
+        for (URI uri : store.getURIs())
+            Log.d(SHARED_PREF_NAME, uri.toString());
 
         pref.edit().putString("json", json).apply();
     }

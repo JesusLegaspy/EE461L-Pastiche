@@ -14,16 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SearchEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
-import com.pastiche.pastiche.pObject.PEvent;
-import com.pastiche.pastiche.pObject.PUser;
 import com.pastiche.pastiche.server.ServerHandler;
 import com.pastiche.pastiche.server.ServerRequestQueue;
-
-import java.util.List;
 
 /**
  * Created by Aria Pahlavan on 11/13/16.
@@ -36,12 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SHARED_PREF_NAME = "PUSER_INFO";
     private static final float DISASBLE_ALPHA = (float) 0.4;
     private static final float ENABLE_ALPHA = 1;
-    private Toolbar main_toolbar;
     private ImageView searchFilter;
-    private SearchView searchView;
-    private List<PEvent> eventSearchResult;
-    private PEvent curUserEvent;
-    private PUser pUser;
 
 
     public static String getSharedPreferenceName() {
@@ -55,16 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupActivity();
         appbarSetup();
-        updateCurUserEvents();
 
-    }
-
-
-    /**
-     * updates the list of current user events
-     */
-    public void updateCurUserEvents() {
-        //TODO API call to get cur user list of events
     }
 
 
@@ -73,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void appbarSetup() {
         //set up the app bar
-        main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(main_toolbar);
         TextView app_name = (TextView) findViewById(R.id.toolbar_app_name);
 
@@ -134,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint("Search Pastiche Event");
         ComponentName componentName = new ComponentName(this, SearchableActivity.class);
-        searchView.setSearchableInfo( searchManager.getSearchableInfo(componentName) );
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -217,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
         ServerHandler.getInstance(this.getApplicationContext()).logout(
                 data -> onLogoutSuccess(editor),
-                error -> onLogoutFail(error));
+                this::onLogoutFail);
     }
 
     private void goto_my_photos() {
@@ -246,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void onLogoutFail(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
 
