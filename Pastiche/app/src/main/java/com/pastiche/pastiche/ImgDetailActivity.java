@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
+import com.pastiche.pastiche.server.ServerHandler;
+import com.pastiche.pastiche.server.ServerRequestHandler;
 
 public class ImgDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO_ID = "photoId";
@@ -45,9 +45,10 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private void setupActivity(Bundle savedInstanceState) {
         Toolbar img_toolbar = (Toolbar) findViewById(R.id.photo_detail_toolbar);
-        setSupportActionBar(img_toolbar);
-        img_toolbar.setBackgroundColor(getColor(R.color.colorAccentPink));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(img_toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            img_toolbar.setBackgroundColor(getColor(R.color.colorAccentPink));
+        }
 
 
         if ( Build.VERSION.SDK_INT >= 21 ) {
@@ -160,8 +161,7 @@ public class ImgDetailActivity extends AppCompatActivity {
 
     private int getCurUserId() {
         SharedPreferences preferences = getSharedPreferences(MainActivity.getSharedPreferenceName(), Context.MODE_PRIVATE);
-        int v = preferences.getInt("userId", -1);
-        return v;
+        return preferences.getInt("userId", -1);
     }
 
 
@@ -200,8 +200,8 @@ public class ImgDetailActivity extends AppCompatActivity {
                 .removePhotoFromEvent(
                         String.valueOf(photoId),
                         String.valueOf(eventId),
-                        data -> onRemoveSuccess(data),
-                        error -> onRemoveFail(error)
+                        this::onRemoveSuccess,
+                        this::onRemoveFail
                         );
     }
 

@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pastiche.pastiche.MainActivity;
-import com.pastiche.pastiche.PObject.PSession;
+import com.pastiche.pastiche.pObject.PSession;
 import com.pastiche.pastiche.R;
-import com.pastiche.pastiche.Server.PersistentCookieStore;
-import com.pastiche.pastiche.Server.ServerHandler;
+import com.pastiche.pastiche.server.PersistentCookieStore;
+import com.pastiche.pastiche.server.ServerHandler;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;

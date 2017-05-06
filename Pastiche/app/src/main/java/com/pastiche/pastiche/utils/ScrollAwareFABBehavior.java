@@ -1,4 +1,4 @@
-package com.pastiche.pastiche;
+package com.pastiche.pastiche.utils;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

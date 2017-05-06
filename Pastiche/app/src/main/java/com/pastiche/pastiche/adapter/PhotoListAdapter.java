@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.pastiche.pastiche.PObject.PPhoto;
+import com.pastiche.pastiche.pObject.PPhoto;
 import com.pastiche.pastiche.R;
-import com.pastiche.pastiche.Server.ServerHandler;
-import com.pastiche.pastiche.Server.ServerRequestHandler;
+import com.pastiche.pastiche.server.ServerHandler;
+import com.pastiche.pastiche.server.ServerRequestHandler;
 import com.pastiche.pastiche.viewHolder.PhotoListViewHolder;
 
 import java.util.ArrayList;
@@ -82,8 +82,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             Log.d("PhotoListAdapter", "photo picked: " +photos.get(position).getId());
             Glide.with(context)
                     .load(url)
-                    .placeholder(context.getDrawable(R.drawable.empty_photo))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(context.getResources().getDrawable(R.drawable.empty_photo))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.getImg_event_item());
 
             holder.setPhotoId(photos.get(position).getId());
@@ -92,7 +92,8 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
             holder.setUploadDate(photos.get(position).getUploaded());
         }
         else {
-            holder.getImg_event_item().setImageDrawable(context.getDrawable(R.drawable.empty_photo));
+            holder.getImg_event_item().setImageDrawable(context.getResources()
+                                                               .getDrawable(R.drawable.empty_photo));
         }
 
 
@@ -114,7 +115,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListViewHolder> 
 
         ServerHandler.getInstance(context).listPhotosForAnEvent(
                 eventID,
-                photosList -> loadPhotos(photosList),
+                this::loadPhotos,
                 error -> Log.e(TAG, error)
         );
     }

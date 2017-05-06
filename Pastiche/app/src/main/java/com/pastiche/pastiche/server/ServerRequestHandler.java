@@ -1,41 +1,43 @@
-package com.pastiche.pastiche.Server;
+package com.pastiche.pastiche.server;
 
-        import android.annotation.SuppressLint;
-        import android.content.Context;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.util.Log;
-        import android.widget.ImageView;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.widget.ImageView;
 
-        import com.android.volley.DefaultRetryPolicy;
-        import com.android.volley.NetworkResponse;
-        import com.android.volley.Request;
-        import com.android.volley.RetryPolicy;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.ImageRequest;
-        import com.android.volley.toolbox.JsonObjectRequest;
-        import com.android.volley.toolbox.StringRequest;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.pastiche.pastiche.utils.PConsumer;
 
-        import org.json.JSONException;
-        import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.ByteArrayOutputStream;
-        import java.util.HashMap;
-        import java.util.Map;
-        import java.util.function.Consumer;
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by jesus on 10/25/2016.
  */
 
 public class ServerRequestHandler {
-    @SuppressLint("StaticFieldLeak") // Okay as long as this.getApplicationContext is passed as a parameter in getInstance.
+    @SuppressLint("StaticFieldLeak")
+    // Okay as long as this.getApplicationContext is passed as a parameter in getInstance.
     private static ServerRequestHandler mInstance;
-    @SuppressLint("StaticFieldLeak") // https://stackoverflow.com/questions/40094020/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memor
+    @SuppressLint("StaticFieldLeak")
+    // https://stackoverflow.com/questions/40094020/warning-do-not-place-android-context-classes-in-static-fields-this-is-a-memor
     private static Context mCtx;
     public static String baseURL = "http://api.pastiche.staging.jacobingalls.rocks:8080";
+    public static String TAG = "SvrReqHandlr";
 
-    private ServerRequestHandler (Context context){
+    private ServerRequestHandler(Context context) {
         mCtx = context;
     }
 
@@ -50,12 +52,16 @@ public class ServerRequestHandler {
         return mInstance;
     }
 
-    public void jsonPost(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException {
+    public void jsonPost(String url, JSONObject body, PConsumer<JSONObject> data, PConsumer<VolleyError> errorData) throws JSONException, NullPointerException {
+        if (data == null || errorData == null) {
+            Log.d(TAG, "PConsumer is null");
+            throw new NullPointerException();
+        }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, baseURL + url, body, data::accept, errorData::accept) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
 
                 return params;
@@ -66,7 +72,11 @@ public class ServerRequestHandler {
         pQueue.addToRequestQueue(jsObjRequest);
     }
 
-    public void jsonGet(String url, JSONObject body, Consumer<JSONObject> data, Consumer<VolleyError> errorData) throws JSONException{
+    public void jsonGet(String url, JSONObject body, PConsumer<JSONObject> data, PConsumer<VolleyError> errorData) throws JSONException {
+        if (data == null || errorData == null) {
+            Log.d(TAG, "PConsumer is null");
+            throw new NullPointerException();
+        }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, baseURL + url, body, data::accept, errorData::accept);
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(1000, 10, 2));
@@ -74,29 +84,45 @@ public class ServerRequestHandler {
         pQueue.addToRequestQueue(jsObjRequest);
     }
 
-    public void stringPost(String url, String body, Consumer<String> data, Consumer<VolleyError> errorData) {
+    public void stringPost(String url, String body, PConsumer<String> data,
+                           PConsumer<VolleyError> errorData) {
         StringRequest strRequest = new StringRequest
                 (Request.Method.POST, baseURL + url, data::accept, errorData::accept);
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(strRequest);
     }
 
-    public void stringGet(String url, String body, Consumer<String> data, Consumer<VolleyError> errorData) {
+    public void stringGet(String url, String body, PConsumer<String> data,
+                          PConsumer<VolleyError> errorData) {
+        String logError = "error: stringGet null parameter";
+        if (url == null || body == null || data == null) {
+            Log.d(TAG, logError);
+            errorData.accept(new VolleyError(logError));
+        }
+        if (errorData == null) {
+            Log.d(TAG, logError);
+            return;
+        }
         StringRequest strRequest = new StringRequest
                 (Request.Method.GET, baseURL + url, data::accept, errorData::accept);
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(strRequest);
     }
 
-    public void imageGet(String url, ImageView.ScaleType scaleType, Consumer<Bitmap> data, Consumer<VolleyError> errorData){
+    void imageGet(String url, ImageView.ScaleType scaleType, PConsumer<Bitmap> data,
+                  PConsumer<VolleyError> errorData) {
         ImageRequest imgRequest = new ImageRequest
-                (baseURL + url, data::accept, 0,0, scaleType,null, errorData::accept);
+                (baseURL + url, data::accept, 0, 0, scaleType, null, errorData::accept);
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(imgRequest);
     }
 
-    public void imagePost(String url, Bitmap bitmapPhoto, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, baseURL + url, data::accept, errorData::accept) {
+    void imagePost(String url, Bitmap bitmapPhoto, PConsumer<NetworkResponse> data,
+                   PConsumer<VolleyError> errorData) {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST,
+                                                                             baseURL + url,
+                                                                             data::accept,
+                                                                             errorData::accept) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -117,8 +143,12 @@ public class ServerRequestHandler {
         pQueue.addToRequestQueue(multipartRequest);
     }
 
-    public void imagePost(String url, String imagePath, Consumer<NetworkResponse> data, Consumer<VolleyError> errorData){
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, baseURL + url, data::accept, errorData::accept) {
+    void imagePost(String url, String imagePath, PConsumer<NetworkResponse> data,
+                   PConsumer<VolleyError> errorData) {
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST,
+                                                                             baseURL + url,
+                                                                             data::accept,
+                                                                             errorData::accept) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -131,7 +161,9 @@ public class ServerRequestHandler {
             @Override
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
-                params.put("photo", new DataPart(".jpg", getBytesFromBitmap(BitmapFactory.decodeFile(imagePath)), "image/jpeg"));
+                params.put("photo", new DataPart(".jpg",
+                                                 getBytesFromBitmap(BitmapFactory.decodeFile(imagePath)),
+                                                 "image/jpeg"));
 
                 return params;
             }
@@ -140,16 +172,20 @@ public class ServerRequestHandler {
         pQueue.addToRequestQueue(multipartRequest);
     }
 
-    public void delete(String url, Consumer<JSONObject> data, Consumer<VolleyError> errorData){
+    public void delete(String url, PConsumer<JSONObject> data, PConsumer<VolleyError> errorData) {
         JsonObjectRequest deleteRequest = new JsonObjectRequest
-                (Request.Method.DELETE, baseURL + url, new JSONObject(), data::accept, errorData::accept);
+                (Request.Method.DELETE,
+                 baseURL + url,
+                 new JSONObject(),
+                 data::accept,
+                 errorData::accept);
         ServerRequestQueue pQueue = ServerRequestQueue.getInstance(mCtx);
         pQueue.addToRequestQueue(deleteRequest);
     }
 
     // convert from bitmap to byte array
     public byte[] getBytesFromBitmap(Bitmap bitmap) {
-        if(bitmap != null) {
+        if (bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
             return stream.toByteArray();

@@ -1,4 +1,4 @@
-package com.pastiche.pastiche.Server;
+package com.pastiche.pastiche.server;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
